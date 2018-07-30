@@ -1,0 +1,38 @@
+group 'pl.socha23'
+version '1.0'
+
+buildscript {
+	repositories {
+		jcenter()
+		maven { url 'https://repo.spring.io/snapshot' }
+		maven { url 'https://repo.spring.io/milestone' }
+	}
+	dependencies {
+		classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.1.0.BUILD-SNAPSHOT'
+	}
+}
+
+apply plugin: 'groovy'
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+sourceCompatibility = 1.10
+
+
+jar {
+	baseName = 'memba'
+	version =  '1.0'
+}
+
+repositories {
+	jcenter()
+	maven { url "https://repo.spring.io/snapshot" }
+	maven { url "https://repo.spring.io/milestone" }
+}
+
+dependencies {
+	compile("org.springframework.boot:spring-boot-starter-web")
+	compile("org.springframework.boot:spring-boot-starter-webflux")
+	testCompile("org.springframework.boot:spring-boot-starter-test")
+}
