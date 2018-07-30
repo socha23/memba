@@ -1,0 +1,42 @@
+{
+  "main": "index.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "scripts": {
+    "watch": "webpack --watch --colors --progress",
+    "watch-prod": "webpack --watch --colors --progress --config webpack.config.prod.js",
+    "bundle": "webpack",
+    "bundle-prod": "webpack --config webpack.config.prod.js",
+    "test": "jest"
+  },
+  "jest": {
+    "setupTestFrameworkScriptFile": "./src/test/js/index.js",
+    "verbose": true,
+    "modulePaths": [
+      "<rootDir>/src/main/js/",
+      "<rootDir>/src/test/js/"
+    ]
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-stage-2": "^6.24.1",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-jest": "^22.0.4",
+    "babel-loader": "^7.1.2",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-15": "^1.0.5",
+    "jest": "^22.0.4",
+    "jest-enzyme": "^4.0.2",
+    "react-test-renderer": "^16.4.1",
+    "redux-devtools": "^3.4.0",
+    "regenerator-runtime": "^0.11.1",
+    "webpack": "^3.6.0"
+  }
+}

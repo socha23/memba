@@ -1,0 +1,1 @@
+gradle bootRepackage -Pprofile=prod
