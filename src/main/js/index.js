@@ -16,7 +16,7 @@ class Hello extends React.Component {
             credentials: 'same-origin'
         })
             .then(r => r.json())
-            .then(user => {this.setState({message: "Hello, " + user.firstName + "!"})})
+            .then(user => {this.setState({message: "Hello, " + user.fullName + "!"})})
 
     }
 
