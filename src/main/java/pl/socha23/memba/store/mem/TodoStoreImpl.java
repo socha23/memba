@@ -13,9 +13,9 @@ public class TodoStoreImpl implements TodoStore {
     @Override
     public List<Todo> listTodosByUserId(String userId) {
         var result = new ArrayList<Todo>();
-        result.add(new TodoImpl("Papier"));
-        result.add(new TodoImpl("Mydło"));
-        result.add(new TodoImpl("Powidło"));
+        result.add(new TodoImpl("1", "Papier"));
+        result.add(new TodoImpl("2", "Mydło"));
+        result.add(new TodoImpl("3", "Powidło"));
         return result;
     }
 }

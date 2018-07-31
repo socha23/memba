@@ -2,6 +2,48 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import fetch from 'isomorphic-fetch'
 
+const Todo = ({todo}) => <div>
+    {todo.text}
+</div>;
+
+const TodoListView = ({loading, todos}) => loading ?
+    <div>Loading...</div> :
+    <div> {
+        todos.map(todo => <Todo key={todo.id} todo={todo}/>)
+    }                                 
+    </div>;
+
+
+class TodoList extends React.Component {
+    state = {
+        loading: false,
+        todos: []
+    };
+
+    componentDidMount() {
+        this.reload();
+    }
+
+    reload() {
+        this.setState({
+            loading: true
+        });
+
+        fetch("todos", {
+            credentials: 'same-origin'
+        })
+            .then(r => r.json())
+            .then(r => {this.setState({loading: false, todos: r.items})})
+    }
+
+    render() {
+        return <TodoListView loading={this.state.loading} todos={this.state.todos}/>
+    }
+
+
+}
+
+
 class Hello extends React.Component {
     state = {
         message: "init"
@@ -21,7 +63,10 @@ class Hello extends React.Component {
     }
 
     render() {
-        return <div>{this.state.message}</div>;
+        return <div>
+            {this.state.message}
+            <TodoList/>
+        </div>;
     }
 }
 
