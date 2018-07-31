@@ -1,4 +1,4 @@
-package pl.socha23.memba.web
+package pl.socha23.memba
 
 import reactor.core.publisher.Flux
 

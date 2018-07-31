@@ -3,21 +3,20 @@ package pl.socha23.memba.business.todos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pl.socha23.memba.business.Todo;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
 
 @Component
-class ListTodosImpl implements ListTodos {
+class TodosOperationsImpl implements TodosOperations {
 
     private TodoStore todoStore;
 
     @Autowired
-    public ListTodosImpl(TodoStore todoStore) {
+    public TodosOperationsImpl(TodoStore todoStore) {
         this.todoStore = todoStore;
     }
 
     @Override
-    public List<Todo> listTodos(String userId) {
+    public Flux<Todo> listTodosByUserId(String userId) {
         return todoStore.listTodosByUserId(userId);
     }
 
