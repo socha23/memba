@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class TodoStoreImpl implements TodoStore {
+class TodoStoreImpl implements TodoStore {
 
     @Override
     public List<Todo> listTodosByUserId(String userId) {

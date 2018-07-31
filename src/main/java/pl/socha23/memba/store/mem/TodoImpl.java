@@ -2,7 +2,7 @@ package pl.socha23.memba.store.mem;
 
 import pl.socha23.memba.business.Todo;
 
-public class TodoImpl implements Todo {
+class TodoImpl implements Todo {
 
     private String id;
     private String text;
