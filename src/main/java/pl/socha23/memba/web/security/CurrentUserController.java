@@ -1,21 +1,18 @@
-package pl.socha23.memba.web;
+package pl.socha23.memba.web.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pl.socha23.memba.business.User;
+import pl.socha23.memba.web.security.User;
 import pl.socha23.memba.web.security.CurrentUserProvider;
 
-/**
- *
- */
 @RestController
-public class Controller {
+public class CurrentUserController {
 
     private CurrentUserProvider currentUserProvider;
 
     @Autowired
-    public Controller(CurrentUserProvider currentUserProvider) {
+    public CurrentUserController(CurrentUserProvider currentUserProvider) {
         this.currentUserProvider = currentUserProvider;
     }
 

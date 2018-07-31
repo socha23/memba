@@ -1,4 +1,4 @@
-package pl.socha23.memba.business;
+package pl.socha23.memba.web.security;
 
 public interface User {
 
