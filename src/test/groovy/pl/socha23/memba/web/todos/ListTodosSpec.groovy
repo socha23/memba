@@ -5,27 +5,17 @@ import pl.socha23.memba.business.todos.ListTodos
 import pl.socha23.memba.web.security.TestUserProvider
 import spock.lang.Specification
 
-import static pl.socha23.memba.web.FluxUtils.fluxResultItems
+import static pl.socha23.memba.web.FluxUtils.toList
 
 class ListTodosSpec extends Specification {
 
-    def "empty todos list"() {
+    def "empty todos"() {
         given:
         def controller = testController([])
 
         expect:
-        controller.listTodos().items.size() == 0
-    }
-
-    def "noneempty todos list"() {
-        given:
-        def controller = testController([
-                [id: "1", text: "todo 1"],
-                [id:"2", text: "todo 2"]
-        ])
-
-        expect:
-        controller.listTodos().items.size() == 2
+        def result =
+        toList(controller.fluxTodos()).size() == 0
     }
 
     def "noneempty todos flux"() {
@@ -36,8 +26,7 @@ class ListTodosSpec extends Specification {
         ])
 
         expect:
-        def result = controller.fluxTodos()
-        fluxResultItems(result).size() == 2
+        toList(controller.fluxTodos()).size() == 2
     }
 
     private static TodosController testController(List<Map> todos) {

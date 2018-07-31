@@ -33,7 +33,7 @@ class TodoList extends React.Component {
             credentials: 'same-origin'
         })
             .then(r => r.json())
-            .then(r => {this.setState({loading: false, todos: r.items})})
+            .then(r => {this.setState({loading: false, todos: r})})
     }
 
     render() {

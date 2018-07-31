@@ -5,11 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.socha23.memba.business.Todo;
 import pl.socha23.memba.business.todos.ListTodos;
-import pl.socha23.memba.web.FluxResult;
-import pl.socha23.memba.web.ListResult;
 import pl.socha23.memba.web.security.CurrentUserProvider;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 @RestController
 public class TodosController {
@@ -24,23 +21,11 @@ public class TodosController {
     }
 
     @GetMapping("/todos")
-    public ListResult<Todo> listTodos() {
-        return ListResult.of(listTodos.listTodos(getCurrentUserId()));
-    }
-
-    @GetMapping("/other")
-    public ListResult<Todo> listTodosOther() {
-        return ListResult.of(listTodos.listTodos(getCurrentUserId()));
-    }
-
-    @GetMapping("/flux")
-    public Mono<FluxResult<Todo>> fluxTodos() {
-        return FluxResult.of(Flux.fromIterable(listTodos.listTodos(getCurrentUserId())));
+    public Flux<Todo> fluxTodos() {
+        return Flux.fromIterable(listTodos.listTodos(getCurrentUserId()));
     }
 
     private String getCurrentUserId() {
         return userProvider.currentUser().getId();
     }
-
-    ;
 }
