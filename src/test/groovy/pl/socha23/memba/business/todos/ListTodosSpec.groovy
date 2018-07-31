@@ -1,6 +1,5 @@
 package pl.socha23.memba.business.todos
 
-import pl.socha23.memba.business.Todo
 import spock.lang.Specification
 
 class ListTodosSpec extends Specification {
