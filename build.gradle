@@ -42,7 +42,6 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-security")
 	compile("org.springframework.security:spring-security-oauth2-client")
 	compile("org.springframework.security:spring-security-oauth2-jose")
-    compile("org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.0.2.BUILD-SNAPSHOT")
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }
