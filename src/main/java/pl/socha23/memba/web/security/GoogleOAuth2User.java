@@ -1,6 +1,7 @@
-package pl.socha23.memba.sample;
+package pl.socha23.memba.web.security;
 
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import pl.socha23.memba.business.User;
 
 import java.util.Map;
 

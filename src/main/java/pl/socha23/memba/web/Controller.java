@@ -1,12 +1,10 @@
-package pl.socha23.memba.sample;
+package pl.socha23.memba.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.security.Principal;
+import pl.socha23.memba.business.User;
+import pl.socha23.memba.web.security.CurrentUserProvider;
 
 /**
  *
@@ -23,7 +21,7 @@ public class Controller {
 
     @GetMapping("/currentUser")
     public User currentUser() {
-        return currentUserProvider.currentUser().orElse(null);
+        return currentUserProvider.currentUser();
     }
 
 }
