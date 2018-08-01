@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import fetch from 'isomorphic-fetch'
+import {jsonGet} from './apiHelper'
+import SignInRequired from './SignInRequired'
 
 const Todo = ({todo}) => <div>
     {todo.text}
@@ -28,21 +29,14 @@ class TodoList extends React.Component {
         this.setState({
             loading: true
         });
-
-        fetch("/api/todos?auth", {
-            credentials: 'same-origin'
-        })
-            .then(r => r.json())
-            .then(r => {this.setState({loading: false, todos: r})})
+        jsonGet("/todos")
+            .then(r => {this.setState({loading: false, todos: r})});         
     }
 
     render() {
         return <TodoListView loading={this.state.loading} todos={this.state.todos}/>
     }
-
-
 }
-
 
 class Hello extends React.Component {
     state = {
@@ -54,11 +48,8 @@ class Hello extends React.Component {
             message: "didMount"
         });
 
-        fetch("/api/currentUser?auth", {
-            credentials: 'same-origin'
-        })
-            .then(r => r.json())
-            .then(user => {this.setState({message: "Hello, " + user.fullName + "!"})})
+        jsonGet("/currentUser")
+            .then(user => {this.setState({message: "Hello, " + user.fullName})})
 
     }
 
@@ -66,12 +57,14 @@ class Hello extends React.Component {
         return <div>
             {this.state.message}
             <TodoList/>
-        </div>;
+        </div>
     }
-}
+}                            
 
 
 ReactDOM.render(
-    <Hello/>
+    <SignInRequired>
+        <Hello/>
+    </SignInRequired>
 , document.getElementById('result'));
 

@@ -3,12 +3,8 @@ server:
     enabled: true
     mime-types: application/json,application/xml,text/html,text/xml,text/plain,text/css,application/javascript
 
-spring:
+memba:
   security:
-    oauth2:
-      client:
-        registration:
-          google:
-            client-id: 240160191919-krl7dhbuetvq1s2r7af6oojb9sd76n3q.apps.googleusercontent.com
-            client-secret: J5fYSCrJ1fNteZCcT6lxXBQJ
+    google:
+      client_id: "502079153987-8e460ao67b3jj62u94o362sgukfrjf6q.apps.googleusercontent.com"
 
