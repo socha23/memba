@@ -1,4 +1,4 @@
-package pl.socha23.memba.web.security.google;
+package pl.socha23.memba.web.security.spring.google;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
@@ -11,7 +11,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Component;
 import pl.socha23.memba.web.security.User;
-import pl.socha23.memba.web.security.UserBasedAuthentication;
+import pl.socha23.memba.web.security.spring.UserBasedAuthentication;
 
 import java.util.Collections;
 

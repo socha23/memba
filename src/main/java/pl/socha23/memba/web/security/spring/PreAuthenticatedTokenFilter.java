@@ -1,4 +1,4 @@
-package pl.socha23.memba.web.security;
+package pl.socha23.memba.web.security.spring;
 
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 import org.springframework.stereotype.Component;

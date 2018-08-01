@@ -1,8 +1,9 @@
-package pl.socha23.memba.web.security;
+package pl.socha23.memba.web.security.spring;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import pl.socha23.memba.web.security.User;
 
 import java.util.Collection;
 import java.util.Collections;

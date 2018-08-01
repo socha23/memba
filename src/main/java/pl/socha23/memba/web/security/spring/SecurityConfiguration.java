@@ -1,4 +1,4 @@
-package pl.socha23.memba.web.security;
+package pl.socha23.memba.web.security.spring;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
