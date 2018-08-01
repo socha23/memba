@@ -1,10 +1,16 @@
 import React from 'react'
-import TodoList from './TodoList'
-import SignInRequired from './SignInRequired'
+import {Switch, Route} from 'react-router-dom'
 
+import TodoList from './TodoList'
+import AddTodo from './AddTodo'
+import SignInRequired from './SignInRequired'
 
 export default () => <div style={{maxWidth: 700, margin: "auto"}}>
     <SignInRequired>
-        <TodoList/>
+        <Switch>
+            <Route exact path="/" component={TodoList}/>
+            <Route path="/add" component={AddTodo}/>
+        </Switch>
     </SignInRequired>
+
 </div>

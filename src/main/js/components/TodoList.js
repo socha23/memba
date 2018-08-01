@@ -2,23 +2,18 @@ import React from 'react'
 import {jsonGet} from '../apiHelper'
 import TodoItem from './TodoItem'
 import AddTodoButton from './AddTodoButton'
+import FlexColumn from './FlexColumn'
 
 const TodoListView = ({loading, todos}) => loading ?
     <div>Loading...</div> :
-    <div style={{
-        display: "flex",
-        flexDirection: "column"
-
-
-    }}>
+    <FlexColumn style={{minHeight: "100%"}}>
         <AddTodoButton/>
         <ul className="list-group"> {
             todos.map(todo => <TodoItem key={todo.id} todo={todo}/>)
         }
         </ul>
+    </FlexColumn>;
 
-    </div>;
-        
 class TodoList extends React.Component {
     state = {
         loading: false,
