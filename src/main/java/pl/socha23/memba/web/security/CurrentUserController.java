@@ -16,7 +16,7 @@ public class CurrentUserController {
         this.currentUserProvider = currentUserProvider;
     }
 
-    @GetMapping("/currentUser")
+    @GetMapping("/api/currentUser")
     public User currentUser() {
         return currentUserProvider.currentUser();
     }

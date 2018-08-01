@@ -20,7 +20,7 @@ public class TodosController {
         this.userProvider = userProvider;
     }
 
-    @GetMapping("/todos")
+    @GetMapping("/api/todos")
     public Flux<Todo> currentUserTodos() {
         return todosOperations.listTodosByUserId(getCurrentUserId());
     }

@@ -29,7 +29,7 @@ class TodoList extends React.Component {
             loading: true
         });
 
-        fetch("todos", {
+        fetch("/api/todos?auth", {
             credentials: 'same-origin'
         })
             .then(r => r.json())
@@ -54,7 +54,7 @@ class Hello extends React.Component {
             message: "didMount"
         });
 
-        fetch("currentUser", {
+        fetch("/api/currentUser?auth", {
             credentials: 'same-origin'
         })
             .then(r => r.json())
