@@ -1,19 +1,24 @@
 import React from 'react'
 import {jsonGet} from '../apiHelper'
 import TodoItem from './TodoItem'
-
-const Todo = ({todo}) => <li className="list-group-item">
-    {todo.text}
-</li>;
+import AddTodoButton from './AddTodoButton'
 
 const TodoListView = ({loading, todos}) => loading ?
     <div>Loading...</div> :
-    <ul className="list-group"> {
-        todos.map(todo => <Todo key={todo.id} todo={todo}/>)
-    }                                 
-    </ul>;
+    <div style={{
+        display: "flex",
+        flexDirection: "column"
 
 
+    }}>
+        <AddTodoButton/>
+        <ul className="list-group"> {
+            todos.map(todo => <TodoItem key={todo.id} todo={todo}/>)
+        }
+        </ul>
+
+    </div>;
+        
 class TodoList extends React.Component {
     state = {
         loading: false,
