@@ -1,5 +1,5 @@
 import React from 'react'
-import {setIdToken} from './apiHelper'
+import {setIdToken} from '../apiHelper'
 
 class SignInRequired extends React.Component {
     state = {
