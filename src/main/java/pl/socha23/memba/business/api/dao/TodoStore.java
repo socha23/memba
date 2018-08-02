@@ -1,6 +1,6 @@
-package pl.socha23.memba.business.todos;
+package pl.socha23.memba.business.api.dao;
 
-import pl.socha23.memba.business.Todo;
+import pl.socha23.memba.business.api.model.Todo;
 import reactor.core.publisher.Flux;
 
 public interface TodoStore {

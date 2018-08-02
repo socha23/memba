@@ -1,8 +1,8 @@
-package pl.socha23.memba.store.mem;
+package pl.socha23.memba.dao.mem;
 
 import org.springframework.stereotype.Component;
-import pl.socha23.memba.business.Todo;
-import pl.socha23.memba.business.todos.TodoStore;
+import pl.socha23.memba.business.api.model.Todo;
+import pl.socha23.memba.business.api.dao.TodoStore;
 import reactor.core.publisher.Flux;
 
 @Component

@@ -1,6 +1,7 @@
 package pl.socha23.memba.business.todos
 
-
+import pl.socha23.memba.business.api.dao.TodoStore
+import pl.socha23.memba.business.impl.TodosOperationsImpl
 import reactor.core.publisher.Flux
 import spock.lang.Specification
 import static pl.socha23.memba.FluxUtils.toList;

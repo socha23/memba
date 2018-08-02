@@ -1,6 +1,6 @@
-package pl.socha23.memba.store.mem;
+package pl.socha23.memba.dao.mem;
 
-import pl.socha23.memba.business.Todo;
+import pl.socha23.memba.business.api.model.Todo;
 
 class TodoImpl implements Todo {
 

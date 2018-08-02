@@ -1,13 +1,8 @@
-package pl.socha23.memba.business.todos;
+package pl.socha23.memba.business.api.logic;
 
-import pl.socha23.memba.business.Todo;
+import pl.socha23.memba.business.api.model.Todo;
 import reactor.core.publisher.Flux;
 
-import java.util.List;
-
-/**
- *
- */
 public interface TodosOperations {
     Flux<Todo> listTodosByUserId(String userId);
 }

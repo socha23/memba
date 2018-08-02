@@ -1,7 +1,7 @@
 package pl.socha23.memba.web.todos
 
 
-import pl.socha23.memba.business.todos.TodosOperations
+import pl.socha23.memba.business.api.logic.TodosOperations
 import pl.socha23.memba.web.security.TestUserProvider
 import reactor.core.publisher.Flux
 import spock.lang.Specification
