@@ -17,11 +17,12 @@ const TodoListView = ({loading, todos}) => <div>
         </PageTopNavbar>
         <PageBody>
             {loading ? <BigMemba/> :
-                <ul className="list-group"> {
-                    todos.map(todo => <TodoItem key={todo.id} todo={todo}/>)
-                }
-                </ul>
-
+                <table className="table table-dark table-hover">
+                    <tbody>
+                    {todos.map(todo => <TodoItem key={todo.id} todo={todo}/>)
+                    }
+                    </tbody>
+                </table>
             }
         </PageBody>
     </div>;

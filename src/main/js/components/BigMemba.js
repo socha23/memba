@@ -1,5 +1,5 @@
 import React from 'react'
 
 export default () => <div>
-    <img src="memba408x411.png"/>
+    <img src="memba375x344.png"/>
 </div>;

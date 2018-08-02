@@ -1,8 +1,12 @@
 import React from 'react'
 
-export const TodoItem = ({todo}) => <li className="list-group-item">
-    {todo.text}
-</li>;
+const CELL_STYLE = {paddingTop: 20, paddingBottom: 20};
+
+export const TodoItem = ({todo}) => <tr>
+    <td style={CELL_STYLE}>
+        <h5>{todo.text}</h5>
+    </td>
+</tr>;
 
 
 export default TodoItem

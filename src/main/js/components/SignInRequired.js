@@ -2,6 +2,7 @@ import React from 'react'
 import {setIdToken} from '../apiHelper'
 import BigMemba from './BigMemba'
 import PageTopNavbar from './PageTopNavbar'
+import PageBottomNavbar from './PageBottomNavbar'
 import NavbarBrand from './NavbarBrand'
 import PageBody from './PageBody'
 
@@ -52,10 +53,12 @@ class SignInRequired extends React.Component {
             </PageTopNavbar>
             <PageBody>
                 <BigMemba/>
+            </PageBody>
+            <PageBottomNavbar>
                 <div id="signInButton">
                     Connecting to Google...
                 </div>
-            </PageBody>
+            </PageBottomNavbar>
         </div>;
     }
 }
