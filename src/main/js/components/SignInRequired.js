@@ -1,5 +1,9 @@
 import React from 'react'
 import {setIdToken} from '../apiHelper'
+import BigMemba from './BigMemba'
+import PageTopNavbar from './PageTopNavbar'
+import NavbarBrand from './NavbarBrand'
+import PageBody from './PageBody'
 
 class SignInRequired extends React.Component {
     state = {
@@ -43,9 +47,15 @@ class SignInRequired extends React.Component {
 
     render() {
         return this.state.signedIn ? this.props.children : <div>
-            <div id="signInButton">
-                Connecting to Google...
-            </div>
+            <PageTopNavbar>
+                <NavbarBrand/>
+            </PageTopNavbar>
+            <PageBody>
+                <BigMemba/>
+                <div id="signInButton">
+                    Connecting to Google...
+                </div>
+            </PageBody>
         </div>;
     }
 }

@@ -1,15 +1,15 @@
 import React from 'react'
 import {Switch, Route} from 'react-router-dom'
 
-import TodoList from './TodoList'
-import AddTodo from './AddTodo'
+import TodoListPage from './TodoListPage'
+import AddTodoPage from './AddTodoPage'
 import SignInRequired from './SignInRequired'
 
-export default () => <div style={{maxWidth: 700, margin: "auto"}}>
+export default () => <div className="container" style={{padding: 0}}>
     <SignInRequired>
         <Switch>
-            <Route exact path="/" component={TodoList}/>
-            <Route path="/add" component={AddTodo}/>
+            <Route exact path="/" component={TodoListPage}/>
+            <Route path="/add" component={AddTodoPage}/>
         </Switch>
     </SignInRequired>
 
