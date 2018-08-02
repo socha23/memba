@@ -53,12 +53,12 @@ dependencies {
 
 
 task npmInstall(type: Exec) {
-	commandLine 'cmd', '/c', 'npm', 'install'
+	commandLine 'npm', 'install'
 }
 
 
 task npmBundleProd(type: Exec) {
-	commandLine 'cmd', '/c', 'npm', 'run', 'bundle-prod'
+	commandLine 'npm', 'run', 'bundle-prod'
 }
 
 classes.dependsOn npmBundleProd
