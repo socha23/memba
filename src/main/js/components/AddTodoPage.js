@@ -12,7 +12,7 @@ const AddTodoPage = () => <div>
     </BrandedNavbar>
     
     <PageBody>
-        <div className="container">
+        <div className="container" style={{padding: 2}}>
             <TodoTextInput/>
             <Link to="/" className="btn btn-primary btn-lg btn-block">
                 Add new item
@@ -28,7 +28,8 @@ class TodoTextInput extends React.Component {
 
     render() {
         return <div className="form-group">
-                <textarea rows={4} ref={r => {this.input = r}} type="text" className="form-control form-control-lg" style={{paddingTop: 3, paddingRight: 5, paddingBottom: 3, paddingLeft: 5}}/>
+            <label for="description" className="col-form-label-lg">Description:</label>
+            <textarea id="description" rows={4} ref={r => {this.input = r}} type="text" className="form-control form-control-lg" style={{paddingTop: 3, paddingRight: 5, paddingBottom: 3, paddingLeft: 5}}/>
         </div>
     }
 }
