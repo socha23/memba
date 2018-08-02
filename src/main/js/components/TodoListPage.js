@@ -27,7 +27,7 @@ const TodoListView = ({loading, todos}) => <div>
 
 class TodoListPage extends React.Component {
     state = {
-        loading: false,
+        loading: true,
         todos: []
     };
 
