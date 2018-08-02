@@ -1,4 +1,4 @@
-package pl.socha23.memba.web.security.spring;
+package pl.socha23.memba.web.security.springsecurity;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;

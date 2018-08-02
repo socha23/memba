@@ -1,7 +1,6 @@
-package pl.socha23.memba.web.security.spring;
+package pl.socha23.memba.web.security.springsecurity;
 
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
