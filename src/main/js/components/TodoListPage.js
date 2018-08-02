@@ -3,20 +3,18 @@ import {Link} from 'react-router-dom'
 
 import {jsonGet} from '../apiHelper'
 import TodoItem from './TodoItem'
-import PageTopNavbar from './PageTopNavbar'
-import NavbarBrand from './NavbarBrand'
+import {BrandedNavbar} from './PageTopNavbar'
 import PageBody from './PageBody'
 import BigMemba from './BigMemba'
 
 const TodoListView = ({loading, todos}) => <div>
-        <PageTopNavbar>
-            <NavbarBrand/>
+        <BrandedNavbar>
             <Link to="/add" className="btn btn-primary">
                 Add...
             </Link>
-        </PageTopNavbar>
+        </BrandedNavbar>
         <PageBody>
-            {loading ? <BigMemba/> :
+            {loading ? <BigMemba/>:
                 <table className="table table-dark table-hover">
                     <tbody>
                     {todos.map(todo => <TodoItem key={todo.id} todo={todo}/>)

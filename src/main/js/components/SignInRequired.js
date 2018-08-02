@@ -1,10 +1,24 @@
 import React from 'react'
 import {setIdToken} from '../apiHelper'
 import BigMemba from './BigMemba'
-import PageTopNavbar from './PageTopNavbar'
+import {BrandedNavbar} from './PageTopNavbar'
 import PageBottomNavbar from './PageBottomNavbar'
-import NavbarBrand from './NavbarBrand'
 import PageBody from './PageBody'
+
+
+const NotYetSignedIn = ({children}) => <div>
+    <BrandedNavbar/>
+    <PageBody>
+        <BigMemba/>
+    </PageBody>
+    <PageBottomNavbar>
+        <div id="signInButton">
+            Connecting to Google...
+        </div>
+    </PageBottomNavbar>
+</div>;
+
+
 
 class SignInRequired extends React.Component {
     state = {
@@ -47,19 +61,7 @@ class SignInRequired extends React.Component {
     }
 
     render() {
-        return this.state.signedIn ? this.props.children : <div>
-            <PageTopNavbar>
-                <NavbarBrand/>
-            </PageTopNavbar>
-            <PageBody>
-                <BigMemba/>
-            </PageBody>
-            <PageBottomNavbar>
-                <div id="signInButton">
-                    Connecting to Google...
-                </div>
-            </PageBottomNavbar>
-        </div>;
+        return this.state.signedIn ? this.props.children : <NotYetSignedIn/>
     }
 }
 
