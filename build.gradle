@@ -16,15 +16,19 @@ buildscript {
 
 apply plugin: 'groovy'
 apply plugin: 'java'
+apply plugin: 'war'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
-apply plugin: 'com.moowork.node'
 
 sourceCompatibility = 1.10
 
 jar {
 	baseName = 'memba'
 	version =  '1.0'
+}
+
+bootWar {
+	archiveName = 'memba.war'
 }
 
 repositories {
@@ -37,6 +41,7 @@ repositories {
 dependencies {
 	compile("org.springframework.boot:spring-boot-starter-web")
 	compile("org.springframework.boot:spring-boot-starter-webflux")
+	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 
     compile("org.springframework.boot:spring-boot-starter-security")
 	compile("com.google.api-client:google-api-client:1.23.0")
@@ -44,3 +49,17 @@ dependencies {
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile("org.spockframework:spock-spring:1.0-groovy-2.4")
 }
+
+
+task npmInstall(type: Exec) {
+	commandLine 'cmd', '/c', 'npm', 'install'
+}
+
+
+task npmBundleProd(type: Exec) {
+	commandLine 'cmd', '/c', 'npm', 'run', 'bundle-prod'
+}
+
+classes.dependsOn npmBundleProd
+npmBundleProd.dependsOn processResources
+npmBundleProd.dependsOn npmInstall

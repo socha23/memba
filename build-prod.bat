@@ -1,1 +1,1 @@
-gradle bootRepackage -Pprofile=prod
+gradle bootWar
