@@ -22,9 +22,9 @@ apply plugin: 'io.spring.dependency-management'
 
 sourceCompatibility = 1.10
 
-jar {
-	baseName = 'memba'
-	version =  '1.0'
+bootJar {
+	launchScript()
+	archiveName = 'memba.jar'	
 }
 
 bootWar {

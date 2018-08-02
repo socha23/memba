@@ -1,1 +1,1 @@
-gradle bootWar
+gradle bootJar
