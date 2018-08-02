@@ -6,7 +6,7 @@ import BigButton from './BigButton'
 export const AddTodoButton = () =>
     <Link to="/add">
         <BigButton>
-            Add item
+            Add item...
         </BigButton>
     </Link>;
 
