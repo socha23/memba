@@ -4,15 +4,12 @@ import {Link} from 'react-router-dom'
 import todoLogic from '../todoLogic'
 import TodoItem from './TodoItem'
 import {BrandedNavbar} from './PageTopNavbar'
+import {BorderlessBottomNavbar} from "./PageBottomNavbar";
 import PageBody from './PageBody'
 import BigMemba from './BigMemba'
 
 const TodoListView = ({loading, todos}) => <div>
-        <BrandedNavbar>
-            <Link to="/add" className="btn btn-primary">
-                Add...
-            </Link>
-        </BrandedNavbar>
+        <BrandedNavbar/>
         <PageBody>
             {loading ? <BigMemba/>:
                 <table className="table table-dark table-hover" style={{position: "relative", top: -1}}>
@@ -23,6 +20,12 @@ const TodoListView = ({loading, todos}) => <div>
                 </table>
             }
         </PageBody>
+    <BorderlessBottomNavbar>
+        <Link to="/add" className="btn btn-block btn-lg btn-primary">
+            Add new...
+        </Link>
+    </BorderlessBottomNavbar>
+
     </div>;
 
 class TodoListPage extends React.Component {

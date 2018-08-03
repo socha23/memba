@@ -2,7 +2,7 @@ import React from 'react'
 import {setIdToken} from '../apiHelper'
 import BigMemba from './BigMemba'
 import {BrandedNavbar} from './PageTopNavbar'
-import PageBottomNavbar from './PageBottomNavbar'
+import {PageBottomNavbar} from './PageBottomNavbar'
 import PageBody from './PageBody'
 
 
@@ -10,12 +10,12 @@ const NotYetSignedIn = ({children}) => <div>
     <BrandedNavbar/>
     <PageBody>
         <BigMemba/>
-    </PageBody>
-    <PageBottomNavbar>
-        <div id="signInButton">
-            Connecting to Google...
+        <div style={{width: 240, margin: "auto"}}>
+            <div id="signInButton">
+                Connecting to Google...
+            </div>
         </div>
-    </PageBottomNavbar>
+    </PageBody>
 </div>;
 
 

@@ -1,9 +1,20 @@
 import React from 'react'
 
-export default ({children}) => <nav className="navbar fixed-bottom navbar-expand-lg"
-                                    style={{paddingTop: 0, paddingRight: 2, paddingBottom: 2, paddingLeft: 2}}>
+const PADDING = {paddingTop: 0, paddingRight: 2, paddingBottom: 2, paddingLeft: 2};
+
+export const PageBottomNavbar =  ({children}) => <nav className="navbar fixed-bottom navbar-expand-lg"
+                                    style={PADDING}>
     <div className="container">
         {children}
     </div>
 </nav>;
 
+
+export const StatusBottomNavbar = PageBottomNavbar;
+
+export const BorderlessBottomNavbar =  ({children}) => <nav className="navbar fixed-bottom navbar-expand-lg"
+                                    style={{...PADDING, borderTop: "none"}}>
+    <div className="container">
+        {children}
+    </div>
+</nav>;

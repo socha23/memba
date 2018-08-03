@@ -5,7 +5,7 @@ import todoLogic from '../todoLogic'
 
 import {BrandedNavbar} from './PageTopNavbar'
 import PageBody from './PageBody'
-import PageBottomNavbar from './PageBottomNavbar'
+import {BorderlessBottomNavbar} from './PageBottomNavbar'
 
 const AddTodoPageView = ({
                              text, onChangeText,
@@ -13,7 +13,7 @@ const AddTodoPageView = ({
                          }) => <div>
     <BrandedNavbar title="Enter details">
         <Link to="/" className="btn btn-primary">
-            Back
+            Cancel
         </Link>
     </BrandedNavbar>
 
@@ -22,11 +22,18 @@ const AddTodoPageView = ({
             <TodoTextInput value={text} onChangeValue={onChangeText}/>
         </div>
     </PageBody>
-    <PageBottomNavbar>
-        <button className="btn btn-primary btn-lg btn-block" disabled={!submitEnabled} onClick={submitEnabled ? onSubmit : () => {}}>
+
+    <BorderlessBottomNavbar>
+        <button
+            className={"btn btn-lg btn-block " + (submitEnabled ? "btn-success" : "btn-primary")}
+            disabled={!submitEnabled}
+            onClick={submitEnabled ? onSubmit : () => {}}
+        >
             {submitEnabled ? "Add new item" : "Enter description first"}
         </button>
-    </PageBottomNavbar>
+    </BorderlessBottomNavbar>
+
+
 </div>;
 
 class TodoTextInput extends React.Component {
