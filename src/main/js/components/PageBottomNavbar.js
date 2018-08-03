@@ -1,7 +1,7 @@
 import React from 'react'
 
 export default ({children}) => <nav className="navbar fixed-bottom navbar-expand-lg"
-                                    style={{padding: "0 5px 0 0"}}>
+                                    style={{paddingTop: 0, paddingRight: 2, paddingBottom: 2, paddingLeft: 2}}>
     <div className="container">
         {children}
     </div>

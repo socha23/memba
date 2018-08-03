@@ -5,6 +5,7 @@ import todoLogic from '../todoLogic'
 
 import {BrandedNavbar} from './PageTopNavbar'
 import PageBody from './PageBody'
+import PageBottomNavbar from './PageBottomNavbar'
 
 const AddTodoPageView = ({
                              text, onChangeText,
@@ -19,11 +20,13 @@ const AddTodoPageView = ({
     <PageBody>
         <div className="container" style={{padding: 2}}>
             <TodoTextInput value={text} onChangeValue={onChangeText}/>
-            <button className="btn btn-primary btn-lg btn-block" disabled={!submitEnabled} onClick={submitEnabled ? onSubmit : () => {}}>
-                {submitEnabled ? "Add new item" : "Enter description first"}
-            </button>
         </div>
     </PageBody>
+    <PageBottomNavbar>
+        <button className="btn btn-primary btn-lg btn-block" disabled={!submitEnabled} onClick={submitEnabled ? onSubmit : () => {}}>
+            {submitEnabled ? "Add new item" : "Enter description first"}
+        </button>
+    </PageBottomNavbar>
 </div>;
 
 class TodoTextInput extends React.Component {
@@ -33,15 +36,16 @@ class TodoTextInput extends React.Component {
 
     render() {
         return <div className="form-group">
-            <label htmlFor="description" className="col-form-label-lg">Description:</label>
             <textarea id="description"
                       ref={r => {this.input = r}}
-                      rows={4}
+                      rows={5}
                       className="form-control form-control-lg"
                       style={{paddingTop: 3, paddingRight: 5, paddingBottom: 3, paddingLeft: 5}}
 
                       value={this.props.value}
                       onChange={(e) => {this.props.onChangeValue(e.target.value)}}
+
+                      placeholder="Description..."
 
             />
         </div>
