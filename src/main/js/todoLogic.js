@@ -1,4 +1,4 @@
-import {jsonGet} from './apiHelper'
+import {jsonGet, jsonPost} from './apiHelper'
 
 class TodoLogic {
     todos = [];
@@ -55,19 +55,13 @@ class TodoLogic {
         this.callSubscribers();
     }
 
-    callSubscribers() {
-        for (const subscriber in this.subscribers) {
-            this.subscribers[subscriber]()
-        }
-
-    }
-
-    addTodo({text}) {
-        this.todos.unshift({
-            id: "auto" + this.autoinc++,
-            text: text
-        });
-        this.callSubscribers();
+    addTodo(todo) {
+        this.loading = true;
+        jsonPost("/todos", todo)
+            .then(r => {
+                this.todos.unshift(r);
+                this.callSubscribers();
+            });
     }
 
     setCompleted(todoId, completed) {
@@ -78,6 +72,15 @@ class TodoLogic {
     findTodoById(id) {
         return this.todos.find(t => t.id === id)
     }
+
+    callSubscribers() {
+        for (const subscriber in this.subscribers) {
+            this.subscribers[subscriber]()
+        }
+
+    }
+
+
 }
 
 const TODO_LOGIC = new TodoLogic();
