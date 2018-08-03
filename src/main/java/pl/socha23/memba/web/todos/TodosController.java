@@ -30,6 +30,11 @@ public class TodosController {
         return todosOperations.listTodosByUserId(getCurrentUserId());
     }
 
+    /*
+     * problem: to move entirely to webflux we would have to disable webmvc, and that breaks the web login,
+     * so better let's not
+     */
+
     @PostMapping("/api/todos")
     public Mono<Todo> addTodo(@RequestBody CreateTodoRequestPayload createTodo) {
         return todosOperations.createTodo(getCurrentUserId(), Mono.just(createTodo));
