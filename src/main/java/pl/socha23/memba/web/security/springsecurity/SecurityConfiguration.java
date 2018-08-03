@@ -32,7 +32,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .anyRequest().hasRole("USER")
                 .and()
                 .addFilterBefore(tokenFilter(), BasicAuthenticationFilter.class)
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .csrf().disable() // we REST anyway
+        ;
 
     }
 
