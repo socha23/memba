@@ -1,12 +1,12 @@
 import React from 'react'
 
-const CELL_STYLE = {paddingTop: 20, paddingBottom: 20};
-
-export const TodoItem = ({todo}) => <tr>
-    <td style={CELL_STYLE}>
+export default ({todo}) =>
+    <div className="todoItem"
+         style={{
+             paddingTop: 20,
+             paddingBottom: 20,
+             paddingLeft: 12,
+             paddingRight: 12
+         }}>
         <h5>{todo.text}</h5>
-    </td>
-</tr>;
-
-
-export default TodoItem
+    </div>;

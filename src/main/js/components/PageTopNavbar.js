@@ -1,7 +1,7 @@
 import React from 'react'
 
 export const PageTopNavbar = ({children}) => <nav className="navbar fixed-top navbar-expand-lg navbar-dark bg-primary"
-                                                  style={{paddingTop: 2, paddingRight: 2, paddingBottom: 0, paddingLeft: 2}}>
+                                                  style={{paddingTop: 0, paddingRight: 2, paddingBottom: 0, paddingLeft: 2}}>
     <div className="container">
         {children}
     </div>

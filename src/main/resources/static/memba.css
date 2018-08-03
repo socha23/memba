@@ -1,3 +1,25 @@
 a:hover {
     text-decoration: none;
 }
+
+.example-enter {
+    height: 0
+}
+
+.todoItem {
+    border-top: 1px solid rgba(0,0,0,0.6)
+}
+
+.todoItem:first-child {
+    border-top: none;
+}
+
+.todoItem:hover {
+    background-color: rgba(255, 255, 255, 0.075);
+}
+
+.example-enter.example-enter-active {
+  height: 200px;
+  transition: height 500ms ease-in;
+}
+

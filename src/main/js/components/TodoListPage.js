@@ -1,5 +1,6 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import todoLogic from '../todoLogic'
 import TodoItem from './TodoItem'
@@ -12,19 +13,16 @@ const TodoListView = ({loading, todos}) => <div>
         <BrandedNavbar/>
         <PageBody>
             {loading ? <BigMemba/>:
-                <table className="table table-dark table-hover" style={{position: "relative", top: -1}}>
-                    <tbody>
-                    {todos.map(todo => <TodoItem key={todo.id} todo={todo}/>)
-                    }
-                    </tbody>
-                </table>
+                <div style={{color: "white"}}>
+                    {todos.map(todo => <TodoItem key={todo.id} todo={todo}/>)}
+                </div>
             }
         </PageBody>
-    <BorderlessBottomNavbar>
-        <Link to="/add" className="btn btn-block btn-lg btn-primary">
-            Add new...
-        </Link>
-    </BorderlessBottomNavbar>
+        <BorderlessBottomNavbar>
+            <Link to="/add" className="btn btn-block btn-lg btn-primary">
+                Add new...
+            </Link>
+        </BorderlessBottomNavbar>
 
     </div>;
 
