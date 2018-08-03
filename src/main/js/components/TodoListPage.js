@@ -1,7 +1,7 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
 
-import {jsonGet} from '../apiHelper'
+import todoLogic from '../todoLogic'
 import TodoItem from './TodoItem'
 import {BrandedNavbar} from './PageTopNavbar'
 import PageBody from './PageBody'
@@ -15,7 +15,7 @@ const TodoListView = ({loading, todos}) => <div>
         </BrandedNavbar>
         <PageBody>
             {loading ? <BigMemba/>:
-                <table className="table table-dark table-hover">
+                <table className="table table-dark table-hover" style={{position: "relative", top: -1}}>
                     <tbody>
                     {todos.map(todo => <TodoItem key={todo.id} todo={todo}/>)
                     }
@@ -27,24 +27,22 @@ const TodoListView = ({loading, todos}) => <div>
 
 class TodoListPage extends React.Component {
     state = {
-        loading: true,
-        todos: []
+        generation: 0
     };
 
     componentDidMount() {
-        this.reload();
+        todoLogic.subscribe(this, () => this.incGeneration())
     }
 
-    reload() {
-        this.setState({
-            loading: true
-        });
-        jsonGet("/todos")
-            .then(r => {this.setState({loading: false, todos: r})});
+    componentWillUnmount() {
+        todoLogic.unsubscribe(this)
     }
 
+    incGeneration() {
+        this.setState({generation: this.state.generation + 1})
+    }
     render() {
-        return <TodoListView loading={this.state.loading} todos={this.state.todos}/>
+        return <TodoListView loading={todoLogic.areTodosNotLoaded()} todos={todoLogic.listTodos()}/>
     }
 }
 
