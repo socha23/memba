@@ -48,7 +48,6 @@ class TodoTextInput extends React.Component {
                       rows={5}
                       className="form-control form-control-lg"
                       style={{paddingTop: 3, paddingRight: 5, paddingBottom: 3, paddingLeft: 5}}
-
                       value={this.props.value}
                       onChange={(e) => {this.props.onChangeValue(e.target.value)}}
 
@@ -83,8 +82,10 @@ class AddTodoPage extends React.Component {
     }
 
     onSubmit() {
-        todoLogic.addTodo({
-            text: this.state.text.trim()
+        setTimeout(() => {
+            todoLogic.addTodo({
+                text: this.state.text.trim()
+            });
         });
         this.props.history.push('/');
     }

@@ -9,12 +9,24 @@ import {BorderlessBottomNavbar} from "./PageBottomNavbar";
 import PageBody from './PageBody'
 import BigMemba from './BigMemba'
 
-const TodoListView = ({loading, todos}) => <div>
+const TodoListView = ({loading, todos}) => {
+
+    var todoElements = todos.map(todo =>
+        <TodoItem key={todo.id} todo={todo}/>
+    );
+
+    return <div>
         <BrandedNavbar/>
         <PageBody>
-            {loading ? <BigMemba/>:
+            {loading ? <BigMemba/> :
                 <div style={{color: "white"}}>
-                    {todos.map(todo => <TodoItem key={todo.id} todo={todo}/>)}
+                    <ReactCSSTransitionGroup
+                        transitionName="example"
+                        transitionEnterTimeout={300}
+                        transitionLeaveTimeout={300}
+                        >
+                        {todoElements}
+                    </ReactCSSTransitionGroup>
                 </div>
             }
         </PageBody>
@@ -24,7 +36,8 @@ const TodoListView = ({loading, todos}) => <div>
             </Link>
         </BorderlessBottomNavbar>
 
-    </div>;
+    </div>
+};
 
 class TodoListPage extends React.Component {
     state = {
@@ -42,6 +55,7 @@ class TodoListPage extends React.Component {
     incGeneration() {
         this.setState({generation: this.state.generation + 1})
     }
+
     render() {
         return <TodoListView loading={todoLogic.areTodosNotLoaded()} todos={todoLogic.listTodos()}/>
     }
