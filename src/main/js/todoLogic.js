@@ -35,7 +35,10 @@ class TodoLogic {
     }
 
     listTodos() {
-        return this.todos;
+        const completed = this.todos.filter(t => t.completed);
+        const notCompleted = this.todos.filter(t => !t.completed);
+
+        return notCompleted.concat(completed);
     }
 
     fetchTodos() {
@@ -52,7 +55,7 @@ class TodoLogic {
     }
 
     callSubscribers() {
-        for (var subscriber in this.subscribers) {
+        for (const subscriber in this.subscribers) {
             this.subscribers[subscriber]()
         }
 
@@ -64,6 +67,15 @@ class TodoLogic {
             text: text
         });
         this.callSubscribers();
+    }
+
+    setCompleted(todoId, completed) {
+        this.findTodoById(todoId).completed = completed;
+        this.callSubscribers();
+    }
+
+    findTodoById(id) {
+        return this.todos.find(t => t.id === id)
     }
 }
 

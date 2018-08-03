@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import todoLogic from '../todoLogic'
-import TodoItem from './TodoItem'
+import TodoItem from './TodoListItem'
 import {BrandedNavbar} from './PageTopNavbar'
 import {BorderlessBottomNavbar} from "./PageBottomNavbar";
 import PageBody from './PageBody'
@@ -12,22 +12,20 @@ import BigMemba from './BigMemba'
 const TodoListView = ({loading, todos}) => {
 
     var todoElements = todos.map(todo =>
-        <TodoItem key={todo.id} todo={todo}/>
+        <TodoItem key={todo.id + todo.completed} todo={todo}/>
     );
 
     return <div>
         <BrandedNavbar/>
         <PageBody>
             {loading ? <BigMemba/> :
-                <div style={{color: "white"}}>
-                    <ReactCSSTransitionGroup
-                        transitionName="example"
-                        transitionEnterTimeout={300}
-                        transitionLeaveTimeout={300}
-                        >
-                        {todoElements}
-                    </ReactCSSTransitionGroup>
-                </div>
+                <ReactCSSTransitionGroup
+                    transitionName="example"
+                    transitionEnterTimeout={300}
+                    transitionLeaveTimeout={300}
+                    >
+                    {todoElements}
+                </ReactCSSTransitionGroup>
             }
         </PageBody>
         <BorderlessBottomNavbar>
