@@ -2,6 +2,20 @@ a:hover {
     text-decoration: none;
 }
 
+.navbar .nav-link:hover, .navbar .nav-link:focus {
+    background-color: transparent !important;
+    background-image: none !important;
+    color: rgba(255,255,255,0.5) !important;
+}
+
+.navbar .active .nav-link:hover, .navbar .active .nav-link:focus {
+    background-color: #3A3F44 !important;
+    background-image: linear-gradient(#101112, #17191b 40%, #1b1e20) !important;
+    color: white !important;
+}
+
+
+
 .todoItem {
     border-top: 1px solid rgba(0,0,0,0.6)
 }
@@ -15,23 +29,23 @@ a:hover {
 }
 
 
-.example-enter {
+.todoItem-enter {
     opacity: 0;
     height: 0;
 }
 
-.example-enter.example-enter-active {
+.todoItem-enter.todoItem-enter-active {
     height: 70px;
     opacity: 1;
     transition: height 300ms, opacity 300ms;
 }
 
-.example-leave {
+.todoItem-leave {
     height: 70px;
     opacity: 1;
 }
 
-.example-leave.example-leave-active {
+.todoItem-leave.todoItem-leave-active {
     opacity: 0;
     height: 0;
     transition: height 300ms, opacity 300ms;

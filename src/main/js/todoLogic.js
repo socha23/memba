@@ -34,11 +34,12 @@ class TodoLogic {
         return this.todosNotLoaded;
     }
 
-    listTodos() {
-        const completed = this.todos.filter(t => t.completed);
-        const notCompleted = this.todos.filter(t => !t.completed);
+    listTodos({
+                  showNotCompleted = true,
+                  showCompleted = false,
+              }) {
 
-        return notCompleted.concat(completed);
+        return this.todos.filter(t => (t.completed && showCompleted) || ((!t.completed) && showNotCompleted));
     }
 
     fetchTodos() {
