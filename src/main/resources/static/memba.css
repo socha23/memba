@@ -48,5 +48,5 @@ a:hover {
 .todoItem-leave.todoItem-leave-active {
     opacity: 0;
     height: 0;
-    transition: height 300ms, opacity 300ms;
+    transition: height 300ms, opacity 100ms;
 }
