@@ -6,12 +6,12 @@ class TodoImpl implements Todo {
 
     private String id;
     private String text;
-    private boolean done;
+    private boolean completed;
 
     TodoImpl(String id, String text) {
         this.id = id;
         this.text = text;
-        done = false;
+        completed = false;
     }
 
     @Override
@@ -25,7 +25,11 @@ class TodoImpl implements Todo {
     }
 
     @Override
-    public boolean isDone() {
-        return done;
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 }

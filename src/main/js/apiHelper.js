@@ -2,30 +2,37 @@ import fetch from 'isomorphic-fetch'
 
 var idToken = null;
 
-function jsonGet(path) {
-    return fetch("/api" + path, {
+export function jsonGet(path) {
+    return jsonCall("GET", path, null)
+}
+
+export function jsonPatch(path, payload = {}) {
+    return jsonCall("PATCH", path, payload)
+}
+
+export function jsonPut(path, payload = {}) {
+    return jsonCall("PUT", path, payload)
+}
+
+export function jsonPost(path, payload = {}) {
+    return jsonCall("POST", path, payload)
+}
+
+function jsonCall(method, path, payload) {
+    const params = {
         credentials: 'same-origin',
+        method: method,
         headers: {
             "Authorization": "Bearer " + idToken,
             "Content-Type": "application/json"
         }
-    })
+    };
+    if (payload != null) {
+        params.body = JSON.stringify(payload);
+    }
+    return fetch("/api" + path, params)
         .then(unpackResponse)
 }
-
-function jsonPost(path, payload) {
-    return fetch("/api" + path, {
-        credentials: 'same-origin',
-        method: "POST",
-        body: JSON.stringify(payload),
-        headers: {
-            "Authorization": "Bearer " + idToken,
-            "Content-Type": "application/json"
-        }
-    })
-        .then(unpackResponse)
-}
-
 
 const unpackResponse = r => {
     if (r.ok) {
@@ -36,12 +43,7 @@ const unpackResponse = r => {
     }
 };
 
-function setIdToken(token) {
+export function setIdToken(token) {
     idToken = token;
 }
 
-module.exports = {
-    jsonGet: jsonGet,
-    jsonPost: jsonPost,
-    setIdToken: setIdToken
-};

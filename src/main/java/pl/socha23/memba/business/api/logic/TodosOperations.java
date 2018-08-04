@@ -8,4 +8,6 @@ import reactor.core.publisher.Mono;
 public interface TodosOperations {
     Flux<Todo> listTodosByUserId(String userId);
     Mono<Todo> createTodo(String userId, Mono<? extends CreateTodo> createTodo);
+
+    Mono<Boolean> setCompleted(String currentUserId, String todoId, boolean completed);
 }

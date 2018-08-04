@@ -9,4 +9,7 @@ public interface TodoStore {
 
     Flux<Todo> listTodosByUserId(String userId);
     Mono<Todo> createTodo(String userId, Mono<? extends CreateTodo> createTodo);
+    Mono<Todo> findTodoById(String todoId);
+
+    void setCompleted(String todoId, boolean completed);
 }

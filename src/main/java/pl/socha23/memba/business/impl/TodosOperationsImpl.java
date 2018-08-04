@@ -29,5 +29,23 @@ class TodosOperationsImpl implements TodosOperations {
         return todoStore.createTodo(userId, createTodo);
     }
 
+    @Override
+    public Mono<Boolean> setCompleted(String currentUserId, String todoId, boolean completed) {
+        return todoStore
+                .findTodoById(todoId)
+                .map(t -> assertCanComplete(currentUserId, t))
+                .map(t -> doSetCompleted(t.getId(), completed));
+    }
+
+    private boolean doSetCompleted(String todoId, boolean completed) {
+        todoStore.setCompleted(todoId, completed);
+        return true;
+    }
+
+    private static Todo assertCanComplete(String currentUserId, Todo todo) {
+        // TODO here is the right spot for checking todo access rights
+        return todo;
+    }
+
 
 }
