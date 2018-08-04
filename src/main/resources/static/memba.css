@@ -24,11 +24,6 @@ a:hover {
     border-top: none;
 }
 
-.todoItem:hover {
-    background-color: rgba(255, 255, 255, 0.075);
-}
-
-
 .todoItem-enter {
     opacity: 0;
     height: 0;
