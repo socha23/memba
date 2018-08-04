@@ -2,7 +2,7 @@ import React from 'react'
 import todoLogic from '../todoLogic'
 
 const TodoView = ({todo}) => {
-    const opacity = todo.completed ? 0.5 : 1;
+    const opacity = todo.completed ? 0.3 : 1;
 
     return <div className="todoItem">
         <div style={{
