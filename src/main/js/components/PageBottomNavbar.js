@@ -12,7 +12,7 @@ export const PageBottomNavbar =  ({children}) => <nav className="navbar fixed-bo
 
 export const StatusBottomNavbar = PageBottomNavbar;
 
-export const BorderlessBottomNavbar =  ({children}) => <nav className="navbar fixed-bottom navbar-expand-lg"
+export const BorderlessBottomNavbar =  ({children}) => <nav className="navbar fixed-bottom navbar-expand-lg bg-primary"
                                     style={{...PADDING, border: "none"}}>
     <div className="container">
         {children}
