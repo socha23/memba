@@ -41,7 +41,7 @@ public class TodosController {
         return todosOperations.updateTodo(todoId, Mono.just(UpdateTodoRequest.withCompleted(completed)));
     }
 
-    private static class UpdateTodoRequest implements UpdateTodo {
+    static class UpdateTodoRequest implements UpdateTodo {
         private String text;
         private Boolean completed;
 

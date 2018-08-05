@@ -1,6 +1,5 @@
 package pl.socha23.memba.dao.mem;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import pl.socha23.memba.business.api.dao.TodoStore;
@@ -9,16 +8,17 @@ import pl.socha23.memba.business.api.model.Todo;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
 @Profile("mem")
-class MemTodoStore implements TodoStore<BasicTodo> {
+public class MemTodoStore implements TodoStore<BasicTodo> {
 
     private int autoInc = 0;
-
-    private Set<String> seenUserIds = new HashSet<>();
     private Map<String, BasicTodo> todosById = new HashMap<>();
 
     @Override
@@ -47,24 +47,13 @@ class MemTodoStore implements TodoStore<BasicTodo> {
     }
 
     private List<BasicTodo> getUserTodos(String userId) {
-        if (!seenUserIds.contains(userId)) {
-            createDefaultTodos(userId);
-        }
-
         return todosById.values().stream()
                 .filter(t -> t.getOwnerId().equals(userId))
                 .sorted(Comparator.comparing(Todo::getId).reversed())
                 .collect(Collectors.toList());
     }
 
-    private void createDefaultTodos(String userId) {
-        addTodo(userId, "Papier");
-        addTodo(userId, "Mydło");
-        addTodo(userId, "Powidło");
-        seenUserIds.add(userId);
-    }
-
-    private BasicTodo addTodo(Todo todo) {
+    public BasicTodo addTodo(Todo todo) {
         var newTodo = BasicTodo.copy(todo);
 
         if (newTodo.getId() == null) {
@@ -73,13 +62,6 @@ class MemTodoStore implements TodoStore<BasicTodo> {
 
         todosById.put(newTodo.getId(), newTodo);
         return newTodo;
-    }
-
-    private Todo addTodo(String userId, String text) {
-        var todo = new BasicTodo();
-        todo.setOwnerId(userId);
-        todo.setText(text);
-        return addTodo(todo);
     }
 
     private String autoinc() {

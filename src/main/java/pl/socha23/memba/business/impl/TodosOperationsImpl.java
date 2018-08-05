@@ -12,7 +12,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Component
-class TodosOperationsImpl implements TodosOperations {
+public class TodosOperationsImpl implements TodosOperations {
 
     private TodoStore<? extends Todo> todoStore;
     private CurrentUserProvider currentUserProvider;
@@ -58,6 +58,10 @@ class TodosOperationsImpl implements TodosOperations {
 
         if (updateTodo.isCompleted() != null) {
             newTodo.setCompleted(updateTodo.isCompleted());
+        }
+
+        if (updateTodo.getText() != null) {
+            newTodo.setText(updateTodo.getText());
         }
 
         return newTodo;
