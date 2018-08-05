@@ -7,7 +7,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface TodosOperations {
-    Flux<Todo> listCurrentUserTodos();
-    Mono<Todo> createTodo(Mono<? extends CreateTodo> createTodo);
-    Mono<Todo> updateTodo(String todoId, Mono<? extends UpdateTodo> updateTodo);
+    Flux<? extends Todo> listCurrentUserTodos();
+    Mono<? extends Todo> createTodo(Mono<? extends CreateTodo> createTodo);
+    Mono<? extends Todo> updateTodo(String todoId, Mono<? extends UpdateTodo> updateTodo);
 }

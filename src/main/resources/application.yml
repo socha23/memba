@@ -8,3 +8,12 @@ memba:
     google:
       client_id: "502079153987-8e460ao67b3jj62u94o362sgukfrjf6q.apps.googleusercontent.com"
 
+spring:
+  profiles:
+    active: mongo
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: memba
+      password: ""

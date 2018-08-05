@@ -14,21 +14,21 @@ import reactor.core.publisher.Mono;
 @Component
 class TodosOperationsImpl implements TodosOperations {
 
-    private TodoStore todoStore;
+    private TodoStore<? extends Todo> todoStore;
     private CurrentUserProvider currentUserProvider;
 
-    public TodosOperationsImpl(TodoStore todoStore, CurrentUserProvider currentUserProvider) {
+    public TodosOperationsImpl(TodoStore<? extends Todo> todoStore, CurrentUserProvider currentUserProvider) {
         this.todoStore = todoStore;
         this.currentUserProvider = currentUserProvider;
     }
 
     @Override
-    public Flux<Todo> listCurrentUserTodos() {
-        return todoStore.listTodosByUserId(currentUserProvider.getCurrentUserId());
+    public Flux<? extends Todo> listCurrentUserTodos() {
+        return todoStore.listTodosByOwnerId(currentUserProvider.getCurrentUserId());
     }
 
     @Override
-    public Mono<Todo> createTodo(Mono<? extends CreateTodo> createTodo) {
+    public Mono<? extends Todo> createTodo(Mono<? extends CreateTodo> createTodo) {
 
         return createTodo
                 .map(this::doCreateTodo)
@@ -46,14 +46,14 @@ class TodosOperationsImpl implements TodosOperations {
     }
 
     @Override
-    public Mono<Todo> updateTodo(String todoId, Mono<? extends UpdateTodo> updateTodo) {
+    public Mono<? extends Todo> updateTodo(String todoId, Mono<? extends UpdateTodo> updateTodo) {
         return todoStore
                 .findTodoById(todoId)
-                .zipWhen(t -> updateTodo, this::doUpdateTodo)
+                .zipWith(updateTodo, this::doUpdateTodo)
                 .compose(todoStore::updateTodo);
     }
 
-    private Todo doUpdateTodo(Todo todo, UpdateTodo updateTodo) {
+    private BasicTodo doUpdateTodo(Todo todo, UpdateTodo updateTodo) {
         var newTodo = BasicTodo.copy(todo);
 
         if (updateTodo.isCompleted() != null) {

@@ -4,12 +4,12 @@ import pl.socha23.memba.business.api.model.Todo;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public interface TodoStore {
+public interface TodoStore<T extends Todo> {
     
-    Mono<Todo> findTodoById(String id);
+    Mono<T> findTodoById(String id);
 
-    Flux<Todo> listTodosByUserId(String userId);
+    Flux<T> listTodosByOwnerId(String userId);
 
-    Mono<Todo> createTodo(Mono<? extends Todo> todo);
-    Mono<Todo> updateTodo(Mono<? extends Todo> todo);
+    Mono<T> createTodo(Mono<? extends Todo> todo);
+    Mono<T> updateTodo(Mono<? extends Todo> todo);
 }

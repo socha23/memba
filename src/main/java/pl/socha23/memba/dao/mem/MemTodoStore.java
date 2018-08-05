@@ -1,5 +1,7 @@
 package pl.socha23.memba.dao.mem;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import pl.socha23.memba.business.api.dao.TodoStore;
 import pl.socha23.memba.business.api.model.BasicTodo;
@@ -11,38 +13,40 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
-class TodoStoreImpl implements TodoStore {
+@Profile("mem")
+class MemTodoStore implements TodoStore<BasicTodo> {
 
     private int autoInc = 0;
 
     private Set<String> seenUserIds = new HashSet<>();
-    private Map<String, Todo> todosById = new HashMap<>();
+    private Map<String, BasicTodo> todosById = new HashMap<>();
 
     @Override
-    public Mono<Todo> findTodoById(String id) {
+    public Mono<BasicTodo> findTodoById(String id) {
         return Mono.justOrEmpty(todosById.get(id));
     }
 
     @Override
-    public Flux<Todo> listTodosByUserId(String userId) {
+    public Flux<BasicTodo> listTodosByOwnerId(String userId) {
         return Flux.fromIterable(getUserTodos(userId));
     }
 
     @Override
-    public Mono<Todo> createTodo(Mono<? extends Todo> todo) {
-        return todo.map(this::addTodo);
+    public Mono<BasicTodo> createTodo(Mono<? extends Todo> todo) {
+        return todo
+                .map(this::addTodo);
     }
 
     @Override
-    public Mono<Todo> updateTodo(Mono<? extends Todo> todo) {
+    public Mono<BasicTodo> updateTodo(Mono<? extends Todo> todo) {
         return todo.map(this::doUpdateTodo);
     }
 
-    private Todo doUpdateTodo(Todo todo) {
-        return todosById.put(todo.getId(), todo);
+    private BasicTodo doUpdateTodo(Todo todo) {
+        return todosById.put(todo.getId(), BasicTodo.copy(todo));
     }
 
-    private List<Todo> getUserTodos(String userId) {
+    private List<BasicTodo> getUserTodos(String userId) {
         if (!seenUserIds.contains(userId)) {
             createDefaultTodos(userId);
         }
@@ -60,7 +64,7 @@ class TodoStoreImpl implements TodoStore {
         seenUserIds.add(userId);
     }
 
-    private Todo addTodo(Todo todo) {
+    private BasicTodo addTodo(Todo todo) {
         var newTodo = BasicTodo.copy(todo);
 
         if (newTodo.getId() == null) {

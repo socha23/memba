@@ -23,7 +23,7 @@ class ListTodosSpec extends Specification {
 
     private static TodoStore todoStore(List<Map> todos) {
         return [
-                listTodosByUserId: {userId -> Flux.fromIterable(todos)}
+                listTodosByOwnerId: {userId -> Flux.fromIterable(todos)}
         ] as TodoStore
     }
 }

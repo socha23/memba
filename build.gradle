@@ -47,6 +47,8 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-security")
 	compile("com.google.api-client:google-api-client:1.23.0")
 
+	compile("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
+
 	//compile("org.springframework.boot:spring-boot-starter-actuator")
 
     testCompile("org.springframework.boot:spring-boot-starter-test")

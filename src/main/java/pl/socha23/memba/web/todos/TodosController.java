@@ -17,7 +17,7 @@ public class TodosController {
     }
 
     @GetMapping("/api/todos")
-    public Flux<Todo> currentUserTodos() {
+    public Flux<? extends Todo> currentUserTodos() {
         return todosOperations.listCurrentUserTodos();
     }
 
@@ -27,19 +27,19 @@ public class TodosController {
      */
 
     @PostMapping("/api/todos")
-    public Mono<Todo> addTodo(@RequestBody CreateTodoRequest createTodo) {
+    public Mono<? extends Todo> addTodo(@RequestBody CreateTodoRequest createTodo) {
         return todosOperations.createTodo(Mono.just(createTodo));
     }
 
     @PutMapping("/api/todos/{todoId}")
-    public Mono<Todo> update(@PathVariable("todoId") String todoId, @RequestBody UpdateTodoRequest updateTodo) {
+    public Mono<? extends Todo> update(@PathVariable("todoId") String todoId, @RequestBody UpdateTodoRequest updateTodo) {
         return todosOperations.updateTodo(todoId, Mono.just(updateTodo));
-    };
+    }
 
     @PutMapping("/api/todos/{todoId}/completed")
-    public Mono<Todo> setCompleted(@PathVariable("todoId") String todoId, @RequestBody boolean completed) {
+    public Mono<? extends Todo> setCompleted(@PathVariable("todoId") String todoId, @RequestBody boolean completed) {
         return todosOperations.updateTodo(todoId, Mono.just(UpdateTodoRequest.withCompleted(completed)));
-    };
+    }
 
     private static class UpdateTodoRequest implements UpdateTodo {
         private String text;
