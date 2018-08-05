@@ -1,6 +1,8 @@
-package pl.socha23.memba.business.todos
+package pl.socha23.memba.business.impl
 
 import pl.socha23.memba.business.api.dao.TodoStore
+import pl.socha23.memba.business.api.logic.CurrentUserProvider
+import pl.socha23.memba.business.api.model.User
 import pl.socha23.memba.business.impl.TodosOperationsImpl
 import reactor.core.publisher.Flux
 import spock.lang.Specification
@@ -13,16 +15,15 @@ class ListTodosSpec extends Specification {
         def listTodos = new TodosOperationsImpl(todoStore([
                 [id: "1", text: "foo"],
                 [id: "2", text: "bar"]
-        ]))
+        ]), new TestUserProvider())
         expect:
-        toList(listTodos.listTodosByUserId("testId")).size() == 2
+        toList(listTodos.listCurrentUserTodos()).size() == 2
 
     }
 
     private static TodoStore todoStore(List<Map> todos) {
         return [
-                listTodosByUserId: {id -> Flux.fromIterable(todos)}
+                listTodosByUserId: {userId -> Flux.fromIterable(todos)}
         ] as TodoStore
     }
-
 }

@@ -2,8 +2,8 @@ package pl.socha23.memba.web.security.springsecurity;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import pl.socha23.memba.web.security.CurrentUserProvider;
-import pl.socha23.memba.web.security.User;
+import pl.socha23.memba.business.api.logic.CurrentUserProvider;
+import pl.socha23.memba.business.api.model.User;
 
 @Component
 public class SpringSecurityCurrentUserProvider implements CurrentUserProvider {

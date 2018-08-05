@@ -3,7 +3,7 @@ package pl.socha23.memba.web.security.springsecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import pl.socha23.memba.web.security.User;
+import pl.socha23.memba.business.api.model.User;
 
 import java.util.Collection;
 import java.util.Collections;

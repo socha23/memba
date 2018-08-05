@@ -10,7 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Component;
-import pl.socha23.memba.web.security.User;
+import pl.socha23.memba.business.api.model.User;
 import pl.socha23.memba.web.security.springsecurity.UserBasedAuthentication;
 
 import java.util.Collections;
@@ -66,17 +66,14 @@ class GoogleJWTAuthenticationManager implements AuthenticationManager {
             return payload.getEmail();
         }
 
-        @Override
         public String getFirstName() {
             return (String)payload.get("first_name");
         }
 
-        @Override
         public String getFullName() {
             return (String)payload.get("name");
         }
 
-        @Override
         public String getEmail() {
             return payload.getEmail();
         }

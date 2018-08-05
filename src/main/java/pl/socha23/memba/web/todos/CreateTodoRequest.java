@@ -2,7 +2,7 @@ package pl.socha23.memba.web.todos;
 
 import pl.socha23.memba.business.api.model.CreateTodo;
 
-public class CreateTodoRequestPayload implements CreateTodo {
+public class CreateTodoRequest implements CreateTodo {
 
     private String text = null;
 

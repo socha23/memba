@@ -1,4 +1,7 @@
-package pl.socha23.memba.web.security
+package pl.socha23.memba.business.impl
+
+import pl.socha23.memba.business.api.logic.CurrentUserProvider
+import pl.socha23.memba.business.api.model.User
 
 class TestUserProvider implements CurrentUserProvider {
 
@@ -11,17 +14,14 @@ class TestUserProvider implements CurrentUserProvider {
                 return "testUserId"
             }
 
-            @Override
             String getFirstName() {
                 return "First Name"
             }
 
-            @Override
             String getFullName() {
                 return "First Name Lastname"
             }
 
-            @Override
             String getEmail() {
                 return "name@domain.com"
             }

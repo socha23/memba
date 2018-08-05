@@ -2,20 +2,26 @@ package pl.socha23.memba.dao.mem;
 
 import org.springframework.stereotype.Component;
 import pl.socha23.memba.business.api.dao.TodoStore;
-import pl.socha23.memba.business.api.model.CreateTodo;
+import pl.socha23.memba.business.api.model.BasicTodo;
 import pl.socha23.memba.business.api.model.Todo;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 class TodoStoreImpl implements TodoStore {
 
     private int autoInc = 0;
 
-    private Map<String, List<TodoImpl>> todosByUser = new HashMap<>();
-    private Map<String, TodoImpl> todosById = new HashMap<>();
+    private Set<String> seenUserIds = new HashSet<>();
+    private Map<String, Todo> todosById = new HashMap<>();
+
+    @Override
+    public Mono<Todo> findTodoById(String id) {
+        return Mono.justOrEmpty(todosById.get(id));
+    }
 
     @Override
     public Flux<Todo> listTodosByUserId(String userId) {
@@ -23,49 +29,56 @@ class TodoStoreImpl implements TodoStore {
     }
 
     @Override
-    public Mono<Todo> createTodo(String userId, Mono<? extends CreateTodo> createTodo) {
-        var result = newTodo(createTodo);
-
-        getUserTodos(userId).add(0, result);
-        todosById.put(result.getId(), result);
-
-        return Mono.just(result);
+    public Mono<Todo> createTodo(Mono<? extends Todo> todo) {
+        return todo.map(this::addTodo);
     }
 
     @Override
-    public Mono<Todo> findTodoById(String todoId) {
-        return Mono.just(todosById.get(todoId));
+    public Mono<Todo> updateTodo(Mono<? extends Todo> todo) {
+        return todo.map(this::doUpdateTodo);
     }
 
-    @Override
-    public void setCompleted(String todoId, boolean completed) {
-        todosById.get(todoId).setCompleted(completed);
+    private Todo doUpdateTodo(Todo todo) {
+        return todosById.put(todo.getId(), todo);
     }
 
-    private TodoImpl newTodo(Mono<? extends CreateTodo> createTodo) {
-        return new TodoImpl(UUID.randomUUID().toString(), createTodo.block().getText());
-    };
-
-    private List<TodoImpl> getUserTodos(String userId) {
-        if (!todosByUser.containsKey(userId)) {
+    private List<Todo> getUserTodos(String userId) {
+        if (!seenUserIds.contains(userId)) {
             createDefaultTodos(userId);
         }
-        return todosByUser.get(userId);
+
+        return todosById.values().stream()
+                .filter(t -> t.getOwnerId().equals(userId))
+                .sorted(Comparator.comparing(Todo::getId).reversed())
+                .collect(Collectors.toList());
     }
 
     private void createDefaultTodos(String userId) {
-        var result = new ArrayList<TodoImpl>();
-        result.add(todo("Papier"));
-        result.add(todo("Mydło"));
-        result.add(todo("Powidło"));
-
-        todosByUser.put(userId, result);
-        for (var todo : result) {
-            todosById.put(todo.getId(), todo);
-        }
+        addTodo(userId, "Papier");
+        addTodo(userId, "Mydło");
+        addTodo(userId, "Powidło");
+        seenUserIds.add(userId);
     }
 
-    private TodoImpl todo(String text) {
-        return new TodoImpl("_auto" + autoInc++, text);
+    private Todo addTodo(Todo todo) {
+        var newTodo = BasicTodo.copy(todo);
+
+        if (newTodo.getId() == null) {
+            newTodo.setId(autoinc());
+        }
+
+        todosById.put(newTodo.getId(), newTodo);
+        return newTodo;
+    }
+
+    private Todo addTodo(String userId, String text) {
+        var todo = new BasicTodo();
+        todo.setOwnerId(userId);
+        todo.setText(text);
+        return addTodo(todo);
+    }
+
+    private String autoinc() {
+        return "_auto" + autoInc++;
     }
 }

@@ -1,11 +1,13 @@
 package pl.socha23.memba.business.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import pl.socha23.memba.business.api.dao.TodoStore;
+import pl.socha23.memba.business.api.logic.CurrentUserProvider;
 import pl.socha23.memba.business.api.logic.TodosOperations;
+import pl.socha23.memba.business.api.model.BasicTodo;
 import pl.socha23.memba.business.api.model.CreateTodo;
 import pl.socha23.memba.business.api.model.Todo;
-import pl.socha23.memba.business.api.dao.TodoStore;
+import pl.socha23.memba.business.api.model.UpdateTodo;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -13,39 +15,52 @@ import reactor.core.publisher.Mono;
 class TodosOperationsImpl implements TodosOperations {
 
     private TodoStore todoStore;
+    private CurrentUserProvider currentUserProvider;
 
-    @Autowired
-    public TodosOperationsImpl(TodoStore todoStore) {
+    public TodosOperationsImpl(TodoStore todoStore, CurrentUserProvider currentUserProvider) {
         this.todoStore = todoStore;
+        this.currentUserProvider = currentUserProvider;
     }
 
     @Override
-    public Flux<Todo> listTodosByUserId(String userId) {
-        return todoStore.listTodosByUserId(userId);
+    public Flux<Todo> listCurrentUserTodos() {
+        return todoStore.listTodosByUserId(currentUserProvider.getCurrentUserId());
     }
 
     @Override
-    public Mono<Todo> createTodo(String userId, Mono<? extends CreateTodo> createTodo) {
-        return todoStore.createTodo(userId, createTodo);
+    public Mono<Todo> createTodo(Mono<? extends CreateTodo> createTodo) {
+
+        return createTodo
+                .map(this::doCreateTodo)
+                .compose(todoStore::createTodo);
     }
 
-    @Override
-    public Mono<Boolean> setCompleted(String currentUserId, String todoId, boolean completed) {
-        return todoStore
-                .findTodoById(todoId)
-                .map(t -> assertCanComplete(currentUserId, t))
-                .map(t -> doSetCompleted(t.getId(), completed));
-    }
+    private Todo doCreateTodo(CreateTodo create) {
+        var todo = new BasicTodo();
 
-    private boolean doSetCompleted(String todoId, boolean completed) {
-        todoStore.setCompleted(todoId, completed);
-        return true;
-    }
+        todo.setOwnerId(currentUserProvider.getCurrentUserId());
+        todo.setText(create.getText());
+        todo.setCompleted(false);
 
-    private static Todo assertCanComplete(String currentUserId, Todo todo) {
-        // TODO here is the right spot for checking todo access rights
         return todo;
     }
 
+    @Override
+    public Mono<Todo> updateTodo(String todoId, Mono<? extends UpdateTodo> updateTodo) {
+        return todoStore
+                .findTodoById(todoId)
+                .zipWhen(t -> updateTodo, this::doUpdateTodo)
+                .compose(todoStore::updateTodo);
+    }
+
+    private Todo doUpdateTodo(Todo todo, UpdateTodo updateTodo) {
+        var newTodo = BasicTodo.copy(todo);
+
+        if (updateTodo.isCompleted() != null) {
+            newTodo.setCompleted(updateTodo.isCompleted());
+        }
+
+        return newTodo;
+    }
 
 }

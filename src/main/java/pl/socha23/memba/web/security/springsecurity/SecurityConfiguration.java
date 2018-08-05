@@ -1,6 +1,5 @@
 package pl.socha23.memba.web.security.springsecurity;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,7 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-import javax.servlet.*;
+import javax.servlet.Filter;
 
 @EnableWebSecurity
 @Configuration
@@ -19,7 +18,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private AuthenticationManager authenticationManager;
 
-    @Autowired 
     public SecurityConfiguration(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
