@@ -3,19 +3,25 @@ import {Link, withRouter} from 'react-router-dom'
 
 import todoLogic from '../todoLogic'
 
-import {BrandedNavbar} from './PageTopNavbar'
+import {PageTopNavbar, PageTitle} from "./PageTopNavbar";
+
 import PageBody from './PageBody'
 import {BorderlessBottomNavbar} from './PageBottomNavbar'
+import ButtonIcon from './ButtonIcon'
 
 const AddTodoPageView = ({
                              text, onChangeText,
                              submitEnabled, onSubmit
                          }) => <div>
-    <BrandedNavbar title="Enter details">
-        <Link to="/" className="btn btn-primary">
-            Cancel
-        </Link>
-    </BrandedNavbar>
+    <PageTopNavbar>
+        <div style={{display: "flex", alignItems: "center"}}>
+            <Link to="/" className="btn btn-primary">
+                <ButtonIcon className={"fas fa-backward"}/>Back
+            </Link>
+            <PageTitle>Enter details</PageTitle>
+        </div>
+
+    </PageTopNavbar>
 
     <PageBody>
         <div className="container" style={{padding: 2}}>
@@ -29,7 +35,11 @@ const AddTodoPageView = ({
             disabled={!submitEnabled}
             onClick={submitEnabled ? onSubmit : () => {}}
         >
-            {submitEnabled ? "Add new item" : "Enter description first"}
+            {submitEnabled ? <span>
+                    <ButtonIcon className={"fas fa-check"}/>
+                    Add new item
+                </span>
+                : "Enter description first"}
         </button>
     </BorderlessBottomNavbar>
 

@@ -7,7 +7,7 @@ import {BrandedNavbar} from './PageTopNavbar'
 import {BorderlessBottomNavbar} from "./PageBottomNavbar";
 import PageBody from './PageBody'
 import BigMemba from './BigMemba'
-
+import ButtonIcon from './ButtonIcon'
 
 const TodoListView = ({
                           loading = false,
@@ -28,7 +28,7 @@ const TodoListView = ({
         </PageBody>
         <BorderlessBottomNavbar>
             <Link to="/add" className="btn btn-block btn-lg btn-primary">
-                Add new...
+                <ButtonIcon className="fas fa-plus"/>Add new...
             </Link>
         </BorderlessBottomNavbar>
     </div>

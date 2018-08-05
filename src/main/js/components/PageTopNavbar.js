@@ -6,11 +6,14 @@ export const PageTopNavbar = ({children}) => <nav className="navbar fixed-top na
         {children}
     </div>
 </nav>;
+
+export const PageTitle = ({children}) => <span className="navbar-brand" style={{paddingLeft: 8, borderRight: "none"}}>{children}</span>
     
 export const BrandedNavbar = ({title = "Memba", children}) => <PageTopNavbar>
     <div>
         <img src="memba48x44.png" width={48} height={44} style={{marginTop: 3, marginRight: 2, marginBottom: 0, marginLeft: 0}} className="d-inline-block align-top"/>
-        <span className="navbar-brand" style={{paddingLeft: 8, borderRight: "none"}}>{title}</span>
+        <PageTitle>{title}</PageTitle>
+
     </div>
     {children}
 </PageTopNavbar>;
