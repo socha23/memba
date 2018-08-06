@@ -6,26 +6,26 @@ import AbstractEditTodoPageView from './AbstractEditTodoPageView'
 
 import ButtonIcon from './ButtonIcon'
 
-class AddTodoPage extends React.Component {
+class EditTodoPage extends React.Component {
 
     state = {
-        text: ''
+        ...todoLogic.findTodoById(this.props.match.params.todoId)
     };
 
     render() {
         return <AbstractEditTodoPageView
-            title="Enter details"
+            title="Edit todo"
             buttonClass={this.isSubmitEnabled() ? "btn-success" : "btn-primary"}
             buttonContents={this.isSubmitEnabled() ? <span>
                                 <ButtonIcon className={"fas fa-check"}/>
-                                Add new item
+                                Save changes
                             </span>
                             : "Enter description first"}
             todo={this.state}
             onChangeFields={values => {this.setState(values)}}
             submitEnabled={this.isSubmitEnabled()}
             onSubmit={() => {this.onSubmit()}}
-            createMode={true}
+            createMode={false}
         />;
     }
 
@@ -34,14 +34,10 @@ class AddTodoPage extends React.Component {
     }
 
     onSubmit() {
-        setTimeout(() => {
-            todoLogic.addTodo({
-                text: this.state.text.trim()
-            });
-        });
+        todoLogic.update(this.props.match.params.todoId, this.state);
         this.props.history.push('/');
     }
 }
 
 
-export default withRouter(AddTodoPage)
+export default withRouter(EditTodoPage)

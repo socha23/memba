@@ -78,6 +78,20 @@ class TodoLogic {
             });
     }
 
+    update(todoId, todo) {
+        if (this.loading) {
+            return;
+        }
+        this.loading = true;
+        jsonPut("/todos/" + todoId, todo)
+            .then(t => {
+                this.loading = false;
+                const idx = this.todos.findIndex(t => t.id === todoId);
+                this.todos[idx] = t;
+                this.callSubscribers();
+            });
+    }
+
     findTodoById(id) {
         return this.todos.find(t => t.id === id)
     }

@@ -1,4 +1,5 @@
 import React from 'react'
+import {Link} from 'react-router-dom'
 import todoLogic from '../todoLogic'
 
 const TodoView = ({todo}) => {
@@ -14,7 +15,9 @@ const TodoView = ({todo}) => {
             alignItems: "center",
             color: "white"
         }}>
-            <h5 style={{opacity: opacity, marginBottom: 7}}>{todo.text}</h5>
+            <Link to={"/todo/" + todo.id} style={{flexGrow: 1}}>
+                <h5 style={{opacity: opacity, marginBottom: 7}}>{todo.text}</h5>
+            </Link>
             <div style={{cursor: "pointer"}} onClick={() => todoLogic.setCompleted(todo.id, !todo.completed)}>
                 <i style={{fontSize: 40}} className={"far " + (todo.completed ? "fa-check-square" : "fa-square")}/>
 
