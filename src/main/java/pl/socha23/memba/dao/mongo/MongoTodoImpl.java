@@ -23,14 +23,7 @@ class MongoTodoImpl extends BasicTodo implements Todo {
     }
 
     public static MongoTodoImpl copy(Todo todo) {
-        var result = new MongoTodoImpl();
-
-        result.setId(todo.getId());
-        result.setOwnerId(todo.getOwnerId());
-        result.setText(todo.getText());
-        result.setCompleted(todo.isCompleted());
-
-        return result;
+        return BasicTodo.copy(todo, new MongoTodoImpl());
     }
 
 }

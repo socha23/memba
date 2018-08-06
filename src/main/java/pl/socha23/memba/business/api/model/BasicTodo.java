@@ -7,6 +7,7 @@ public class BasicTodo implements Todo {
 
     private String text;
     private boolean completed;
+    private String color;
 
     @Override
     public String getId() {
@@ -42,16 +43,30 @@ public class BasicTodo implements Todo {
         this.completed = completed;
     }
 
-    public static BasicTodo copy(Todo todo) {
-        var result = new BasicTodo();
-
-        result.setId(todo.getId());
-        result.setOwnerId(todo.getOwnerId());
-        result.setText(todo.getText());
-        result.setCompleted(todo.isCompleted());
-
-        return result;
+    @Override
+    public String getColor() {
+        return color;
     }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public static BasicTodo copy(Todo todo) {
+        return copy(todo, new BasicTodo());
+    }
+
+    protected static <T extends BasicTodo> T copy(Todo from, T to) {
+        to.setId(from.getId());
+        to.setOwnerId(from.getOwnerId());
+        to.setText(from.getText());
+        to.setCompleted(from.isCompleted());
+        to.setColor(from.getColor());
+        return to;
+
+    }
+
+
 
 
 }

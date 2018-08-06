@@ -5,11 +5,13 @@ import todoLogic from '../todoLogic'
 import AbstractEditTodoPageView from './AbstractEditTodoPageView'
 
 import ButtonIcon from './ButtonIcon'
+import {DEFAULT_COLOR} from "./ColorPicker";
 
 class AddTodoPage extends React.Component {
 
     state = {
-        text: ''
+        text: '',
+        color: DEFAULT_COLOR
     };
 
     render() {
@@ -35,9 +37,7 @@ class AddTodoPage extends React.Component {
 
     onSubmit() {
         setTimeout(() => {
-            todoLogic.addTodo({
-                text: this.state.text.trim()
-            });
+            todoLogic.addTodo(this.state);
         });
         this.props.history.push('/');
     }

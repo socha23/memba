@@ -5,4 +5,9 @@ public interface Todo {
     String getOwnerId();
     String getText();
     boolean isCompleted();
+
+    /**
+     * Color in CSS format, for example "red" or "#d244641"
+     */
+    String getColor();
 }

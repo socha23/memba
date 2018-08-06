@@ -3,7 +3,6 @@ package pl.socha23.memba.web.todos;
 import org.springframework.web.bind.annotation.*;
 import pl.socha23.memba.business.api.logic.TodosOperations;
 import pl.socha23.memba.business.api.model.Todo;
-import pl.socha23.memba.business.api.model.UpdateTodo;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -39,34 +38,5 @@ public class TodosController {
     @PutMapping("/api/todos/{todoId}/completed")
     public Mono<? extends Todo> setCompleted(@PathVariable("todoId") String todoId, @RequestBody boolean completed) {
         return todosOperations.updateTodo(todoId, Mono.just(UpdateTodoRequest.withCompleted(completed)));
-    }
-
-    static class UpdateTodoRequest implements UpdateTodo {
-        private String text;
-        private Boolean completed;
-
-        @Override
-        public String getText() {
-            return text;
-        }
-
-        public void setText(String text) {
-            this.text = text;
-        }
-
-        @Override
-        public Boolean isCompleted() {
-            return completed;
-        }
-
-        public void setCompleted(Boolean completed) {
-            this.completed = completed;
-        }
-
-        static UpdateTodoRequest withCompleted(boolean completed) {
-            var result = new UpdateTodoRequest();
-            result.setCompleted(completed);
-            return result;
-        }
     }
 }

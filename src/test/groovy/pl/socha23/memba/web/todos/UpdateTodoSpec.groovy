@@ -24,7 +24,7 @@ class UpdateTodoSpec extends Specification {
         ]))
 
         when:
-        def request = new TodosController.UpdateTodoRequest();
+        def request = new UpdateTodoRequest();
         request.text  = "todo updated"
         controller.update("1", request).block()
 

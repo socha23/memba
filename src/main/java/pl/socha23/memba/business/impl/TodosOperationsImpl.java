@@ -41,6 +41,7 @@ public class TodosOperationsImpl implements TodosOperations {
         todo.setOwnerId(currentUserProvider.getCurrentUserId());
         todo.setText(create.getText());
         todo.setCompleted(false);
+        todo.setColor(create.getColor());
 
         return todo;
     }
@@ -62,6 +63,10 @@ public class TodosOperationsImpl implements TodosOperations {
 
         if (updateTodo.getText() != null) {
             newTodo.setText(updateTodo.getText());
+        }
+
+        if (updateTodo.getColor() != null) {
+            newTodo.setColor(updateTodo.getColor());
         }
 
         return newTodo;

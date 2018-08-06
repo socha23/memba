@@ -2,10 +2,12 @@ import React from 'react'
 import {Link} from 'react-router-dom'
 
 import {PageTopNavbar, PageTitle} from "./PageTopNavbar";
-
 import PageBody from './PageBody'
 import {BorderlessBottomNavbar} from './PageBottomNavbar'
+
 import ButtonIcon from './ButtonIcon'
+import ColorPicker from './ColorPicker'
+
 
 export default ({
                              title, buttonClass, buttonContents,
@@ -26,6 +28,7 @@ export default ({
     <PageBody>
         <div className="container" style={{padding: 2}}>
             <TodoTextInput value={todo.text} onChangeValue={v => onChangeFields({text: v})} autofocus={createMode}/>
+            <ColorPicker value={todo.color} onChangeValue={v => onChangeFields({color: v})}/>
         </div>
     </PageBody>
 
@@ -48,7 +51,7 @@ class TodoTextInput extends React.Component {
     }
 
     render() {
-        return <div className="form-group">
+        return <div className="form-group" style={{marginBottom: 6}}>
             <textarea id="description"
                       ref={r => {this.input = r}}
                       rows={5}
