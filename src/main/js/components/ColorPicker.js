@@ -1,6 +1,6 @@
 import React from 'react'
 
-const BOX_SIZE = 24;
+const BOX_SIZE = 27;
 
 export const COLORS = [
     "#ffffff",
@@ -16,12 +16,13 @@ export const COLORS = [
 export const DEFAULT_COLOR = COLORS[0];
 
 export default ({colors = COLORS, value, onChangeValue}) => <div style={{display: "flex", flexWrap: "wrap", justifyContent: "space-between"}}>
-    {colors.map(c =>
+    {colors.map((c, idx) =>
         <div key={c} style={{cursor: "pointer"}} onClick={() => onChangeValue(c)}>
             <div style={{
                 border: c == value ? "3px solid white" : "3px solid transparent",
                 borderRadius: 5,
-                padding: 4
+                padding: 4,
+                marginLeft: (idx > 0 ? -6 : 0)
 
             }}>
                 <div style={{backgroundColor: c, height: BOX_SIZE, width: BOX_SIZE, borderRadius: 2}}/>
