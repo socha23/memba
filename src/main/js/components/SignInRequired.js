@@ -2,20 +2,17 @@ import React from 'react'
 import {setIdToken} from '../apiHelper'
 import BigMemba from './BigMemba'
 import {BrandedNavbar} from './PageTopNavbar'
-import {PageBottomNavbar} from './PageBottomNavbar'
+import {BorderlessBottomNavbar, PageBottomNavbar} from './PageBottomNavbar'
 import PageBody from './PageBody'
 
-
-const NotYetSignedIn = ({children}) => <div>
+const NotYetSignedIn = ({children, onClickSignIn}) => <div>
     <BrandedNavbar/>
     <PageBody>
         <BigMemba/>
-        <div style={{width: 240, margin: "auto"}}>
-            <div id="signInButton">
-                Connecting to Google...
-            </div>
-        </div>
     </PageBody>
+    <BorderlessBottomNavbar>
+        <a id="signInButton" className="btn btn-block btn-primary" onClick={onClickSignIn}>Sign in with Google</a>
+    </BorderlessBottomNavbar>
 </div>;
 
 
@@ -26,42 +23,45 @@ class SignInRequired extends React.Component {
         signedIn: false
     };
 
-    onSignInSuccess(googleUser) {
-        const idToken = googleUser.getAuthResponse().id_token;
-        setIdToken(idToken);
-        this.setState({signedIn: true});
-    }
-
-    onSignInFailure(failure) {
-        console.log(failure);
-        this.setState({signedIn: false});
+    onSignInChange() {
+        const user = this.auth2.currentUser.get();
+        if (user.isSignedIn()) {
+            const idToken = user.getAuthResponse().id_token;
+            setIdToken(idToken);
+            this.setState({signedIn: true});
+        } else {
+            this.setState({signedIn: false});
+        }
     }
 
     loadGoogleApi() {
-        const script = document.createElement("script");
-        script.src = "https://apis.google.com/js/platform.js";
-
-        script.onload = () => {
+        global.gapi.load('auth2', () => {
             this.setState({apiLoaded: true});
-            gapi.signin2.render('signInButton', {
-              'scope': 'profile',
-              'width': 240,
-              'height': 50,
-              'longtitle': true,
-              'theme': 'dark',
-              'onsuccess': (s) => {this.onSignInSuccess(s)},
-              'onfailure': (f) => {this.onSignInFailure(f)}
+            global.gapi.auth2.init({
+                client_id: global.GOOGLE_CLIENT_ID,
+                scope: "profile"
+            }).then((auth2) => {
+                this.auth2 = auth2;
+                this.onSignInChange();
+                auth2.isSignedIn.listen(() => {this.onSignInChange()});
             });
-        };
-        document.body.appendChild(script);
+        });
     }
 
     componentDidMount() {
         this.loadGoogleApi();
     }
 
+    onClickSignIn() {
+        this.auth2.signIn();
+    }
+
     render() {
-        return this.state.signedIn ? this.props.children : <NotYetSignedIn/>
+        if (this.state.signedIn) {
+            return this.props.children;
+        } else {
+            return <NotYetSignedIn onClickSignIn={() => this.onClickSignIn()}/>
+        }
     }
 }
 

@@ -3,12 +3,18 @@
 <head lang="en">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
     <title>Memba?</title>
-    <meta name="google-signin-client_id" th:content="${googleClientId}">
 
     <link rel="stylesheet" href="bootstrap-slate-4.1.3.min.css">
     <link rel="stylesheet" href="fontawesome/css/all.css">
     <link rel="stylesheet" href="memba.css">
+
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+        GOOGLE_CLIENT_ID = [[${googleClientId}]];
+        /*]]>*/
+    </script>
 
 </head>
 <body>
@@ -39,6 +45,7 @@
 <script src="jquery-3.3.1.min.js"></script>
 <script src="popper-1.14.3.min.js"></script>
 <script src="bootstrap-4.1.3.min.js"></script>
+<script src="https://apis.google.com/js/api.js"></script>
 <script type="application/javascript" src="bundle.js"></script>
 </body>
 </html>
