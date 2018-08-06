@@ -2,21 +2,24 @@ import React from 'react'
 import {setIdToken} from '../apiHelper'
 import BigMemba from './BigMemba'
 import {BrandedNavbar} from './PageTopNavbar'
-import {BorderlessBottomNavbar} from './PageBottomNavbar'
+import {BorderlessBottomNavbar, PageBottomNavbar} from './PageBottomNavbar'
 import PageBody from './PageBody'
 import ButtonIcon from './ButtonIcon'
 
-const NotYetSignedIn = ({children, onClickSignIn}) => <div>
+const NotYetSignedIn = ({children, googleApisLoaded, onClickSignIn}) => <div>
     <BrandedNavbar/>
     <PageBody>
         <BigMemba/>
     </PageBody>
+    {googleApisLoaded ?
     <BorderlessBottomNavbar>
         <a id="signInButton" className="btn btn-block btn-primary" onClick={onClickSignIn}>
             <ButtonIcon className="fab fa-google"/>
             Sign in with Google
         </a>
     </BorderlessBottomNavbar>
+        :  <PageBottomNavbar>Loading Google API...</PageBottomNavbar>
+            }
 </div>;
 
 
@@ -64,7 +67,7 @@ class SignInRequired extends React.Component {
         if (this.state.signedIn) {
             return this.props.children;
         } else {
-            return <NotYetSignedIn onClickSignIn={() => this.onClickSignIn()}/>
+            return <NotYetSignedIn googleApisLoaded={this.state.apiLoaded} onClickSignIn={() => this.onClickSignIn()}/>
         }
     }
 }
