@@ -1,22 +1,44 @@
 import {jsonGet, jsonPost, jsonPut} from './apiHelper'
 
+const REFRESH_TODOS_EVERY_MS = 10 * 1000;
+
 class TodoLogic {
+
     todos = [];
     todosNotLoaded = true;
     loading = false;
     subscribers = {};
-
-    autoinc = 0;
+    reloadIntervalHandler = null;
 
     subscribe(component, onStateChanged) {
-        this.subscribers[component] = onStateChanged;
-        if (this.todosNotLoaded) {
-            this.reload();
+        if (this.countSubscribers() === 0) {
+            this.setupIntervalReload()
         }
+        this.subscribers[component] = onStateChanged;
     }
 
     unsubscribe(component) {
         delete this.subscribers[component];
+        if (this.countSubscribers() === 0) {
+            this.cancelIntervalReload();
+        }
+    }
+
+    countSubscribers() {
+        return Object.keys(this.subscribers).length;
+    }
+
+
+    setupIntervalReload() {
+        if (this.todosNotLoaded) {
+            this.reload();
+        }
+
+        this.reloadIntervalHandler = setInterval(() => {this.reload()}, REFRESH_TODOS_EVERY_MS);
+    }
+
+    cancelIntervalReload() {
+        clearInterval(this.reloadIntervalHandler);
     }
 
     reload() {
