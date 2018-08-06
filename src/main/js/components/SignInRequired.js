@@ -2,8 +2,9 @@ import React from 'react'
 import {setIdToken} from '../apiHelper'
 import BigMemba from './BigMemba'
 import {BrandedNavbar} from './PageTopNavbar'
-import {BorderlessBottomNavbar, PageBottomNavbar} from './PageBottomNavbar'
+import {BorderlessBottomNavbar} from './PageBottomNavbar'
 import PageBody from './PageBody'
+import ButtonIcon from './ButtonIcon'
 
 const NotYetSignedIn = ({children, onClickSignIn}) => <div>
     <BrandedNavbar/>
@@ -11,7 +12,10 @@ const NotYetSignedIn = ({children, onClickSignIn}) => <div>
         <BigMemba/>
     </PageBody>
     <BorderlessBottomNavbar>
-        <a id="signInButton" className="btn btn-block btn-primary" onClick={onClickSignIn}>Sign in with Google</a>
+        <a id="signInButton" className="btn btn-block btn-success" onClick={onClickSignIn}>
+            <ButtonIcon className="fab fa-google"/>
+            Sign in with Google
+        </a>
     </BorderlessBottomNavbar>
 </div>;
 
