@@ -1,9 +1,7 @@
 import React from 'react'
 
-const PADDING = {paddingTop: 0, paddingRight: 2, paddingBottom: 2, paddingLeft: 2};
-
 export const PageBottomNavbar =  ({children}) => <nav className="navbar fixed-bottom navbar-expand-lg"
-                                    style={PADDING}>
+                                    style={{padding: 2}}>
     <div className="container">
         {children}
     </div>
@@ -12,8 +10,8 @@ export const PageBottomNavbar =  ({children}) => <nav className="navbar fixed-bo
 
 export const StatusBottomNavbar = PageBottomNavbar;
 
-export const BorderlessBottomNavbar =  ({children}) => <nav className="navbar fixed-bottom navbar-expand-lg bg-primary"
-                                    style={{...PADDING, border: "none"}}>
+export const BorderlessBottomNavbar =  ({children}) => <nav className="navbar fixed-bottom navbar-expand-lg"
+                                    style={{padding: 2, border: "none", backgroundColor: "#272B30"}}>
     <div className="container">
         {children}
     </div>
