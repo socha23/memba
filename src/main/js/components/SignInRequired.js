@@ -12,7 +12,7 @@ const NotYetSignedIn = ({children, onClickSignIn}) => <div>
         <BigMemba/>
     </PageBody>
     <BorderlessBottomNavbar>
-        <a id="signInButton" className="btn btn-block btn-success" onClick={onClickSignIn}>
+        <a id="signInButton" className="btn btn-block btn-primary" onClick={onClickSignIn}>
             <ButtonIcon className="fab fa-google"/>
             Sign in with Google
         </a>
