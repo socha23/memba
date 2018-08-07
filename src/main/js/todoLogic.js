@@ -4,6 +4,8 @@ const REFRESH_TODOS_EVERY_MS = 10 * 1000;
 
 class TodoLogic {
 
+    subscriptionIdAutoinc = 0;
+
     todos = [];
     todosNotLoaded = true;
     loading = false;
@@ -11,14 +13,17 @@ class TodoLogic {
     reloadIntervalHandler = null;
 
     subscribe(component, onStateChanged) {
+        const subscriptionId = this.subscriptionIdAutoinc++;
+        component.subscriptionId = subscriptionId;
         if (this.countSubscribers() === 0) {
             this.setupIntervalReload()
         }
-        this.subscribers[component] = onStateChanged;
+        this.subscribers[subscriptionId] = onStateChanged;
     }
 
     unsubscribe(component) {
-        delete this.subscribers[component];
+        const subscriptionId = component.subscriptionId;
+        delete this.subscribers[subscriptionId];
         if (this.countSubscribers() === 0) {
             this.cancelIntervalReload();
         }
@@ -30,10 +35,7 @@ class TodoLogic {
 
 
     setupIntervalReload() {
-        if (this.todosNotLoaded) {
-            this.reload();
-        }
-
+        this.reload();
         this.reloadIntervalHandler = setInterval(() => {this.reload()}, REFRESH_TODOS_EVERY_MS);
     }
 
@@ -42,9 +44,6 @@ class TodoLogic {
     }
 
     reload() {
-        if (this.loading) {
-            return;
-        }
         this.fetchTodos();
     }
 
@@ -119,8 +118,8 @@ class TodoLogic {
     }
 
     callSubscribers() {
-        for (const subscriber in this.subscribers) {
-            this.subscribers[subscriber]()
+        for (const subscriptionId in this.subscribers) {
+            this.subscribers[subscriptionId]()
         }
 
     }
