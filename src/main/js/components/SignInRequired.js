@@ -9,7 +9,8 @@ import ButtonIcon from './ButtonIcon'
 
 
 const TOKEN_VALID_CHECK_INTERVAL = 1 * 1000;
-const RELOAD_WHEN_TOKEN_VALID_FOR_LESS_THEN_MS = 60 * 1000;
+const RELOAD_WHEN_TOKEN_VALID_FOR_LESS_THEN_MS = 300 * 1000;
+const BLOCK_WHEN_TOKEN_VALID_FOR_LESS_THEN_MS = 60 * 1000;
 
 
 const NotYetSignedIn = ({children, googleApisLoaded, onClickSignIn}) => <div>
@@ -36,6 +37,7 @@ class SignInRequired extends React.Component {
         apiInitialized: false,
         signedIn: false,
         tokenExpiryOn: null,
+        tokenValidForMs: 0
     };
 
     onSignInChange() {
@@ -75,6 +77,7 @@ class SignInRequired extends React.Component {
     authExpiredCheck() {
         if (this.auth2 && this.state.apiInitialized) {
             const tokenValidForMs = this.state.tokenExpiryOn.diff(moment());
+            this.setState({tokenValidForMs: tokenValidForMs});
             if (tokenValidForMs < RELOAD_WHEN_TOKEN_VALID_FOR_LESS_THEN_MS) {
                 this.auth2.currentUser.get().reloadAuthResponse().then(r => this.onAuth(r));
             }
@@ -86,7 +89,7 @@ class SignInRequired extends React.Component {
     }
 
     render() {
-        if (this.state.signedIn) {
+        if (this.state.signedIn && this.state.tokenValidForMs >= BLOCK_WHEN_TOKEN_VALID_FOR_LESS_THEN_MS) {
             return this.props.children;
         } else {
             return <NotYetSignedIn googleApisLoaded={this.state.apiLoaded} onClickSignIn={() => this.onClickSignIn()}/>

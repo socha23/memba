@@ -1,1 +1,1 @@
-gradle npm_run_watch
+npm run watch
