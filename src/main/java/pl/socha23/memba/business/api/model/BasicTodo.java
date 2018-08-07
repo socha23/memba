@@ -1,5 +1,7 @@
 package pl.socha23.memba.business.api.model;
 
+import java.time.Instant;
+
 public class BasicTodo implements Todo {
 
     private String id;
@@ -7,7 +9,10 @@ public class BasicTodo implements Todo {
 
     private String text;
     private boolean completed;
+    private Instant createdDate;
     private String color;
+
+
 
     @Override
     public String getId() {
@@ -52,6 +57,15 @@ public class BasicTodo implements Todo {
         this.color = color;
     }
 
+    @Override
+    public Instant getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Instant createdDate) {
+        this.createdDate = createdDate;
+    }
+
     public static BasicTodo copy(Todo todo) {
         return copy(todo, new BasicTodo());
     }
@@ -61,6 +75,7 @@ public class BasicTodo implements Todo {
         to.setOwnerId(from.getOwnerId());
         to.setText(from.getText());
         to.setCompleted(from.isCompleted());
+        to.setCreatedDate(from.getCreatedDate());
         to.setColor(from.getColor());
         return to;
 
