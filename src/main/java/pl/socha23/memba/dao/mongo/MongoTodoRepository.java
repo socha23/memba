@@ -7,5 +7,5 @@ import reactor.core.publisher.Flux;
 @Component
 public interface MongoTodoRepository extends ReactiveCrudRepository<MongoTodoImpl, String> {
 
-    Flux<MongoTodoImpl> findByOwnerIdOrderByCreatedDateDesc(String ownerId);
+    Flux<MongoTodoImpl> findByOwnerIdOrderByCreatedOnDesc(String ownerId);
 }

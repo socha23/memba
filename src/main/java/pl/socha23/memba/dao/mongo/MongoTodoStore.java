@@ -3,13 +3,9 @@ package pl.socha23.memba.dao.mongo;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import pl.socha23.memba.business.api.dao.TodoStore;
-import pl.socha23.memba.business.api.model.BasicTodo;
 import pl.socha23.memba.business.api.model.Todo;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Component
 @Profile("mongo")
@@ -28,7 +24,7 @@ class MongoTodoStore implements TodoStore<MongoTodoImpl> {
 
     @Override
     public Flux<MongoTodoImpl> listTodosByOwnerId(String userId) {
-        return repository.findByOwnerIdOrderByCreatedDateDesc(userId);
+        return repository.findByOwnerIdOrderByCreatedOnDesc(userId);
     }
 
     @Override
@@ -40,7 +36,9 @@ class MongoTodoStore implements TodoStore<MongoTodoImpl> {
     public Mono<MongoTodoImpl> updateTodo(Mono<? extends Todo> todo) {
         return todo
                         .map(MongoTodoImpl::copy)
-                        .compose(t -> repository.saveAll(t).next());
+                        .compose(t -> {
+                            return repository.saveAll(t).next();
+                        });
 
     }
 }

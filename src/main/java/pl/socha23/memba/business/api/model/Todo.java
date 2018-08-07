@@ -7,7 +7,7 @@ public interface Todo {
     String getOwnerId();
     String getText();
     boolean isCompleted();
-    Instant getCreatedDate();
+    Instant getCreatedOn();
 
     /**
      * Color in CSS format, for example "red" or "#d244641"

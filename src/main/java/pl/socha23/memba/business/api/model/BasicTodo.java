@@ -9,7 +9,7 @@ public class BasicTodo implements Todo {
 
     private String text;
     private boolean completed;
-    private Instant createdDate;
+    private Instant createdOn;
     private String color;
 
 
@@ -58,12 +58,12 @@ public class BasicTodo implements Todo {
     }
 
     @Override
-    public Instant getCreatedDate() {
-        return createdDate;
+    public Instant getCreatedOn() {
+        return createdOn;
     }
 
-    public void setCreatedDate(Instant createdDate) {
-        this.createdDate = createdDate;
+    public void setCreatedOn(Instant createdOn) {
+        this.createdOn = createdOn;
     }
 
     public static BasicTodo copy(Todo todo) {
@@ -75,7 +75,7 @@ public class BasicTodo implements Todo {
         to.setOwnerId(from.getOwnerId());
         to.setText(from.getText());
         to.setCompleted(from.isCompleted());
-        to.setCreatedDate(from.getCreatedDate());
+        to.setCreatedOn(from.getCreatedOn());
         to.setColor(from.getColor());
         return to;
 

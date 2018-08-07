@@ -11,6 +11,8 @@ import pl.socha23.memba.business.api.model.UpdateTodo;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.Instant;
+
 @Component
 public class TodosOperationsImpl implements TodosOperations {
 
@@ -42,6 +44,7 @@ public class TodosOperationsImpl implements TodosOperations {
         todo.setText(create.getText());
         todo.setCompleted(false);
         todo.setColor(create.getColor());
+        todo.setCreatedOn(Instant.now());
 
         return todo;
     }
