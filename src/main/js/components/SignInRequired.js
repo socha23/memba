@@ -1,10 +1,16 @@
 import React from 'react'
+import moment from 'moment'
 import {setIdToken} from '../apiHelper'
 import BigMemba from './BigMemba'
 import {BrandedNavbar} from './PageTopNavbar'
 import {BorderlessBottomNavbar, PageBottomNavbar} from './PageBottomNavbar'
 import PageBody from './PageBody'
 import ButtonIcon from './ButtonIcon'
+
+
+const TOKEN_VALID_CHECK_INTERVAL = 1 * 1000;
+const RELOAD_WHEN_TOKEN_VALID_FOR_LESS_THEN_MS = 60 * 1000;
+
 
 const NotYetSignedIn = ({children, googleApisLoaded, onClickSignIn}) => <div>
     <BrandedNavbar/>
@@ -27,18 +33,23 @@ const NotYetSignedIn = ({children, googleApisLoaded, onClickSignIn}) => <div>
 class SignInRequired extends React.Component {
     state = {
         apiLoaded: false,
-        signedIn: false
+        apiInitialized: false,
+        signedIn: false,
+        tokenExpiryOn: null,
     };
 
     onSignInChange() {
         const user = this.auth2.currentUser.get();
         if (user.isSignedIn()) {
-            const idToken = user.getAuthResponse().id_token;
-            setIdToken(idToken);
-            this.setState({signedIn: true});
+            this.onAuth(user.getAuthResponse());
         } else {
             this.setState({signedIn: false});
         }
+    }
+
+    onAuth(authResponse) {
+        setIdToken(authResponse.id_token);
+        this.setState({signedIn: true, tokenExpiryOn: moment().add(authResponse.expires_in, "seconds")});
     }
 
     loadGoogleApi() {
@@ -50,6 +61,7 @@ class SignInRequired extends React.Component {
             }).then((auth2) => {
                 this.auth2 = auth2;
                 this.onSignInChange();
+                this.setState({apiInitialized: true});
                 auth2.isSignedIn.listen(() => {this.onSignInChange()});
             });
         });
@@ -57,6 +69,16 @@ class SignInRequired extends React.Component {
 
     componentDidMount() {
         this.loadGoogleApi();
+        setInterval(() => {this.authExpiredCheck()}, TOKEN_VALID_CHECK_INTERVAL)
+    }
+
+    authExpiredCheck() {
+        if (this.auth2 && this.state.apiInitialized) {
+            const tokenValidForMs = this.state.tokenExpiryOn.diff(moment());
+            if (tokenValidForMs < RELOAD_WHEN_TOKEN_VALID_FOR_LESS_THEN_MS) {
+                this.auth2.currentUser.get().reloadAuthResponse().then(r => this.onAuth(r));
+            }
+        }
     }
 
     onClickSignIn() {
