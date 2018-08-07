@@ -10,16 +10,10 @@ import java.time.Instant;
 @Document("todo")
 class MongoTodoImpl extends BasicTodo implements Todo {
 
+
     @CreatedDate
-    private Instant createdDate;
-
-
     public Instant getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Instant createdDate) {
-        this.createdDate = createdDate;
+        return super.getCreatedDate();
     }
 
     public static MongoTodoImpl copy(Todo todo) {
