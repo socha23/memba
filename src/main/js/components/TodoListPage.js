@@ -26,7 +26,7 @@ const TodoListView = ({
             <TodoList todos={todos}/>
         </PageBody>
         <BorderlessBottomNavbar>
-            <Link to="/add" className="btn btn-block btn-lg btn-primary">
+            <Link to="/add" className="btn btn-block btn-lg btn-info">
                 <ButtonIcon className="fas fa-plus"/>Add new...
             </Link>
         </BorderlessBottomNavbar>

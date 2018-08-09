@@ -19,6 +19,7 @@ const TodoView = ({todo}) => {
                 <h5 style={{
                     opacity: opacity,
                     marginBottom: 7,
+                    fontWeight: 300,
                     color: (todo.color == null ? DEFAULT_COLOR : todo.color)
                 }}>{todo.text}</h5>
             </Link>
