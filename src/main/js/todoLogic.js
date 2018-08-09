@@ -4,6 +4,8 @@ const REFRESH_TODOS_EVERY_MS = 10 * 1000;
 
 class TodoLogic {
 
+    ROOT_GROUP_ID = "root";
+
     subscriptionIdAutoinc = 0;
 
     todos = [];
@@ -11,6 +13,7 @@ class TodoLogic {
     loading = false;
     subscribers = {};
     reloadIntervalHandler = null;
+
 
     subscribe(component, onStateChanged) {
         const subscriptionId = this.subscriptionIdAutoinc++;
@@ -58,9 +61,13 @@ class TodoLogic {
     listTodos({
                   showNotCompleted = true,
                   showCompleted = false,
+                  groupId = this.ROOT_GROUP_ID,
               }) {
 
-        return this.todos.filter(t => (t.completed && showCompleted) || ((!t.completed) && showNotCompleted));
+        return this.todos.filter(t =>
+            (t.completed && showCompleted) || ((!t.completed) && showNotCompleted)
+            && ((t.groupId || this.ROOT_GROUP_ID) === groupId)
+        );
     }
 
     fetchTodos() {
