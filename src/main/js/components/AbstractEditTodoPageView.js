@@ -1,5 +1,5 @@
 import React from 'react'
-import {Link} from 'react-router-dom'
+import {LinkWithQuery} from '../routerUtils'
 
 import {PageTopNavbar, PageTitle} from "./PageTopNavbar";
 import PageBody from './PageBody'
@@ -17,9 +17,9 @@ export default ({
                          }) => <div>
     <PageTopNavbar>
         <div style={{display: "flex", alignItems: "center"}}>
-            <Link to="/" className="btn btn-primary">
+            <LinkWithQuery to="/" query={{groupId: todo.groupId}} className="btn btn-primary">
                 <ButtonIcon className={"fas fa-backward"}/>Back
-            </Link>
+            </LinkWithQuery>
             <PageTitle>{title}</PageTitle>
         </div>
 

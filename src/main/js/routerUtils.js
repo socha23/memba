@@ -37,3 +37,6 @@ export const LinkWithQuery = (params) => {
     return <Link  {...params} to={newTo}>{params.children}</Link>
 };
 
+export const encodeQuery = (path, query = {}) => (path + "?" + queryString.stringify(query));
+
+

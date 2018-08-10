@@ -1,5 +1,5 @@
 import React from 'react'
-import {withRouter} from 'react-router-dom'
+import {withRouterWithQuery, encodeQuery} from '../routerUtils'
 
 import todoLogic from '../todoLogic'
 import AbstractEditTodoPageView from './AbstractEditTodoPageView'
@@ -23,7 +23,7 @@ class AddTodoPage extends React.Component {
                                 Add new item
                             </span>
                             : "Enter description first"}
-            todo={this.state}
+            todo={this.getTodo()}
             onChangeFields={values => {this.setState(values)}}
             submitEnabled={this.isSubmitEnabled()}
             onSubmit={() => {this.onSubmit()}}
@@ -35,13 +35,21 @@ class AddTodoPage extends React.Component {
         return this.state.text.trim() !== "";
     }
 
+    getTodo() {
+        return {...this.state, groupId: this.getGroupId()}
+    }
+
     onSubmit() {
         setTimeout(() => {
-            todoLogic.addTodo(this.state);
+            todoLogic.addTodo(this.getTodo());
         });
-        this.props.history.push('/');
+        this.props.history.push(encodeQuery("/", {groupId: this.getGroupId()}));
+    }
+
+    getGroupId() {
+        return this.props.location.query.groupId || todoLogic.ROOT_GROUP_ID
     }
 }
 
 
-export default withRouter(AddTodoPage)
+export default withRouterWithQuery(AddTodoPage)
