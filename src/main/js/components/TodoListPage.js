@@ -5,6 +5,7 @@ import Modal from 'react-bootstrap4-modal'
 
 import todoLogic from '../todoLogic'
 import TodoList from './TodoList'
+import GroupList from './GroupList'
 import LongClickButton from './LongClickButton'
 import {BrandedNavbar} from './PageTopNavbar'
 import {BorderlessBottomNavbar} from "./PageBottomNavbar";
@@ -22,7 +23,8 @@ class TodoListPage extends React.Component {
         return <div>
             <TodoListView
                 groupId={this.getGroupId()}
-                todos={todoLogic.listItems({groupId: this.getGroupId(), showCompleted: this.state.showCompleted})}
+                groups={todoLogic.listGroups({groupId: this.getGroupId()})}
+                todos={todoLogic.listTodos({groupId: this.getGroupId(), showCompleted: this.state.showCompleted})}
                 showCompleted={this.state.showCompleted}
                 onToggleShowCompleted={() => this.onToggleShowCompleted()}
                 onClickAdd={() => this.onAddTodo()}
@@ -81,6 +83,7 @@ export default withRouterWithQuery(TodoListPage)
 const TodoListView = ({
                           groupId = todoLogic.ROOT_GROUP_ID,
                           todos = [],
+                          groups = [],
                           showCompleted = false,
                           onToggleShowCompleted = () => {},
                           onClickAdd = () => {},
@@ -95,6 +98,7 @@ const TodoListView = ({
             </ul>
         </BrandedNavbar>
         <PageBody>
+            <GroupList groups={groups}/>
             <TodoList todos={todos}/>
         </PageBody>
         <BorderlessBottomNavbar>

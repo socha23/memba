@@ -8,7 +8,8 @@ class TodoLogic {
 
     subscriptionIdAutoinc = 0;
 
-    items = [];
+    todos = [];
+    groups = [];
     itemsNotLoaded = true;
     loading = false;
     subscribers = {};
@@ -39,7 +40,9 @@ class TodoLogic {
 
     setupIntervalReload() {
         this.reload();
-        this.reloadIntervalHandler = setInterval(() => {this.reload()}, REFRESH_ITEMS_EVERY_MS);
+        this.reloadIntervalHandler = setInterval(() => {
+            this.reload()
+        }, REFRESH_ITEMS_EVERY_MS);
     }
 
     cancelIntervalReload() {
@@ -54,32 +57,51 @@ class TodoLogic {
         return this.loading;
     }
 
-    areTodosNotLoaded() {
-        return this.todosNotLoaded;
+    areItemsNotLoaded() {
+        return this.itemsNotLoaded;
     }
 
-    listItems({
+    listTodos({
                   showNotCompleted = true,
                   showCompleted = false,
                   groupId = this.ROOT_GROUP_ID,
               }) {
 
-        return this.items.filter(t =>
-            (t.completed && showCompleted) || ((!t.completed) && showNotCompleted)
-            && ((t.groupId || this.ROOT_GROUP_ID) === groupId)
-        );
+        const rightGroup = t => ((t.groupId || this.ROOT_GROUP_ID) === groupId);
+        const rightCompletion = t => (t.completed && showCompleted) || ((!t.completed) && showNotCompleted);
+
+        return this.todos
+            .filter(rightGroup)
+            .filter(rightCompletion);
+    }
+
+    listGroups({
+                  groupId = this.ROOT_GROUP_ID,
+              }) {
+
+        const rightGroup = t => ((t.groupId || this.ROOT_GROUP_ID) === groupId);
+
+        return this.groups
+            .filter(rightGroup);
     }
 
     fetchItems() {
         this.loading = true;
         jsonGet("/items")
-            .then(r => {this.receiveItems(r)});
+            .then(r => {
+                this.receiveItems(r)
+            });
     }
 
     receiveItems(items) {
         this.loading = false;
         this.itemsNotLoaded = false;
-        this.items = items.map(this.fillItemDefaults);
+        this.todos = items
+            .filter(t => t.itemType === "todo")
+            .map(this.fillItemDefaults);
+        this.groups = items
+            .filter(t => t.itemType === "group")
+            .map(this.fillItemDefaults);
         this.callSubscribers();
     }
 
@@ -87,22 +109,22 @@ class TodoLogic {
         return {groupId: this.ROOT_GROUP_ID, ...item}
     };
 
-    _addItem(path, item) {
+    _addItem(path, item, collection) {
         this.loading = true;
         jsonPost(path, item)
             .then(r => {
                 this.loading = false;
-                this.items.unshift(this.fillItemDefaults(r));
+                collection.unshift(this.fillItemDefaults(r));
                 this.callSubscribers();
             });
     }
 
     addTodo(todo) {
-        this._addItem("/todos", todo);
+        this._addItem("/todos", todo, this.todos);
     }
 
     addGroup(group) {
-        this._addItem("/groups", group);
+        this._addItem("/groups", group, this.groups);
     }
 
     setCompleted(todoId, completed) {
@@ -110,7 +132,7 @@ class TodoLogic {
             return;
         }
         this.loading = true;
-        this.findItemById(todoId).completed = completed;
+        this.findTodoById(todoId).completed = completed;
         this.callSubscribers();
         jsonPut("/todos/" + todoId + "/completed", completed)
             .then(r => {
@@ -118,7 +140,7 @@ class TodoLogic {
             });
     }
 
-    _updateItem(path, itemId, item) {
+    _updateItem(path, itemId, item, collection) {
         if (this.loading) {
             return;
         }
@@ -126,18 +148,26 @@ class TodoLogic {
         jsonPut(path + "/" + itemId, item)
             .then(t => {
                 this.loading = false;
-                const idx = this.items.findIndex(t => t.id === itemId);
-                this.items[idx] = this.fillItemDefaults(t);
+                const idx = collection.findIndex(t => t.id === itemId);
+                collection[idx] = this.fillItemDefaults(t);
                 this.callSubscribers();
             });
     }
 
     updateTodo(todoId, todo) {
-        this._updateItem("/todos", todoId, todo)
+        this._updateItem("/todos", todoId, todo, this.todos)
     }
-    
-    findItemById(id) {
-        return this.items.find(t => t.id === id)
+
+    _findItemById(id, collection) {
+        return collection.find(t => t.id === id)
+    }
+
+    findTodoById(id) {
+        return this._findItemById(id, this.todos)
+    }
+
+    findGroupById(id) {
+        return this._findItemById(id, this.groups)
     }
 
     callSubscribers() {

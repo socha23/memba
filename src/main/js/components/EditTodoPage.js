@@ -9,7 +9,7 @@ import TodoForm from './TodoForm'
 const EditTodoPage = ({match}) =>
     <AbstractItemFormPage
         formComponent={TodoForm}
-        item={todoLogic.findItemById(match.params.todoId)}
+        item={todoLogic.findTodoById(match.params.todoId)}
         onSave={(i) => {todoLogic.updateTodo(i.id, i)}}
         title="Edit todo"
         createMode={false}

@@ -18,7 +18,7 @@ class WaitForTodosToLoad extends React.Component {
     };
 
     render() {
-        return todoLogic.areTodosNotLoaded() ? <LoadingScreen/> : this.props.children
+        return todoLogic.areItemsNotLoaded() ? <LoadingScreen/> : this.props.children
     }
     componentDidMount() {
         todoLogic.subscribe(this, () => this.incGeneration())
