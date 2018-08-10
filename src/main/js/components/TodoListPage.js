@@ -99,7 +99,7 @@ const TodoListView = ({
         </PageBody>
         <BorderlessBottomNavbar>
             <LongClickButton className="btn btn-block btn-lg btn-info" onClick={() => {onClickAdd()}} onLongClick={() => {onLongClickAdd()}}>
-                <ButtonIcon className="fas fa-plus"/>Add new...
+                <ButtonIcon className="fas fa-plus"/>Add new.....
             </LongClickButton>
         </BorderlessBottomNavbar>
     </div>;

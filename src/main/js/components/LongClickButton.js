@@ -50,6 +50,8 @@ class LongClickButton extends React.Component {
 
         return <button {...buttonProps}
                         onClick={() => {}}
+                        onTouchStart={() => {this.onPressStarted()}}
+                        onTouchEnd={() => {this.onPressStopped()}}
                         onMouseDown={() => {this.onPressStarted()}}
                         onMouseUp={() => {this.onPressStopped()}}
                         onMouseOut={() => {this.onPressStopped()}}>{this.props.children}</button>
