@@ -20,6 +20,7 @@ const AddTodoPage = ({location}) =>
                 todoLogic.addItem(item);
             });
         }}
+        title="New todo"
         createMode={true}
     />;
 
