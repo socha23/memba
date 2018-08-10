@@ -7,7 +7,7 @@ import todoLogic from '../todoLogic'
 import TodoList from './TodoList'
 import GroupList from './GroupList'
 import LongClickButton from './LongClickButton'
-import {BrandedNavbar} from './PageTopNavbar'
+import {BackAndTitle, BrandedNavbar, MembaIconAndTitle, PageTopNavbar, TitleWithBackNavbar} from './PageTopNavbar'
 import {BorderlessBottomNavbar} from "./PageBottomNavbar";
 import PageBody from './PageBody'
 import ButtonIcon from './ButtonIcon'
@@ -32,10 +32,16 @@ class TodoListPage extends React.Component {
             />
             <AddModal
                 visible={this.state.addModalShown}
-                onClickBackdrop={() => {this.hideModal()}}
-                onAddTodo={() => {this.onAddTodo()}}
-                onAddGroup={() => {this.onAddGroup()}}/>
-            </div>
+                onClickBackdrop={() => {
+                    this.hideModal()
+                }}
+                onAddTodo={() => {
+                    this.onAddTodo()
+                }}
+                onAddGroup={() => {
+                    this.onAddGroup()
+                }}/>
+        </div>
     }
 
     getGroupId() {
@@ -85,28 +91,50 @@ const TodoListView = ({
                           todos = [],
                           groups = [],
                           showCompleted = false,
-                          onToggleShowCompleted = () => {},
-                          onClickAdd = () => {},
-                          onLongClickAdd = () => {},
-                      }) =>
-    <div>
-        <BrandedNavbar>
-            <ul className="navbar-nav">
-                <li className={"nav-item" + (showCompleted ? " active" : "")} onClick={() => onToggleShowCompleted()}>
-                    <i style={{fontSize: 20}} className="nav-link far fa-check-square"/>
-                </li>
-            </ul>
-        </BrandedNavbar>
+                          onToggleShowCompleted = () => {
+                          },
+                          onClickAdd = () => {
+                          },
+                          onLongClickAdd = () => {
+                          },
+                      }) => {
+    var navbarFirstElem;
+    if (groupId === todoLogic.ROOT_GROUP_ID) {
+        navbarFirstElem = <MembaIconAndTitle/>;
+    } else {
+        const group = todoLogic.findGroupById(groupId);
+        navbarFirstElem = <BackAndTitle
+            query={{groupId: group.groupId || todoLogic.ROOT_GROUP_ID}}
+            title={group.text}
+        />
+    }
+
+    const showCompletedElem = <ul className="navbar-nav">
+        <li className={"nav-item" + (showCompleted ? " active" : "")} onClick={() => onToggleShowCompleted()}>
+            <i style={{fontSize: 20}} className="nav-link far fa-check-square"/>
+        </li>
+    </ul>;
+
+    return <div>
+        <PageTopNavbar>
+            {navbarFirstElem}
+            {showCompletedElem}
+        </PageTopNavbar>
         <PageBody>
             <GroupList groups={groups}/>
             <TodoList todos={todos}/>
         </PageBody>
         <BorderlessBottomNavbar>
-            <LongClickButton className="btn btn-block btn-lg btn-info" onClick={() => {onClickAdd()}} onLongClick={() => {onLongClickAdd()}}>
+            <LongClickButton className="btn btn-block btn-lg btn-info" onClick={() => {
+                onClickAdd()
+            }} onLongClick={() => {
+                onLongClickAdd()
+            }}>
                 <ButtonIcon className="fas fa-plus"/>Add new...
             </LongClickButton>
         </BorderlessBottomNavbar>
-    </div>;
+    </div>
+}
 
 const AddModal = ({visible, onClickBackdrop, onAddTodo, onAddGroup}) =>
     <Modal visible={visible} dialogClassName="modal-dialog-centered" onClickBackdrop={onClickBackdrop}>
@@ -118,6 +146,6 @@ const AddModal = ({visible, onClickBackdrop, onAddTodo, onAddGroup}) =>
                 Add new group
             </button>
         </div>
-</Modal>
+    </Modal>
 
 

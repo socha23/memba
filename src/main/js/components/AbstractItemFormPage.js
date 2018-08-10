@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {LinkWithQuery, encodeQuery, withRouterWithQuery} from '../routerUtils'
+import {encodeQuery, withRouterWithQuery} from '../routerUtils'
 
-import {PageTopNavbar, PageTitle} from './PageTopNavbar'
+import {TitleWithBackNavbar} from './PageTopNavbar'
 import PageBody from './PageBody'
 import {BorderlessBottomNavbar} from './PageBottomNavbar'
 
@@ -71,15 +71,7 @@ const AbstractItemFormPageView = ({
                              submitEnabled, onSubmit,
                              createMode
                          }) => <div>
-    <PageTopNavbar>
-        <div style={{display: "flex", alignItems: "center"}}>
-            <LinkWithQuery to="/" query={{groupId: item.groupId}} className="btn btn-primary">
-                <ButtonIcon className={"fas fa-backward"}/>Back
-            </LinkWithQuery>
-            <PageTitle>{title}</PageTitle>
-        </div>
-
-    </PageTopNavbar>
+    <TitleWithBackNavbar to="/" query={{groupId: item.groupId}} title={title}/>
 
     <PageBody>
         <div className="container" style={{padding: 2}}>
