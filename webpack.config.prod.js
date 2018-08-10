@@ -1,4 +1,5 @@
 var webpack = require("webpack");
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 var path = require('path');
 
 module.exports = {
@@ -25,6 +26,6 @@ module.exports = {
 		new webpack.DefinePlugin({
 		  'process.env.NODE_ENV': JSON.stringify('production')
 		}),
-		new webpack.optimize.UglifyJsPlugin()
+		new UglifyJsPlugin()
 	]
 };
