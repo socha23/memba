@@ -17,6 +17,7 @@ class ListItemsSpec extends Specification {
         expect:
         toList(listTodos.listCurrentUserItems()).size() == 2
 
+
     }
 
     def "list items lists groups"() {
@@ -39,8 +40,6 @@ class ListItemsSpec extends Specification {
 
         toList(listGroups.listCurrentUserItems())*.id == ["g1", "g2", "t1", "t2"]
     }
-
-
 
     private static TodoStore todoStore(List<Map> todos) {
         return [

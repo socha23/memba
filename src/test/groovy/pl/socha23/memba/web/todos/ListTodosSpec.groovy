@@ -2,7 +2,15 @@ package pl.socha23.memba.web.todos
 
 
 import pl.socha23.memba.business.api.logic.TodosOperations
+import pl.socha23.memba.business.api.model.BasicGroup
+import pl.socha23.memba.business.api.model.BasicTodo
+import pl.socha23.memba.business.api.model.Todo
+import pl.socha23.memba.business.impl.TestUserProvider
+import pl.socha23.memba.business.impl.TodosOperationsImpl
+import pl.socha23.memba.dao.mem.MemGroupStore
+import pl.socha23.memba.dao.mem.MemTodoStore
 import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 import spock.lang.Specification
 
 import static pl.socha23.memba.FluxUtils.toList
@@ -28,7 +36,23 @@ class ListTodosSpec extends Specification {
         toList(controller.currentUserItems()).size() == 2
     }
 
+    def "list items lists types"() {
+        given:
+        def todoStore = new MemTodoStore()
+        def groupStore = new MemGroupStore()
+        def ops = new TodosOperationsImpl(todoStore, groupStore, new TestUserProvider())
+
+        ops.createTodo(Mono.just(new CreateTodoRequest(text: "g1"))).block()
+        ops.createGroup(Mono.just(new CreateGroupRequest(text: "g1"))).block()
+        
+        def controller = new TodosController(ops)
+        expect:
+
+        toList(controller.currentUserItems())*.itemType == ["group", "todo"]
+    }
+
+
     private static TodosOperations todosOperations(List<Map> todos) {
-        [listCurrentUserItems: {-> Flux.fromIterable(todos)}] as TodosOperations
+        [listCurrentUserItems: {-> Flux.fromIterable(todos.collect{t -> new BasicTodo(t)})}] as TodosOperations
     }
 }

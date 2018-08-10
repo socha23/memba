@@ -18,9 +18,12 @@ public class TodosController {
     }
 
     @GetMapping("/api/items")
-    public Flux<? extends Item> currentUserItems() {
-        return todosOperations.listCurrentUserItems();
+    public Flux<ItemWithType> currentUserItems() {
+        return todosOperations
+                .listCurrentUserItems()
+                .map(this::toItemWithType);
     }
+
 
     /*
      * problem: to move entirely to webflux we would have to disable webmvc, and that breaks the web login,
@@ -46,6 +49,17 @@ public class TodosController {
     @PostMapping("/api/groups")
     public Mono<? extends Group> addGroup(@RequestBody CreateGroupRequest createGroup) {
         return todosOperations.createGroup(Mono.just(createGroup));
+    }
+
+
+    private ItemWithType toItemWithType(Item item) {
+        if (item instanceof Todo) {
+            return TodoWithType.of((Todo) item);
+        } else if (item instanceof Group) {
+            return GroupWithType.of((Group) item);
+        } else {
+            throw new IllegalArgumentException();
+        }
     }
 
 }
