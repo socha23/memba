@@ -37,6 +37,11 @@ public class MemGroupStore implements GroupStore<BasicGroup> {
                 .map(this::addGroup);
     }
 
+    @Override
+    public Mono<BasicGroup> updateGroup(Mono<? extends Group> group) {
+        return group.map(this::doUpdateGroup);
+    }
+
     private BasicGroup doUpdateGroup(Group group) {
         return groupsById.put(group.getId(), BasicGroup.copy(group));
     }
