@@ -26,6 +26,11 @@ class GroupOperationsSpec extends Specification {
     Mono<? extends CreateGroup> withText(String text) {
         Mono.just(new CreateGroup() {
             @Override
+            String getGroupId() {
+                return null
+            }
+
+            @Override
             String getText() {
                 return text
             }

@@ -4,9 +4,19 @@ import pl.socha23.memba.business.api.model.UpdateTodo;
 
 public class UpdateTodoRequest implements UpdateTodo {
 
+    private String groupId;
     private String text;
     private Boolean completed;
     private String color;
+
+    @Override
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
 
     @Override
     public String getText() {

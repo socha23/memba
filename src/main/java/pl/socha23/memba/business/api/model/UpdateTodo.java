@@ -4,7 +4,9 @@ public interface UpdateTodo {
     /*
      * null = no change
      */
+    String getGroupId();
     String getText();
     Boolean isCompleted();
     String getColor();
+
 }

@@ -4,8 +4,18 @@ import pl.socha23.memba.business.api.model.CreateGroup;
 
 public class CreateGroupRequest implements CreateGroup {
 
+    private String groupId = null;
     private String text = null;
     private String color = null;
+
+    @Override
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
 
     @Override
     public String getText() {
@@ -24,4 +34,5 @@ public class CreateGroupRequest implements CreateGroup {
     public void setColor(String color) {
         this.color = color;
     }
+
 }

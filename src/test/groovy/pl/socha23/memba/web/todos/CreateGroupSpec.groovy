@@ -20,10 +20,13 @@ class CreateGroupSpec extends Specification {
         when:
         def request = new CreateGroupRequest();
         request.text  = "my group"
+        request.groupId = "ggg"
         controller.addGroup(request).block()
 
         then:
-        toList(controller.currentUserItems())[0].text == "my group"
+        def group = toList(controller.currentUserItems())[0]
+        group.text == "my group"
+        group.groupId == "ggg"
     }
 
 }

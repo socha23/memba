@@ -44,6 +44,7 @@ public class TodosOperationsImpl implements TodosOperations {
         var todo = new BasicTodo();
 
         todo.setOwnerId(currentUserProvider.getCurrentUserId());
+        todo.setGroupId(create.getGroupId());
         todo.setText(create.getText());
         todo.setCompleted(false);
         todo.setColor(create.getColor());
@@ -69,8 +70,8 @@ public class TodosOperationsImpl implements TodosOperations {
 
     private Group doCreateGroup(CreateGroup create) {
         var group = new BasicGroup();
-
         group.setOwnerId(currentUserProvider.getCurrentUserId());
+        group.setGroupId(create.getGroupId());
         group.setText(create.getText());
         group.setColor(create.getColor());
         group.setCreatedOn(Instant.now());
@@ -80,6 +81,10 @@ public class TodosOperationsImpl implements TodosOperations {
 
     private BasicTodo doUpdateTodo(Todo todo, UpdateTodo updateTodo) {
         var newTodo = BasicTodo.copy(todo);
+
+        if (updateTodo.getGroupId() != null) {
+            newTodo.setGroupId(updateTodo.getGroupId());
+        }
 
         if (updateTodo.isCompleted() != null) {
             newTodo.setCompleted(updateTodo.isCompleted());
