@@ -1,9 +1,10 @@
 import React from 'react'
 
-import {withRouterWithQuery, LinkWithQuery} from "../routerUtils";
+import {withRouterWithQuery, encodeQuery} from "../routerUtils";
 
 import todoLogic from '../todoLogic'
 import TodoList from './TodoList'
+import LongClickButton from './LongClickButton'
 import {BrandedNavbar} from './PageTopNavbar'
 import {BorderlessBottomNavbar} from "./PageBottomNavbar";
 import PageBody from './PageBody'
@@ -21,6 +22,8 @@ class TodoListPage extends React.Component {
             todos={todoLogic.listTodos({groupId: this.getGroupId(), showCompleted: this.state.showCompleted})}
             showCompleted={this.state.showCompleted}
             onToggleShowCompleted={() => this.onToggleShowCompleted()}
+            onClickAdd={() => this.onClickAdd()}
+            onLongClickAdd={() => this.onLongClickAdd()}
         />
     }
 
@@ -43,6 +46,14 @@ class TodoListPage extends React.Component {
     incGeneration() {
         this.setState({generation: this.state.generation + 1})
     }
+
+    onClickAdd() {
+        this.props.history.push(encodeQuery("/addTodo", {groupId: this.getGroupId()}))
+    }
+
+    onLongClickAdd() {
+        console.log("Add clicked looong");
+    }
 }
 
 export default withRouterWithQuery(TodoListPage)
@@ -53,6 +64,8 @@ const TodoListView = ({
                           todos = [],
                           showCompleted = false,
                           onToggleShowCompleted = () => {},
+                          onClickAdd = () => {},
+                          onLongClickAdd = () => {},
                       }) =>
     <div>
         <BrandedNavbar>
@@ -66,9 +79,9 @@ const TodoListView = ({
             <TodoList todos={todos}/>
         </PageBody>
         <BorderlessBottomNavbar>
-            <LinkWithQuery to="/addTodo" query={{groupId: groupId}} className="btn btn-block btn-lg btn-info">
+            <LongClickButton className="btn btn-block btn-lg btn-info" onClick={() => {onClickAdd()}} onLongClick={() => {onLongClickAdd()}}>
                 <ButtonIcon className="fas fa-plus"/>Add new...
-            </LinkWithQuery>
+            </LongClickButton>
         </BorderlessBottomNavbar>
     </div>
 ;
