@@ -2,6 +2,7 @@ package pl.socha23.memba.web.todos;
 
 import org.springframework.web.bind.annotation.*;
 import pl.socha23.memba.business.api.logic.TodosOperations;
+import pl.socha23.memba.business.api.model.Group;
 import pl.socha23.memba.business.api.model.Item;
 import pl.socha23.memba.business.api.model.Todo;
 import reactor.core.publisher.Flux;
@@ -40,4 +41,11 @@ public class TodosController {
     public Mono<? extends Todo> setCompleted(@PathVariable("todoId") String todoId, @RequestBody boolean completed) {
         return todosOperations.updateTodo(todoId, Mono.just(UpdateTodoRequest.withCompleted(completed)));
     }
+
+
+    @PostMapping("/api/groups")
+    public Mono<? extends Group> addGroup(@RequestBody CreateGroupRequest createGroup) {
+        return todosOperations.createGroup(Mono.just(createGroup));
+    }
+
 }
