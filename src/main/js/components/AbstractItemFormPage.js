@@ -1,5 +1,6 @@
 import React from 'react'
-import {LinkWithQuery, encodeQuery} from '../routerUtils'
+import PropTypes from 'prop-types'
+import {LinkWithQuery, encodeQuery, withRouterWithQuery} from '../routerUtils'
 
 import {PageTopNavbar, PageTitle} from './PageTopNavbar'
 import PageBody from './PageBody'
@@ -10,35 +11,36 @@ import ColorPicker from './ColorPicker'
 
 class AbstractItemFormPage extends React.Component {
 
-    state = {...this.getInitialItem()};
+    static propTypes = {
+        item: PropTypes.object.isRequired,
+        title: PropTypes.string,
+        saveButtonLabel: PropTypes.string,
+        onSave: PropTypes.func.isRequired,
+        createMode: PropTypes.bool.isRequired
+    };
 
-    getInitialItem() {
-        throw new Error("getInitialItem() not implemented");
-    }
+    static defaultProps = {
+        title: "Enter details",
+        saveButtonLabel: "Save changes"
+    };
+
+    state = {...this.props.item};
 
     render() {
-        return <AbstractEditItemPageView
-            title={this.getTitle()}
+        return <AbstractEditTodoPageView
+            title={this.props.title}
             buttonClass={this.isSubmitEnabled() ? "btn-success" : "btn-primary"}
             buttonContents={this.isSubmitEnabled() ? <span>
                                 <ButtonIcon className={"fas fa-check"}/>
-                                {this.getSaveButtonLabel()}
+                                {this.props.saveButtonLabel}
                             </span>
                             : "Enter description first"}
             item={this.getItem()}
             onChangeFields={values => {this.setState(values)}}
             submitEnabled={this.isSubmitEnabled()}
             onSubmit={() => {this.onSubmit()}}
-            createMode={this.isCreateMode()}
+            createMode={this.props.createMode}
         />;
-    }
-
-    getTitle() {
-        return "Enter details";
-    }
-
-    getSaveButtonLabel() {
-        return "Save changes"
     }
 
     isCreateMode() {
@@ -54,18 +56,14 @@ class AbstractItemFormPage extends React.Component {
     }
 
     onSubmit() {
-        this.save();
+        this.props.onSave(this.getItem());
         this.props.history.push(encodeQuery("/", {groupId: this.getItem().groupId}));
-    }
-
-    save() {
-        throw new Error("save() not implemented");
     }
 }
 
-export default AbstractItemFormPage
+export default withRouterWithQuery(AbstractItemFormPage)
 
-const AbstractEditItemPageView = ({
+const AbstractEditTodoPageView = ({
                              title, buttonClass, buttonContents,
                              item, onChangeFields,
                              submitEnabled, onSubmit,

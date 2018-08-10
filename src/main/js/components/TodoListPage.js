@@ -66,7 +66,7 @@ const TodoListView = ({
             <TodoList todos={todos}/>
         </PageBody>
         <BorderlessBottomNavbar>
-            <LinkWithQuery to="/add" query={{groupId: groupId}} className="btn btn-block btn-lg btn-info">
+            <LinkWithQuery to="/addTodo" query={{groupId: groupId}} className="btn btn-block btn-lg btn-info">
                 <ButtonIcon className="fas fa-plus"/>Add new...
             </LinkWithQuery>
         </BorderlessBottomNavbar>
