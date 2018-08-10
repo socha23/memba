@@ -38,12 +38,9 @@ class ListTodosSpec extends Specification {
 
     def "list items lists types"() {
         given:
-        def todoStore = new MemTodoStore()
-        def groupStore = new MemGroupStore()
-        def ops = new TodosOperationsImpl(todoStore, groupStore, new TestUserProvider())
-
-        ops.createTodo(Mono.just(new CreateTodoRequest(text: "g1"))).block()
-        ops.createGroup(Mono.just(new CreateGroupRequest(text: "g1"))).block()
+        def ops = new TestTodoOps()
+            .createTodo(new CreateTodoRequest(text: "g1"))
+            .createGroup(new CreateGroupRequest(text: "g1"))
         
         def controller = new TodosController(ops)
         expect:
