@@ -3,14 +3,9 @@ package pl.socha23.memba.web.todos
 
 import pl.socha23.memba.business.api.logic.TodosOperations
 import pl.socha23.memba.business.api.model.BasicTodo
-import pl.socha23.memba.business.api.model.CreateTodo
-import pl.socha23.memba.business.api.model.Todo
-import pl.socha23.memba.business.api.model.UpdateTodo
 import pl.socha23.memba.business.impl.TestUserProvider
 import pl.socha23.memba.business.impl.TodosOperationsImpl
 import pl.socha23.memba.dao.mem.MemTodoStore
-import reactor.core.publisher.Flux
-import reactor.core.publisher.Mono
 import spock.lang.Specification
 
 import static pl.socha23.memba.FluxUtils.toList
@@ -29,7 +24,7 @@ class UpdateTodoSpec extends Specification {
         controller.update("1", request).block()
 
         then:
-        toList(controller.currentUserTodos())[0].text == "todo updated"
+        toList(controller.currentUserItems())[0].text == "todo updated"
     }
 
     private static TodosOperations todosOperations(List<Map> todos) {

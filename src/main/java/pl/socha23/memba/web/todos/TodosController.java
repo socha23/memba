@@ -2,6 +2,7 @@ package pl.socha23.memba.web.todos;
 
 import org.springframework.web.bind.annotation.*;
 import pl.socha23.memba.business.api.logic.TodosOperations;
+import pl.socha23.memba.business.api.model.Item;
 import pl.socha23.memba.business.api.model.Todo;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -15,9 +16,9 @@ public class TodosController {
         this.todosOperations = todosOperations;
     }
 
-    @GetMapping("/api/todos")
-    public Flux<? extends Todo> currentUserTodos() {
-        return todosOperations.listCurrentUserTodos();
+    @GetMapping("/api/items")
+    public Flux<? extends Item> currentUserItems() {
+        return todosOperations.listCurrentUserItems();
     }
 
     /*

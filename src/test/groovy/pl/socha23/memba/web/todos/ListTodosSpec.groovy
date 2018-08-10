@@ -14,7 +14,7 @@ class ListTodosSpec extends Specification {
         def controller = new TodosController(todosOperations([]))
 
         expect:
-        toList(controller.currentUserTodos()).size() == 0
+        toList(controller.currentUserItems()).size() == 0
     }
 
     def "noneempty todos flux"() {
@@ -25,10 +25,10 @@ class ListTodosSpec extends Specification {
         ]))
 
         expect:
-        toList(controller.currentUserTodos()).size() == 2
+        toList(controller.currentUserItems()).size() == 2
     }
 
     private static TodosOperations todosOperations(List<Map> todos) {
-        [listCurrentUserTodos: {-> Flux.fromIterable(todos)}] as TodosOperations
+        [listCurrentUserItems: {-> Flux.fromIterable(todos)}] as TodosOperations
     }
 }

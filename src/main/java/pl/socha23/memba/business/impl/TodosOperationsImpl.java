@@ -4,10 +4,7 @@ import org.springframework.stereotype.Component;
 import pl.socha23.memba.business.api.dao.TodoStore;
 import pl.socha23.memba.business.api.logic.CurrentUserProvider;
 import pl.socha23.memba.business.api.logic.TodosOperations;
-import pl.socha23.memba.business.api.model.BasicTodo;
-import pl.socha23.memba.business.api.model.CreateTodo;
-import pl.socha23.memba.business.api.model.Todo;
-import pl.socha23.memba.business.api.model.UpdateTodo;
+import pl.socha23.memba.business.api.model.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -25,7 +22,7 @@ public class TodosOperationsImpl implements TodosOperations {
     }
 
     @Override
-    public Flux<? extends Todo> listCurrentUserTodos() {
+    public Flux<? extends Item> listCurrentUserItems() {
         return todoStore.listTodosByOwnerId(currentUserProvider.getCurrentUserId());
     }
 

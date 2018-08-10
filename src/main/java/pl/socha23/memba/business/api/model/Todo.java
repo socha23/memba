@@ -2,9 +2,7 @@ package pl.socha23.memba.business.api.model;
 
 import java.time.Instant;
 
-public interface Todo {
-    String getId();
-    String getOwnerId();
+public interface Todo extends Item {
     String getText();
     boolean isCompleted();
     Instant getCreatedOn();

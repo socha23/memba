@@ -72,7 +72,7 @@ class TodoLogic {
 
     fetchItems() {
         this.loading = true;
-        jsonGet("/todos")
+        jsonGet("/items")
             .then(r => {this.receiveItems(r)});
     }
 

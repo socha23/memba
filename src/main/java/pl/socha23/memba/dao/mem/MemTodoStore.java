@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import pl.socha23.memba.business.api.dao.TodoStore;
 import pl.socha23.memba.business.api.model.BasicTodo;
+import pl.socha23.memba.business.api.model.Item;
 import pl.socha23.memba.business.api.model.Todo;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -49,7 +50,7 @@ public class MemTodoStore implements TodoStore<BasicTodo> {
     private List<BasicTodo> getUserTodos(String userId) {
         return todosById.values().stream()
                 .filter(t -> t.getOwnerId().equals(userId))
-                .sorted(Comparator.comparing(Todo::getId).reversed())
+                .sorted(Comparator.comparing(Item::getId).reversed())
                 .collect(Collectors.toList());
     }
 

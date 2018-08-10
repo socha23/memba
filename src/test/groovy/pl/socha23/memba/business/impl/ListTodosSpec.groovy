@@ -1,9 +1,6 @@
 package pl.socha23.memba.business.impl
 
 import pl.socha23.memba.business.api.dao.TodoStore
-import pl.socha23.memba.business.api.logic.CurrentUserProvider
-import pl.socha23.memba.business.api.model.User
-import pl.socha23.memba.business.impl.TodosOperationsImpl
 import reactor.core.publisher.Flux
 import spock.lang.Specification
 import static pl.socha23.memba.FluxUtils.toList;
@@ -17,7 +14,7 @@ class ListTodosSpec extends Specification {
                 [id: "2", text: "bar"]
         ]), new TestUserProvider())
         expect:
-        toList(listTodos.listCurrentUserTodos()).size() == 2
+        toList(listTodos.listCurrentUserItems()).size() == 2
 
     }
 
