@@ -6,11 +6,11 @@ import Modal from 'react-bootstrap4-modal'
 import todoLogic from '../todoLogic'
 import TodoList from './TodoList'
 import GroupList from './GroupList'
+import ButtonIcon from './ButtonIcon'
 import LongClickButton from './LongClickButton'
-import {BackAndTitle, BrandedNavbar, MembaIconAndTitle, PageTopNavbar, TitleWithBackNavbar} from './PageTopNavbar'
+import {BackAndTitle, MembaIconAndTitle, PageTopNavbar, ToolbarButton} from './PageTopNavbar'
 import {BorderlessBottomNavbar} from "./PageBottomNavbar";
 import PageBody from './PageBody'
-import ButtonIcon from './ButtonIcon'
 
 class TodoListPage extends React.Component {
     state = {
@@ -29,6 +29,7 @@ class TodoListPage extends React.Component {
                 onToggleShowCompleted={() => this.onToggleShowCompleted()}
                 onClickAdd={() => this.onAddTodo()}
                 onLongClickAdd={() => this.showModal()}
+                onClickEditGroup={() => this.onEditGroup()}
             />
             <AddModal
                 visible={this.state.addModalShown}
@@ -69,6 +70,11 @@ class TodoListPage extends React.Component {
         this.props.history.push(encodeQuery("/addTodo", {groupId: this.getGroupId()}))
     }
 
+    onEditGroup() {
+        this.hideModal();
+        this.props.history.push(encodeQuery("/group/" + this.getGroupId(), {groupId: this.getGroupId()}))
+    }
+
     onAddGroup() {
         this.hideModal();
         this.props.history.push(encodeQuery("/addGroup", {groupId: this.getGroupId()}))
@@ -85,21 +91,22 @@ class TodoListPage extends React.Component {
 
 export default withRouterWithQuery(TodoListPage)
 
+function isRoot(groupId) {
+    return groupId === todoLogic.ROOT_GROUP_ID;
+}
 
 const TodoListView = ({
                           groupId = todoLogic.ROOT_GROUP_ID,
                           todos = [],
                           groups = [],
                           showCompleted = false,
-                          onToggleShowCompleted = () => {
-                          },
-                          onClickAdd = () => {
-                          },
-                          onLongClickAdd = () => {
-                          },
+                          onToggleShowCompleted = () => {},
+                          onClickAdd = () => {},
+                          onLongClickAdd = () => {},
+                          onClickEditGroup = () => {},
                       }) => {
     var navbarFirstElem;
-    if (groupId === todoLogic.ROOT_GROUP_ID) {
+    if (isRoot(groupId)) {
         navbarFirstElem = <MembaIconAndTitle/>;
     } else {
         const group = todoLogic.findGroupById(groupId);
@@ -109,16 +116,21 @@ const TodoListView = ({
         />
     }
 
-    const showCompletedElem = <ul className="navbar-nav">
-        <li className={"nav-item" + (showCompleted ? " active" : "")} onClick={() => onToggleShowCompleted()}>
-            <i style={{fontSize: 20}} className="nav-link far fa-check-square"/>
-        </li>
-    </ul>;
+    const showCompletedButton = <ToolbarButton
+        className="far fa-check-square"
+        inactive={!showCompleted}
+        onClick={() => onToggleShowCompleted()}
+    />;
+
+    const editGroupButton = isRoot(groupId) ? <span/> : <ToolbarButton className="fas fa-cog" onClick={() => onClickEditGroup()}/>;
 
     return <div>
         <PageTopNavbar>
             {navbarFirstElem}
-            {showCompletedElem}
+            <div className="btn-toolbar">
+                {editGroupButton}
+                {showCompletedButton}
+            </div>
         </PageTopNavbar>
         <PageBody>
             <GroupList groups={groups}/>

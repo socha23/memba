@@ -158,6 +158,10 @@ class TodoLogic {
         this._updateItem("/todos", todoId, todo, this.todos)
     }
 
+    updateGroup(groupId, group) {
+        this._updateItem("/groups", groupId, group, this.groups)
+    }
+
     _findItemById(id, collection) {
         return collection.find(t => t.id === id)
     }

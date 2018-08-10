@@ -22,10 +22,22 @@ export const TitleWithBackNavbar = ({title = "Memba", to = "/", query = {}, chil
     {children}
 </PageTopNavbar>;
 
+
+export const ToolbarButton = ({className="", onClick=() => {}, inactive=false}) =>
+    <i className={className} onClick={() => onClick()}
+       style={{
+           padding: 10,
+           paddingRight: 8,
+           cursor: "pointer",
+           color: inactive ? "#7A8288" : "white"
+       }}
+    />;
+
 export const BackAndTitle = ({title = "Memba", to = "/", query = {}}) => <div style={{display: "flex", alignItems: "center"}}>
-        <LinkWithQuery to={to} query={query} className="btn btn-primary" style={{paddingRight: 10}}>
-            <ButtonIcon className={"fas fa-backward"}/></LinkWithQuery>
-        <PageTitle>{title}</PageTitle>
+        <LinkWithQuery to={to} query={query}>
+            <ToolbarButton className={"fas fa-backward"}/>
+            <PageTitle>{title}</PageTitle>
+        </LinkWithQuery>
     </div>
 ;
 
