@@ -5,6 +5,7 @@ import pl.socha23.memba.business.api.logic.TodosOperations
 import pl.socha23.memba.business.api.model.BasicTodo
 import pl.socha23.memba.business.impl.TestUserProvider
 import pl.socha23.memba.business.impl.TodosOperationsImpl
+import pl.socha23.memba.dao.mem.MemGroupStore
 import pl.socha23.memba.dao.mem.MemTodoStore
 import spock.lang.Specification
 
@@ -36,6 +37,6 @@ class UpdateTodoSpec extends Specification {
             todo.setOwnerId(TestUserProvider.USER_ID);
             store.addTodo(todo);
         }
-        return new TodosOperationsImpl(store, new TestUserProvider())
+        return new TodosOperationsImpl(store, new MemGroupStore(), new TestUserProvider())
     }
 }

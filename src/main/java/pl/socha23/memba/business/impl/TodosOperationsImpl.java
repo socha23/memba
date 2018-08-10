@@ -1,6 +1,8 @@
 package pl.socha23.memba.business.impl;
 
+import org.reactivestreams.Publisher;
 import org.springframework.stereotype.Component;
+import pl.socha23.memba.business.api.dao.GroupStore;
 import pl.socha23.memba.business.api.dao.TodoStore;
 import pl.socha23.memba.business.api.logic.CurrentUserProvider;
 import pl.socha23.memba.business.api.logic.TodosOperations;
@@ -14,16 +16,20 @@ import java.time.Instant;
 public class TodosOperationsImpl implements TodosOperations {
 
     private TodoStore<? extends Todo> todoStore;
+    private GroupStore<? extends Group> groupStore;
     private CurrentUserProvider currentUserProvider;
 
-    public TodosOperationsImpl(TodoStore<? extends Todo> todoStore, CurrentUserProvider currentUserProvider) {
+    public TodosOperationsImpl(TodoStore<? extends Todo> todoStore, GroupStore<? extends Group> groupStore, CurrentUserProvider currentUserProvider) {
         this.todoStore = todoStore;
+        this.groupStore = groupStore;
         this.currentUserProvider = currentUserProvider;
     }
 
     @Override
     public Flux<? extends Item> listCurrentUserItems() {
-        return todoStore.listTodosByOwnerId(currentUserProvider.getCurrentUserId());
+        var groups = groupStore.listGroupsByOwnerId(currentUserProvider.getCurrentUserId());
+        var todos = todoStore.listTodosByOwnerId(currentUserProvider.getCurrentUserId());
+        return Flux.<Item>empty().concatWith(groups).concatWith(todos);
     }
 
     @Override
@@ -52,6 +58,11 @@ public class TodosOperationsImpl implements TodosOperations {
                 .findTodoById(todoId)
                 .zipWith(updateTodo, this::doUpdateTodo)
                 .compose(todoStore::updateTodo);
+    }
+
+    @Override
+    public Mono<? extends Group> createGroup(Mono<? extends CreateGroup> createGroup) {
+        return null; // TODO
     }
 
     private BasicTodo doUpdateTodo(Todo todo, UpdateTodo updateTodo) {
