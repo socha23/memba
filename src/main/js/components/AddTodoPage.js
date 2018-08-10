@@ -2,12 +2,14 @@ import React from 'react'
 import {withRouterWithQuery} from '../routerUtils'
 
 import todoLogic from '../todoLogic'
-import AbstractTodoFormPage from './AbstractItemFormPage'
+import AbstractItemFormPage from './AbstractItemFormPage'
+import TodoForm from './TodoForm'
 
 import {DEFAULT_COLOR} from "./ColorPicker";
 
 const AddTodoPage = ({location}) =>
-    <AbstractTodoFormPage
+    <AbstractItemFormPage
+        formComponent={TodoForm}
         item={{
             text: '',
             color: DEFAULT_COLOR,
@@ -18,7 +20,6 @@ const AddTodoPage = ({location}) =>
                 todoLogic.addItem(item);
             });
         }}
-        saveButtonLabel="Add new item"
         createMode={true}
     />;
 

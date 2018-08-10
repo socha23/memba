@@ -7,32 +7,33 @@ import PageBody from './PageBody'
 import {BorderlessBottomNavbar} from './PageBottomNavbar'
 
 import ButtonIcon from './ButtonIcon'
-import ColorPicker from './ColorPicker'
 
 class AbstractItemFormPage extends React.Component {
 
     static propTypes = {
+        formComponent: PropTypes.oneOfType([PropTypes.func, PropTypes.element]).isRequired,
         item: PropTypes.object.isRequired,
         title: PropTypes.string,
         saveButtonLabel: PropTypes.string,
         onSave: PropTypes.func.isRequired,
-        createMode: PropTypes.bool.isRequired
+        createMode: PropTypes.bool.isRequired,
+        
     };
 
     static defaultProps = {
         title: "Enter details",
-        saveButtonLabel: "Save changes"
     };
 
     state = {...this.props.item};
 
     render() {
-        return <AbstractEditTodoPageView
+        return <AbstractItemFormPageView
+            FormComponent={this.props.formComponent}
             title={this.props.title}
             buttonClass={this.isSubmitEnabled() ? "btn-success" : "btn-primary"}
             buttonContents={this.isSubmitEnabled() ? <span>
                                 <ButtonIcon className={"fas fa-check"}/>
-                                {this.props.saveButtonLabel}
+                                {this.getSaveButtonLabel()}
                             </span>
                             : "Enter description first"}
             item={this.getItem()}
@@ -43,8 +44,8 @@ class AbstractItemFormPage extends React.Component {
         />;
     }
 
-    isCreateMode() {
-        throw new Error("isCreateMode() not implemented");
+    getSaveButtonLabel() {
+        return this.props.saveButtonLabel || (this.props.createMode ? "Add new item" : "Save changes")
     }
 
     isSubmitEnabled() {
@@ -63,7 +64,8 @@ class AbstractItemFormPage extends React.Component {
 
 export default withRouterWithQuery(AbstractItemFormPage)
 
-const AbstractEditTodoPageView = ({
+const AbstractItemFormPageView = ({
+                             FormComponent,
                              title, buttonClass, buttonContents,
                              item, onChangeFields,
                              submitEnabled, onSubmit,
@@ -81,8 +83,7 @@ const AbstractEditTodoPageView = ({
 
     <PageBody>
         <div className="container" style={{padding: 2}}>
-            <TodoTextInput value={item.text} onChangeValue={v => onChangeFields({text: v})} autofocus={createMode}/>
-            <ColorPicker value={item.color} onChangeValue={v => onChangeFields({color: v})}/>
+             <FormComponent item={item} onChangeFields={onChangeFields} createMode={createMode}/>
         </div>
     </PageBody>
 
@@ -96,27 +97,3 @@ const AbstractEditTodoPageView = ({
         </button>
     </BorderlessBottomNavbar>
 </div>;
-
-class TodoTextInput extends React.Component {
-    componentDidMount() {
-        if (this.props.autofocus) {
-            this.input.focus();
-        }
-    }
-
-    render() {
-        return <div className="form-group" style={{marginBottom: 6}}>
-            <textarea id="description"
-                      ref={r => {this.input = r}}
-                      rows={5}
-                      className="form-control form-control-lg"
-                      style={{paddingTop: 3, paddingRight: 5, paddingBottom: 3, paddingLeft: 5}}
-                      value={this.props.value}
-                      onChange={(e) => {this.props.onChangeValue(e.target.value)}}
-
-                      placeholder="Description..."
-
-            />
-        </div>
-    }
-}

@@ -2,10 +2,13 @@ import React from 'react'
 import {withRouterWithQuery} from '../routerUtils'
 
 import todoLogic from '../todoLogic'
-import AbstractTodoFormPage from './AbstractItemFormPage'
+import AbstractItemFormPage from './AbstractItemFormPage'
+import TodoForm from './TodoForm'
+
 
 const EditTodoPage = ({match}) =>
-    <AbstractTodoFormPage
+    <AbstractItemFormPage
+        formComponent={TodoForm}
         item={todoLogic.findTodoById(match.params.todoId)}
         onSave={(i) => {todoLogic.update(i.id, i)}}
         title="Edit todo"
