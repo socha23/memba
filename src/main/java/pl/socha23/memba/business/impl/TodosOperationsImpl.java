@@ -62,7 +62,20 @@ public class TodosOperationsImpl implements TodosOperations {
 
     @Override
     public Mono<? extends Group> createGroup(Mono<? extends CreateGroup> createGroup) {
-        return null; // TODO
+        return createGroup
+                .map(this::doCreateGroup)
+                .compose(groupStore::createGroup);
+    }
+
+    private Group doCreateGroup(CreateGroup create) {
+        var group = new BasicGroup();
+
+        group.setOwnerId(currentUserProvider.getCurrentUserId());
+        group.setText(create.getText());
+        group.setColor(create.getColor());
+        group.setCreatedOn(Instant.now());
+
+        return group;
     }
 
     private BasicTodo doUpdateTodo(Todo todo, UpdateTodo updateTodo) {
