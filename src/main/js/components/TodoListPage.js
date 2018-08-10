@@ -1,6 +1,7 @@
 import React from 'react'
 
 import {withRouterWithQuery, encodeQuery} from "../routerUtils";
+import Modal from 'react-bootstrap4-modal'
 
 import todoLogic from '../todoLogic'
 import TodoList from './TodoList'
@@ -14,17 +15,25 @@ class TodoListPage extends React.Component {
     state = {
         generation: 0,
         showCompleted: false,
+        addModalShown: false,
     };
 
     render() {
-        return <TodoListView
-            groupId={this.getGroupId()}
-            todos={todoLogic.listTodos({groupId: this.getGroupId(), showCompleted: this.state.showCompleted})}
-            showCompleted={this.state.showCompleted}
-            onToggleShowCompleted={() => this.onToggleShowCompleted()}
-            onClickAdd={() => this.onClickAdd()}
-            onLongClickAdd={() => this.onLongClickAdd()}
-        />
+        return <div>
+            <TodoListView
+                groupId={this.getGroupId()}
+                todos={todoLogic.listTodos({groupId: this.getGroupId(), showCompleted: this.state.showCompleted})}
+                showCompleted={this.state.showCompleted}
+                onToggleShowCompleted={() => this.onToggleShowCompleted()}
+                onClickAdd={() => this.onAddTodo()}
+                onLongClickAdd={() => this.showModal()}
+            />
+            <AddModal
+                visible={this.state.addModalShown}
+                onClickBackdrop={() => {this.hideModal()}}
+                onAddTodo={() => {this.onAddTodo()}}
+                onAddGroup={() => {this.onAddGroup()}}/>
+            </div>
     }
 
     getGroupId() {
@@ -47,12 +56,22 @@ class TodoListPage extends React.Component {
         this.setState({generation: this.state.generation + 1})
     }
 
-    onClickAdd() {
+    onAddTodo() {
+        this.hideModal();
         this.props.history.push(encodeQuery("/addTodo", {groupId: this.getGroupId()}))
     }
 
-    onLongClickAdd() {
-        console.log("Add clicked looong");
+    onAddGroup() {
+        this.hideModal();
+        console.log("ADDING GROUP");
+    }
+
+    showModal() {
+        this.setState({addModalShown: true});
+    }
+
+    hideModal() {
+        this.setState({addModalShown: false});
     }
 }
 
@@ -83,5 +102,18 @@ const TodoListView = ({
                 <ButtonIcon className="fas fa-plus"/>Add new...
             </LongClickButton>
         </BorderlessBottomNavbar>
-    </div>
-;
+    </div>;
+
+const AddModal = ({visible, onClickBackdrop, onAddTodo, onAddGroup}) =>
+    <Modal visible={visible} onClickBackdrop={onClickBackdrop}>
+        <div className="modal-body">
+            <button className="btn btn-block btn-lg btn-secondary" onClick={onAddTodo}>
+                Add new todo
+            </button>
+            <button className="btn btn-block btn-lg btn-secondary" onClick={onAddGroup}>
+                Add new group
+            </button>
+        </div>
+</Modal>
+
+

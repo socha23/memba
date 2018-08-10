@@ -28,6 +28,7 @@
     "query-string": "^6.1.0",
     "react": "^16.4.1",
     "react-addons-css-transition-group": "^15.6.2",
+    "react-bootstrap4-modal": "^1.4.0",
     "react-dom": "^16.4.1",
     "react-router-dom": "^4.3.1",
     "recompose": "^0.28.2"
