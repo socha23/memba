@@ -11,13 +11,13 @@ import ColorPicker from './ColorPicker'
 
 export default ({
                              title, buttonClass, buttonContents,
-                             todo, onChangeFields,
+                             item, onChangeFields,
                              submitEnabled, onSubmit,
                              createMode
                          }) => <div>
     <PageTopNavbar>
         <div style={{display: "flex", alignItems: "center"}}>
-            <LinkWithQuery to="/" query={{groupId: todo.groupId}} className="btn btn-primary">
+            <LinkWithQuery to="/" query={{groupId: item.groupId}} className="btn btn-primary">
                 <ButtonIcon className={"fas fa-backward"}/>Back
             </LinkWithQuery>
             <PageTitle>{title}</PageTitle>
@@ -27,8 +27,8 @@ export default ({
 
     <PageBody>
         <div className="container" style={{padding: 2}}>
-            <TodoTextInput value={todo.text} onChangeValue={v => onChangeFields({text: v})} autofocus={createMode}/>
-            <ColorPicker value={todo.color} onChangeValue={v => onChangeFields({color: v})}/>
+            <TodoTextInput value={item.text} onChangeValue={v => onChangeFields({text: v})} autofocus={createMode}/>
+            <ColorPicker value={item.color} onChangeValue={v => onChangeFields({color: v})}/>
         </div>
     </PageBody>
 

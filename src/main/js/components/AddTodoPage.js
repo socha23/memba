@@ -2,7 +2,7 @@ import React from 'react'
 import {withRouterWithQuery, encodeQuery} from '../routerUtils'
 
 import todoLogic from '../todoLogic'
-import AbstractEditTodoPageView from './AbstractEditTodoPageView'
+import AbstractEditItemPageView from './AbstractEditItemPageView'
 
 import ButtonIcon from './ButtonIcon'
 import {DEFAULT_COLOR} from "./ColorPicker";
@@ -15,7 +15,7 @@ class AddTodoPage extends React.Component {
     };
 
     render() {
-        return <AbstractEditTodoPageView
+        return <AbstractEditItemPageView
             title="Enter details"
             buttonClass={this.isSubmitEnabled() ? "btn-success" : "btn-primary"}
             buttonContents={this.isSubmitEnabled() ? <span>
@@ -23,7 +23,7 @@ class AddTodoPage extends React.Component {
                                 Add new item
                             </span>
                             : "Enter description first"}
-            todo={this.getTodo()}
+            item={this.getTodo()}
             onChangeFields={values => {this.setState(values)}}
             submitEnabled={this.isSubmitEnabled()}
             onSubmit={() => {this.onSubmit()}}

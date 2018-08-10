@@ -2,7 +2,7 @@ import React from 'react'
 import {withRouterWithQuery, encodeQuery} from '../routerUtils'
 
 import todoLogic from '../todoLogic'
-import AbstractEditTodoPageView from './AbstractEditTodoPageView'
+import AbstractEditItemPageView from './AbstractEditItemPageView'
 
 import ButtonIcon from './ButtonIcon'
 
@@ -13,7 +13,7 @@ class EditTodoPage extends React.Component {
     };
 
     render() {
-        return <AbstractEditTodoPageView
+        return <AbstractEditItemPageView
             title="Edit todo"
             buttonClass={this.isSubmitEnabled() ? "btn-success" : "btn-primary"}
             buttonContents={this.isSubmitEnabled() ? <span>
@@ -21,7 +21,7 @@ class EditTodoPage extends React.Component {
                                 Save changes
                             </span>
                             : "Enter description first"}
-            todo={this.getTodo()}
+            item={this.getTodo()}
             onChangeFields={values => {this.setState(values)}}
             submitEnabled={this.isSubmitEnabled()}
             onSubmit={() => {this.onSubmit()}}
