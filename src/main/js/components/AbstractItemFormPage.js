@@ -1,15 +1,71 @@
 import React from 'react'
-import {LinkWithQuery} from '../routerUtils'
+import {LinkWithQuery, encodeQuery} from '../routerUtils'
 
-import {PageTopNavbar, PageTitle} from "./PageTopNavbar";
+import {PageTopNavbar, PageTitle} from './PageTopNavbar'
 import PageBody from './PageBody'
 import {BorderlessBottomNavbar} from './PageBottomNavbar'
 
 import ButtonIcon from './ButtonIcon'
 import ColorPicker from './ColorPicker'
 
+class AbstractItemFormPage extends React.Component {
 
-export default ({
+    state = {...this.getInitialItem()};
+
+    getInitialItem() {
+        throw new Error("getInitialItem() not implemented");
+    }
+
+    render() {
+        return <AbstractEditItemPageView
+            title={this.getTitle()}
+            buttonClass={this.isSubmitEnabled() ? "btn-success" : "btn-primary"}
+            buttonContents={this.isSubmitEnabled() ? <span>
+                                <ButtonIcon className={"fas fa-check"}/>
+                                {this.getSaveButtonLabel()}
+                            </span>
+                            : "Enter description first"}
+            item={this.getItem()}
+            onChangeFields={values => {this.setState(values)}}
+            submitEnabled={this.isSubmitEnabled()}
+            onSubmit={() => {this.onSubmit()}}
+            createMode={this.isCreateMode()}
+        />;
+    }
+
+    getTitle() {
+        return "Enter details";
+    }
+
+    getSaveButtonLabel() {
+        return "Save changes"
+    }
+
+    isCreateMode() {
+        throw new Error("isCreateMode() not implemented");
+    }
+
+    isSubmitEnabled() {
+        return this.state.text.trim() !== "";
+    }
+
+    getItem() {
+        return {...this.state}
+    }
+
+    onSubmit() {
+        this.save();
+        this.props.history.push(encodeQuery("/", {groupId: this.getItem().groupId}));
+    }
+
+    save() {
+        throw new Error("save() not implemented");
+    }
+}
+
+export default AbstractItemFormPage
+
+const AbstractEditItemPageView = ({
                              title, buttonClass, buttonContents,
                              item, onChangeFields,
                              submitEnabled, onSubmit,

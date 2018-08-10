@@ -79,16 +79,20 @@ class TodoLogic {
     receiveTodos(todos) {
         this.loading = false;
         this.todosNotLoaded = false;
-        this.todos = todos;
+        this.todos = todos.map(this.fillItemDefaults);
         this.callSubscribers();
     }
 
-    addTodo(todo) {
+    fillItemDefaults = (item) => {
+        return {groupId: this.ROOT_GROUP_ID, ...item}
+    };
+
+    addItem(todo) {
         this.loading = true;
         jsonPost("/todos", todo)
             .then(r => {
                 this.loading = false;
-                this.todos.unshift(r);
+                this.todos.unshift(this.fillItemDefaults(r));
                 this.callSubscribers();
             });
     }
@@ -115,7 +119,7 @@ class TodoLogic {
             .then(t => {
                 this.loading = false;
                 const idx = this.todos.findIndex(t => t.id === todoId);
-                this.todos[idx] = t;
+                this.todos[idx] = this.fillItemDefaults(t);
                 this.callSubscribers();
             });
     }
