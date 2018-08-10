@@ -17,7 +17,7 @@ const AddTodoPage = ({location}) =>
         }}
         onSave={(item) => {
             setTimeout(() => {
-                todoLogic.addItem(item);
+                todoLogic.addTodo(item);
             });
         }}
         title="New todo"

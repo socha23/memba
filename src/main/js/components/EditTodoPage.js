@@ -9,10 +9,10 @@ import TodoForm from './TodoForm'
 const EditTodoPage = ({match}) =>
     <AbstractItemFormPage
         formComponent={TodoForm}
-        item={todoLogic.findTodoById(match.params.todoId)}
-        onSave={(i) => {todoLogic.update(i.id, i)}}
+        item={todoLogic.findItemById(match.params.todoId)}
+        onSave={(i) => {todoLogic.updateTodo(i.id, i)}}
         title="Edit todo"
         createMode={false}
-    />
+    />;
 
 export default withRouterWithQuery(EditTodoPage)

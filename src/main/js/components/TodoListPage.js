@@ -22,7 +22,7 @@ class TodoListPage extends React.Component {
         return <div>
             <TodoListView
                 groupId={this.getGroupId()}
-                todos={todoLogic.listTodos({groupId: this.getGroupId(), showCompleted: this.state.showCompleted})}
+                todos={todoLogic.listItems({groupId: this.getGroupId(), showCompleted: this.state.showCompleted})}
                 showCompleted={this.state.showCompleted}
                 onToggleShowCompleted={() => this.onToggleShowCompleted()}
                 onClickAdd={() => this.onAddTodo()}

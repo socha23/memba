@@ -1,6 +1,6 @@
 import {jsonGet, jsonPost, jsonPut} from './apiHelper'
 
-const REFRESH_TODOS_EVERY_MS = 10 * 1000;
+const REFRESH_ITEMS_EVERY_MS = 10 * 1000;
 
 class TodoLogic {
 
@@ -8,8 +8,8 @@ class TodoLogic {
 
     subscriptionIdAutoinc = 0;
 
-    todos = [];
-    todosNotLoaded = true;
+    items = [];
+    itemsNotLoaded = true;
     loading = false;
     subscribers = {};
     reloadIntervalHandler = null;
@@ -39,7 +39,7 @@ class TodoLogic {
 
     setupIntervalReload() {
         this.reload();
-        this.reloadIntervalHandler = setInterval(() => {this.reload()}, REFRESH_TODOS_EVERY_MS);
+        this.reloadIntervalHandler = setInterval(() => {this.reload()}, REFRESH_ITEMS_EVERY_MS);
     }
 
     cancelIntervalReload() {
@@ -47,7 +47,7 @@ class TodoLogic {
     }
 
     reload() {
-        this.fetchTodos();
+        this.fetchItems();
     }
 
     isLoading() {
@@ -58,28 +58,28 @@ class TodoLogic {
         return this.todosNotLoaded;
     }
 
-    listTodos({
+    listItems({
                   showNotCompleted = true,
                   showCompleted = false,
                   groupId = this.ROOT_GROUP_ID,
               }) {
 
-        return this.todos.filter(t =>
+        return this.items.filter(t =>
             (t.completed && showCompleted) || ((!t.completed) && showNotCompleted)
             && ((t.groupId || this.ROOT_GROUP_ID) === groupId)
         );
     }
 
-    fetchTodos() {
+    fetchItems() {
         this.loading = true;
         jsonGet("/todos")
-            .then(r => {this.receiveTodos(r)});
+            .then(r => {this.receiveItems(r)});
     }
 
-    receiveTodos(todos) {
+    receiveItems(items) {
         this.loading = false;
-        this.todosNotLoaded = false;
-        this.todos = todos.map(this.fillItemDefaults);
+        this.itemsNotLoaded = false;
+        this.items = items.map(this.fillItemDefaults);
         this.callSubscribers();
     }
 
@@ -87,12 +87,12 @@ class TodoLogic {
         return {groupId: this.ROOT_GROUP_ID, ...item}
     };
 
-    addItem(todo) {
+    addTodo(todo) {
         this.loading = true;
         jsonPost("/todos", todo)
             .then(r => {
                 this.loading = false;
-                this.todos.unshift(this.fillItemDefaults(r));
+                this.items.unshift(this.fillItemDefaults(r));
                 this.callSubscribers();
             });
     }
@@ -102,7 +102,7 @@ class TodoLogic {
             return;
         }
         this.loading = true;
-        this.findTodoById(todoId).completed = completed;
+        this.findItemById(todoId).completed = completed;
         this.callSubscribers();
         jsonPut("/todos/" + todoId + "/completed", completed)
             .then(r => {
@@ -110,7 +110,7 @@ class TodoLogic {
             });
     }
 
-    update(todoId, todo) {
+    updateTodo(todoId, todo) {
         if (this.loading) {
             return;
         }
@@ -118,14 +118,14 @@ class TodoLogic {
         jsonPut("/todos/" + todoId, todo)
             .then(t => {
                 this.loading = false;
-                const idx = this.todos.findIndex(t => t.id === todoId);
-                this.todos[idx] = this.fillItemDefaults(t);
+                const idx = this.items.findIndex(t => t.id === todoId);
+                this.items[idx] = this.fillItemDefaults(t);
                 this.callSubscribers();
             });
     }
 
-    findTodoById(id) {
-        return this.todos.find(t => t.id === id)
+    findItemById(id) {
+        return this.items.find(t => t.id === id)
     }
 
     callSubscribers() {
