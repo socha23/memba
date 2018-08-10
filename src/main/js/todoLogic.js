@@ -87,14 +87,22 @@ class TodoLogic {
         return {groupId: this.ROOT_GROUP_ID, ...item}
     };
 
-    addTodo(todo) {
+    _addItem(path, item) {
         this.loading = true;
-        jsonPost("/todos", todo)
+        jsonPost(path, item)
             .then(r => {
                 this.loading = false;
                 this.items.unshift(this.fillItemDefaults(r));
                 this.callSubscribers();
             });
+    }
+
+    addTodo(todo) {
+        this._addItem("/todos", todo);
+    }
+
+    addGroup(group) {
+        this._addItem("/groups", group);
     }
 
     setCompleted(todoId, completed) {
@@ -110,20 +118,24 @@ class TodoLogic {
             });
     }
 
-    updateTodo(todoId, todo) {
+    _updateItem(path, itemId, item) {
         if (this.loading) {
             return;
         }
         this.loading = true;
-        jsonPut("/todos/" + todoId, todo)
+        jsonPut(path + "/" + itemId, item)
             .then(t => {
                 this.loading = false;
-                const idx = this.items.findIndex(t => t.id === todoId);
+                const idx = this.items.findIndex(t => t.id === itemId);
                 this.items[idx] = this.fillItemDefaults(t);
                 this.callSubscribers();
             });
     }
 
+    updateTodo(todoId, todo) {
+        this._updateItem("/todos", todoId, todo)
+    }
+    
     findItemById(id) {
         return this.items.find(t => t.id === id)
     }

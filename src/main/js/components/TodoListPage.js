@@ -63,7 +63,7 @@ class TodoListPage extends React.Component {
 
     onAddGroup() {
         this.hideModal();
-        console.log("ADDING GROUP");
+        this.props.history.push(encodeQuery("/addGroup", {groupId: this.getGroupId()}))
     }
 
     showModal() {

@@ -7,6 +7,7 @@ import WaitForTodosToLoad from './WaitForTodosToLoad'
 import TodoListPage from './TodoListPage'
 import AddTodoPage from './AddTodoPage'
 import EditTodoPage from './EditTodoPage'
+import AddGroupPage from './AddGroupPage'
 
 export default () => <div className="container" style={{padding: 0}}>
     <SignInRequired>
@@ -15,6 +16,7 @@ export default () => <div className="container" style={{padding: 0}}>
                 <Route exact path="/" component={TodoListPage}/>
                 <Route path="/addTodo" component={AddTodoPage}/>
                 <Route path="/todo/:todoId" component={EditTodoPage}/>
+                <Route path="/addGroup" component={AddGroupPage}/>
             </Switch>
         </WaitForTodosToLoad>
     </SignInRequired>
