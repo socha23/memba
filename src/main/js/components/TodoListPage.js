@@ -105,7 +105,7 @@ const TodoListView = ({
     </div>;
 
 const AddModal = ({visible, onClickBackdrop, onAddTodo, onAddGroup}) =>
-    <Modal visible={visible} onClickBackdrop={onClickBackdrop}>
+    <Modal visible={visible} dialogClassName="modal-dialog-centered" onClickBackdrop={onClickBackdrop}>
         <div className="modal-body">
             <button className="btn btn-block btn-lg btn-secondary" onClick={onAddTodo}>
                 Add new todo
