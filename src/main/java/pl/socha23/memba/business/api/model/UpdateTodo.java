@@ -4,7 +4,6 @@ public interface UpdateTodo {
     /*
      * null = no change
      */
-
     String getText();
     Boolean isCompleted();
     String getColor();
