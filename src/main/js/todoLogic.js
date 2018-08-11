@@ -181,7 +181,7 @@ class TodoLogic {
             return;
         }
         this.loading = true;
-        restDelete("/group/" + idToRemove)
+        restDelete("/groups/" + idToRemove)
             .then(() => {
                 this.loading = false;
                 const idx = this.groups.findIndex(g => g.id === idToRemove);
