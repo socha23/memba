@@ -2,6 +2,7 @@ package pl.socha23.memba.web.todos.controllers;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pl.socha23.memba.business.api.logic.GroupsOperations;
 import pl.socha23.memba.business.api.logic.TodosOperations;
 import pl.socha23.memba.business.api.model.Group;
 import pl.socha23.memba.business.api.model.Item;
@@ -15,22 +16,20 @@ import reactor.core.publisher.Flux;
 public class ItemsController {
 
     private TodosOperations todosOperations;
+    private GroupsOperations groupsOperations;
 
-    public ItemsController(TodosOperations todosOperations) {
+    public ItemsController(TodosOperations todosOperations, GroupsOperations groupsOperations) {
         this.todosOperations = todosOperations;
+        this.groupsOperations = groupsOperations;
     }
 
     @GetMapping("/api/items")
     public Flux<ItemWithType> currentUserItems() {
-        return todosOperations
-                .listCurrentUserItems()
+        return Flux.<Item>empty()
+                .concatWith(groupsOperations.listCurrentUserGroups())
+                .concatWith(todosOperations.listCurrentUserTodos())
                 .map(this::toItemWithType);
     }
-
-    /*
-     * problem: to move entirely to webflux we would have to disable webmvc, and that breaks the web login,
-     * so better let's not
-     */
 
     private ItemWithType toItemWithType(Item item) {
         if (item instanceof Todo) {
