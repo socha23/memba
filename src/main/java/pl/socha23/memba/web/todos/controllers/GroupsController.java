@@ -30,7 +30,7 @@ public class GroupsController {
         return groupsOperations.updateGroup(groupId, Mono.just(updateGroup));
     }
 
-    @DeleteMapping("/api/todos/{groupId}")
+    @DeleteMapping("/api/groups/{groupId}")
     public Mono<Void> deleteGroup(@PathVariable("groupId") String groupId) {
         return groupsOperations.deleteGroup(groupId);
     }
