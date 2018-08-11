@@ -1,9 +1,21 @@
 import React from 'react'
+import todoLogic from '../todoLogic'
 import ColorPicker from './ColorPicker'
+import DeleteButton from './DeleteButton'
+
 
 const GroupForm = ({item, onChangeFields, createMode}) => <div>
     <GroupInput value={item.text} onChangeValue={v => onChangeFields({text: v})} autofocus={createMode}/>
     <ColorPicker value={item.color} onChangeValue={v => onChangeFields({color: v})}/>
+    {
+        createMode ? <span/> : <DeleteButton
+            item={item}
+            onDelete={() => todoLogic.deleteGroup(item.id)}
+            buttonTitle="Delete group"
+            message="Are you sure you want to delete this group? Its members will be moved up."
+        />
+    }
+
 </div>;
 
 export default GroupForm;

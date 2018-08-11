@@ -38,7 +38,7 @@ class DeleteButton extends React.Component {
         return <div>
             <button className="btn btn-block btn-danger" onClick={() => this.setState({confirmShown: true})}>
             <ButtonIcon className="fas fa-trash-alt"/>
-                Delete item
+                {this.props.buttonTitle}
             </button>
             <Modal
                 visible={this.state.confirmShown}

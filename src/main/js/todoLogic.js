@@ -176,6 +176,27 @@ class TodoLogic {
             });
     }
 
+    deleteGroup(idToRemove) {
+        if (this.loading) {
+            return;
+        }
+        this.loading = true;
+        restDelete("/group/" + idToRemove)
+            .then(() => {
+                this.loading = false;
+                const idx = this.groups.findIndex(g => g.id === idToRemove);
+                const groupToRemove = this.groups[idx];
+                this.groups.splice(idx, 1);
+
+                [this.todos, this.groups].forEach(collection =>
+                    collection
+                        .filter(i => i.groupId === idToRemove)
+                        .forEach(i => {i.groupId = groupToRemove.groupId})
+                );
+
+                this.callSubscribers();
+            });
+    }
 
     _findItemById(id, collection) {
         return collection.find(t => t.id === id)
