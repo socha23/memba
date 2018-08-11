@@ -1,4 +1,4 @@
-import {jsonGet, jsonPost, jsonPut} from './apiHelper'
+import {jsonGet, jsonPost, jsonPut, restDelete} from './apiHelper'
 
 const REFRESH_ITEMS_EVERY_MS = 10 * 1000;
 
@@ -161,6 +161,21 @@ class TodoLogic {
     updateGroup(groupId, group) {
         this._updateItem("/groups", groupId, group, this.groups)
     }
+
+    deleteTodo(todoId) {
+        if (this.loading) {
+            return;
+        }
+        this.loading = true;
+        restDelete("/todos/" + todoId)
+            .then(() => {
+                this.loading = false;
+                const idx = this.todos.findIndex(t => t.id === todoId);
+                this.todos.splice(idx, 1);
+                this.callSubscribers();
+            });
+    }
+
 
     _findItemById(id, collection) {
         return collection.find(t => t.id === id)

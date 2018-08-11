@@ -25,6 +25,7 @@
     "isomorphic-fetch": "^2.2.1",
     "jest-enzyme": "^6.0.2",
     "moment": "^2.22.2",
+    "prop-types": "^15.6.2",
     "query-string": "^6.1.0",
     "react": "^16.4.1",
     "react-addons-css-transition-group": "^15.6.2",

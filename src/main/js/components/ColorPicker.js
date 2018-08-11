@@ -15,7 +15,7 @@ export const COLORS = [
 
 export const DEFAULT_COLOR = COLORS[0];
 
-export default ({colors = COLORS, value, onChangeValue}) => <div style={{display: "flex", flexWrap: "wrap", justifyContent: "space-between"}}>
+export default ({colors = COLORS, value, onChangeValue}) => <div style={{display: "flex", flexWrap: "wrap", justifyContent: "space-between", marginBottom: 10}}>
     {colors.map((c, idx) =>
         <div key={c} style={{cursor: "pointer"}} onClick={() => onChangeValue(c)}>
             <div style={{

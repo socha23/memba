@@ -18,7 +18,16 @@ export function jsonPost(path, payload = {}) {
     return jsonCall("POST", path, payload)
 }
 
+export function restDelete(path) {
+    return restCall("DELETE", path)
+}
+
 function jsonCall(method, path, payload) {
+    return restCall(method, path, payload)
+        .then(unpackResponse)
+}
+
+function restCall(method, path, payload) {
     const params = {
         credentials: 'same-origin',
         method: method,
@@ -31,8 +40,8 @@ function jsonCall(method, path, payload) {
         params.body = JSON.stringify(payload);
     }
     return fetch("/api" + path, params)
-        .then(unpackResponse)
 }
+
 
 const unpackResponse = r => {
     if (r.ok) {

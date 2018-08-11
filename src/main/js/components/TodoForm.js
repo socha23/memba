@@ -1,9 +1,14 @@
 import React from 'react'
+import todoLogic from '../todoLogic'
 import ColorPicker from './ColorPicker'
+import DeleteButton from './DeleteButton'
 
 const TodoForm = ({item, onChangeFields, createMode}) => <div>
     <TodoTextInput value={item.text} onChangeValue={v => onChangeFields({text: v})} autofocus={createMode}/>
     <ColorPicker value={item.color} onChangeValue={v => onChangeFields({color: v})}/>
+    {
+        createMode ? <span/> : <DeleteButton item={item} onDelete={() => todoLogic.deleteTodo(item.id)}/>
+    }
 </div>;
 
 export default TodoForm;
