@@ -55,9 +55,9 @@ class MongoGroupStore implements GroupStore<MongoGroupImpl> {
     @Override
     public Mono<Void> changeEveryGroupId(String fromGroupId, String toGroupId) {
         return template.updateMulti(
-                new Query(Criteria.where("groups.groupId").is(fromGroupId)),
+                new Query(Criteria.where("groupId").is(fromGroupId)),
                 new Update().set("groupId", toGroupId),
-                Void.class
+                MongoGroupImpl.class
         ).then();
     }
 }
