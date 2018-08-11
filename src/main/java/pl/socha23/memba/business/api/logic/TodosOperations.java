@@ -11,4 +11,5 @@ public interface TodosOperations {
     Mono<? extends Todo> updateTodo(String todoId, Mono<? extends UpdateTodo> updateTodo);
 
     Mono<? extends Group> createGroup(Mono<? extends CreateGroup> createGroup);
+    Mono<? extends Group> updateGroup(String groupId, Mono<? extends UpdateGroup> updateGroup);
 }

@@ -47,7 +47,7 @@ public class TodosController {
 
 
     @PostMapping("/api/groups")
-    public Mono<? extends Group> addGroup(@RequestBody CreateGroupRequest createGroup) {
+    public Mono<? extends Group> addGroup(@RequestBody CreateUpdateGroupRequest createGroup) {
         return todosOperations.createGroup(Mono.just(createGroup));
     }
 
@@ -62,4 +62,8 @@ public class TodosController {
         }
     }
 
+    @PutMapping("/api/groups/{groupId}")
+    public Mono<? extends Group> updateGroup(@PathVariable("groupId") String groupId, @RequestBody CreateUpdateGroupRequest updateGroup) {
+        return todosOperations.updateGroup(groupId, Mono.just(updateGroup));
+    }
 }

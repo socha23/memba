@@ -1,6 +1,7 @@
 package pl.socha23.memba.business.impl
 
 import pl.socha23.memba.business.api.model.CreateGroup
+import pl.socha23.memba.business.api.model.Group
 import pl.socha23.memba.dao.mem.MemGroupStore
 import pl.socha23.memba.dao.mem.MemTodoStore
 import reactor.core.publisher.Mono
@@ -16,29 +17,31 @@ class GroupOperationsSpec extends Specification {
         def ops = new TodosOperationsImpl(new MemTodoStore(), groupStore, new TestUserProvider())
 
         when:
-        ops.createGroup(withText("one")).block()
-        ops.createGroup(withText("two")).block()
+        ops.createGroup(TestCreateUpdateGroup.monoWithText("one")).block()
+        ops.createGroup(TestCreateUpdateGroup.monoWithText("two")).block()
 
         then:
         toList(ops.listCurrentUserItems())*.text == ["two", "one"]
     }
 
-    Mono<? extends CreateGroup> withText(String text) {
-        Mono.just(new CreateGroup() {
-            @Override
-            String getGroupId() {
-                return null
-            }
+    def "updating a group"() {
+        given:
+        def groupStore = new MemGroupStore()
+        def ops = new TodosOperationsImpl(new MemTodoStore(), groupStore, new TestUserProvider())
 
-            @Override
-            String getText() {
-                return text
-            }
+        when:
+        Group g = ops.createGroup(new TestCreateUpdateGroup()
+                .withText("original")
+                .withColor("red")
+                .toMono()
+        ).block()
+        ops.updateGroup(g.id, TestCreateUpdateGroup.monoWithText("modified")).block()
 
-            @Override
-            String getColor() {
-                return null
-            }
-        })
+        then:
+        def changedGroup = toList(ops.listCurrentUserItems())[0]
+        changedGroup.text == "modified"
+        changedGroup.color == "red"
     }
+
+
 }

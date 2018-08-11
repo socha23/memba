@@ -1,8 +1,9 @@
 package pl.socha23.memba.web.todos;
 
 import pl.socha23.memba.business.api.model.CreateGroup;
+import pl.socha23.memba.business.api.model.UpdateGroup;
 
-public class CreateGroupRequest implements CreateGroup {
+public class CreateUpdateGroupRequest implements CreateGroup, UpdateGroup {
 
     private String groupId = null;
     private String text = null;

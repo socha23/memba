@@ -1,8 +1,6 @@
 package pl.socha23.memba.web.todos
 
 
-import pl.socha23.memba.business.api.logic.TodosOperations
-import pl.socha23.memba.business.api.model.BasicTodo
 import pl.socha23.memba.business.impl.TestUserProvider
 import pl.socha23.memba.business.impl.TodosOperationsImpl
 import pl.socha23.memba.dao.mem.MemGroupStore
@@ -18,7 +16,7 @@ class CreateGroupSpec extends Specification {
         def controller = new TodosController(new TodosOperationsImpl(new MemTodoStore(), new MemGroupStore(), new TestUserProvider()))
 
         when:
-        def request = new CreateGroupRequest();
+        def request = new CreateUpdateGroupRequest();
         request.text  = "my group"
         request.groupId = "ggg"
         controller.addGroup(request).block()

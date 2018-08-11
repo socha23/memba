@@ -61,24 +61,6 @@ public class TodosOperationsImpl implements TodosOperations {
                 .compose(todoStore::updateTodo);
     }
 
-    @Override
-    public Mono<? extends Group> createGroup(Mono<? extends CreateGroup> createGroup) {
-        return createGroup
-                .map(this::doCreateGroup)
-                .compose(groupStore::createGroup);
-    }
-
-    private Group doCreateGroup(CreateGroup create) {
-        var group = new BasicGroup();
-        group.setOwnerId(currentUserProvider.getCurrentUserId());
-        group.setGroupId(create.getGroupId());
-        group.setText(create.getText());
-        group.setColor(create.getColor());
-        group.setCreatedOn(Instant.now());
-
-        return group;
-    }
-
     private BasicTodo doUpdateTodo(Todo todo, UpdateTodo updateTodo) {
         var newTodo = BasicTodo.copy(todo);
 
@@ -101,4 +83,47 @@ public class TodosOperationsImpl implements TodosOperations {
         return newTodo;
     }
 
+    @Override
+    public Mono<? extends Group> createGroup(Mono<? extends CreateGroup> createGroup) {
+        return createGroup
+                .map(this::doCreateGroup)
+                .compose(groupStore::createGroup);
+    }
+
+    private Group doCreateGroup(CreateGroup create) {
+        var group = new BasicGroup();
+        group.setOwnerId(currentUserProvider.getCurrentUserId());
+        group.setGroupId(create.getGroupId());
+        group.setText(create.getText());
+        group.setColor(create.getColor());
+        group.setCreatedOn(Instant.now());
+
+        return group;
+    }
+
+    @Override
+    public Mono<? extends Group> updateGroup(String groupId, Mono<? extends UpdateGroup> updateGroup) {
+        return groupStore
+                .findGroupById(groupId)
+                .zipWith(updateGroup, this::doUpdateGroup)
+                .compose(groupStore::updateGroup);
+    }
+
+    private BasicGroup doUpdateGroup(Group group, UpdateGroup updateGroup) {
+        var newGroup = BasicGroup.copy(group);
+
+        if (updateGroup.getGroupId() != null) {
+            newGroup.setGroupId(updateGroup.getGroupId());
+        }
+
+        if (updateGroup.getText() != null) {
+            newGroup.setText(updateGroup.getText());
+        }
+
+        if (updateGroup.getColor() != null) {
+            newGroup.setColor(updateGroup.getColor());
+        }
+
+        return newGroup;
+    }
 }
