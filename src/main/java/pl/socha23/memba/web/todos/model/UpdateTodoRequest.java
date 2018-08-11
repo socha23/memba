@@ -1,4 +1,4 @@
-package pl.socha23.memba.web.todos;
+package pl.socha23.memba.web.todos.model;
 
 import pl.socha23.memba.business.api.model.UpdateTodo;
 
@@ -45,7 +45,7 @@ public class UpdateTodoRequest implements UpdateTodo {
         this.color = color;
     }
 
-    static UpdateTodoRequest withCompleted(boolean completed) {
+    public static UpdateTodoRequest withCompleted(boolean completed) {
         var result = new UpdateTodoRequest();
         result.setCompleted(completed);
         return result;

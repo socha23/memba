@@ -1,28 +1,25 @@
 package pl.socha23.memba.web.todos
 
 
-import pl.socha23.memba.business.impl.TestUserProvider
-import pl.socha23.memba.business.impl.TodosOperationsImpl
-import pl.socha23.memba.dao.mem.MemGroupStore
-import pl.socha23.memba.dao.mem.MemTodoStore
+import pl.socha23.memba.web.todos.controllers.GroupsController
+import pl.socha23.memba.web.todos.model.CreateUpdateGroupRequest
 import spock.lang.Specification
-
-import static pl.socha23.memba.FluxUtils.toList
 
 class CreateGroupSpec extends Specification {
 
     def "create a group"() {
         given:
-        def controller = new TodosController(new TodosOperationsImpl(new MemTodoStore(), new MemGroupStore(), new TestUserProvider()))
+        def ops = new TestTodoOps()
+        def controller = new GroupsController(ops)
 
         when:
-        def request = new CreateUpdateGroupRequest();
+        def request = new CreateUpdateGroupRequest()
         request.text  = "my group"
         request.groupId = "ggg"
         controller.addGroup(request).block()
 
         then:
-        def group = toList(controller.currentUserItems())[0]
+        def group = ops.listGroups()[0]
         group.text == "my group"
         group.groupId == "ggg"
     }

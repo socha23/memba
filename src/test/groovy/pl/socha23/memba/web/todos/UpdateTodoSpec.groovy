@@ -1,42 +1,26 @@
 package pl.socha23.memba.web.todos
 
 
-import pl.socha23.memba.business.api.logic.TodosOperations
-import pl.socha23.memba.business.api.model.BasicTodo
-import pl.socha23.memba.business.impl.TestUserProvider
-import pl.socha23.memba.business.impl.TodosOperationsImpl
-import pl.socha23.memba.dao.mem.MemGroupStore
-import pl.socha23.memba.dao.mem.MemTodoStore
+import pl.socha23.memba.web.todos.controllers.TodosController
+import pl.socha23.memba.web.todos.model.CreateTodoRequest
+import pl.socha23.memba.web.todos.model.UpdateTodoRequest
+import reactor.core.publisher.Mono
 import spock.lang.Specification
-
-import static pl.socha23.memba.FluxUtils.toList
 
 class UpdateTodoSpec extends Specification {
 
     def "update a todo"() {
         given:
-        def controller = new TodosController(todosOperations([
-                [id: "1", text: "todo"],
-        ]))
+        def ops = new TestTodoOps()
+        def todo = ops.createTodo(Mono.just(new CreateTodoRequest(text: "todo"))).block()
+        def controller = new TodosController(ops)
 
         when:
-        def request = new UpdateTodoRequest();
+        def request = new UpdateTodoRequest()
         request.text  = "todo updated"
-        controller.update("1", request).block()
+        controller.updateTodo(todo.id, request).block()
 
         then:
-        toList(controller.currentUserItems())[0].text == "todo updated"
-    }
-
-    private static TodosOperations todosOperations(List<Map> todos) {
-        def store = new MemTodoStore();
-        for (Map t : todos) {
-            def todo = new BasicTodo()
-            todo.setId(t.id)
-            todo.setText(t.text)
-            todo.setOwnerId(TestUserProvider.USER_ID);
-            store.addTodo(todo);
-        }
-        return new TodosOperationsImpl(store, new MemGroupStore(), new TestUserProvider())
+        ops.listTodos()[0].text == "todo updated"
     }
 }
