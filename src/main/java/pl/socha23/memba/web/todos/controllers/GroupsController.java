@@ -29,4 +29,9 @@ public class GroupsController {
     public Mono<? extends Group> updateGroup(@PathVariable("groupId") String groupId, @RequestBody CreateUpdateGroupRequest updateGroup) {
         return groupsOperations.updateGroup(groupId, Mono.just(updateGroup));
     }
+
+    @DeleteMapping("/api/todos/{groupId}")
+    public Mono<Void> deleteGroup(@PathVariable("groupId") String groupId) {
+        return groupsOperations.deleteGroup(groupId);
+    }
 }
