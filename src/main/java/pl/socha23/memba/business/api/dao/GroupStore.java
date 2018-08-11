@@ -13,4 +13,11 @@ public interface GroupStore<T extends Group> {
     Mono<T> createGroup(Mono<? extends Group> group);
 
     Mono<T> updateGroup(Mono<? extends Group> group);
+
+    Mono<Void> deleteGroup(String groupId);
+
+    /**
+     * Update all the groups belonging to a given group and makes them parts of another one
+     */
+    Mono<Void> changeEveryGroupId(String fromGroupId, String toGroupId);
 }

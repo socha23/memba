@@ -3,8 +3,9 @@ package pl.socha23.memba.dao.mem;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import pl.socha23.memba.business.api.dao.GroupStore;
-import pl.socha23.memba.business.api.dao.TodoStore;
-import pl.socha23.memba.business.api.model.*;
+import pl.socha23.memba.business.api.model.BasicGroup;
+import pl.socha23.memba.business.api.model.Group;
+import pl.socha23.memba.business.api.model.Item;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -37,6 +38,21 @@ public class MemGroupStore implements GroupStore<BasicGroup> {
                 .map(this::addGroup);
     }
 
+    private BasicGroup addGroup(Group group) {
+        var newGroup = BasicGroup.copy(group);
+
+        if (newGroup.getId() == null) {
+            newGroup.setId(autoinc());
+        }
+
+        groupsById.put(newGroup.getId(), newGroup);
+        return newGroup;
+    }
+
+    private String autoinc() {
+        return "_autoincGroup" + autoInc++;
+    }
+
     @Override
     public Mono<BasicGroup> updateGroup(Mono<? extends Group> group) {
         return group.map(this::doUpdateGroup);
@@ -53,18 +69,18 @@ public class MemGroupStore implements GroupStore<BasicGroup> {
                 .collect(Collectors.toList());
     }
 
-    public BasicGroup addGroup(Group group) {
-        var newGroup = BasicGroup.copy(group);
-
-        if (newGroup.getId() == null) {
-            newGroup.setId(autoinc());
-        }
-
-        groupsById.put(newGroup.getId(), newGroup);
-        return newGroup;
+    @Override
+    public Mono<Void> deleteGroup(String groupId) {
+        groupsById.remove(groupId);
+        return Mono.empty();
     }
 
-    private String autoinc() {
-        return "_autoincGroup" + autoInc++;
+    @Override
+    public Mono<Void> changeEveryGroupId(String fromGroupId, String toGroupId) {
+        groupsById.values().stream()
+                .filter(g -> fromGroupId.equals(g.getGroupId()))
+                .forEach(g -> g.setGroupId(toGroupId));
+        return Mono.empty();
     }
+
 }

@@ -1,6 +1,10 @@
 package pl.socha23.memba.dao.mongo;
 
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 import pl.socha23.memba.business.api.dao.TodoStore;
 import pl.socha23.memba.business.api.model.Todo;
@@ -12,9 +16,11 @@ import reactor.core.publisher.Mono;
 class MongoTodoStore implements TodoStore<MongoTodoImpl> {
 
     private MongoTodoRepository repository;
+    private ReactiveMongoTemplate template;
 
-    public MongoTodoStore(MongoTodoRepository repository) {
+    public MongoTodoStore(MongoTodoRepository repository, ReactiveMongoTemplate template) {
         this.repository = repository;
+        this.template = template;
     }
 
     @Override
@@ -35,10 +41,8 @@ class MongoTodoStore implements TodoStore<MongoTodoImpl> {
     @Override
     public Mono<MongoTodoImpl> updateTodo(Mono<? extends Todo> todo) {
         return todo
-                        .map(MongoTodoImpl::copy)
-                        .compose(t -> {
-                            return repository.saveAll(t).next();
-                        });
+                .map(MongoTodoImpl::copy)
+                .compose(t -> repository.saveAll(t).next());
 
     }
 
@@ -46,4 +50,14 @@ class MongoTodoStore implements TodoStore<MongoTodoImpl> {
     public Mono<Void> deleteTodo(String id) {
         return repository.deleteById(id);
     }
+
+    @Override
+    public Mono<Void> changeEveryGroupId(String fromGroupId, String toGroupId) {
+        return template.updateMulti(
+                new Query(Criteria.where("todos.groupId").is(fromGroupId)),
+                new Update().set("groupId", toGroupId),
+                Void.class
+        ).then();
+    }
+
 }

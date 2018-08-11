@@ -10,4 +10,5 @@ public interface GroupsOperations {
     Flux<? extends Group> listCurrentUserGroups();
     Mono<? extends Group> createGroup(Mono<? extends CreateGroup> createGroup);
     Mono<? extends Group> updateGroup(String groupId, Mono<? extends UpdateGroup> updateGroup);
+    Mono<Void> deleteGroup(String groupId);
 }

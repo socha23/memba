@@ -13,4 +13,10 @@ public interface TodoStore<T extends Todo> {
     Mono<T> createTodo(Mono<? extends Todo> todo);
     Mono<T> updateTodo(Mono<? extends Todo> todo);
     Mono<Void> deleteTodo(String id);
+
+    /**
+     * Update all the groups belonging to a given group and makes them parts of another one
+     */
+    Mono<Void> changeEveryGroupId(String fromGroupId, String toGroupId);
+
 }

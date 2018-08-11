@@ -55,6 +55,18 @@ public class GroupsOperationsImpl implements GroupsOperations {
                 .compose(groupStore::updateGroup);
     }
 
+    @Override
+    public Mono<Void> deleteGroup(String groupId) {
+        return groupStore
+                .findGroupById(groupId)
+                .flatMap(g -> Mono.when(
+                        groupStore.deleteGroup(g.getId()),
+                        groupStore.changeEveryGroupId(groupId, g.getGroupId()),
+                        todoStore.changeEveryGroupId(groupId, g.getGroupId())
+                        )
+                );
+    }
+
     private BasicGroup doUpdateGroup(Group group, UpdateGroup updateGroup) {
         var newGroup = BasicGroup.copy(group);
 

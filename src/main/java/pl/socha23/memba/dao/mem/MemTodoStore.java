@@ -74,4 +74,13 @@ public class MemTodoStore implements TodoStore<BasicTodo> {
     private String autoinc() {
         return "_auto" + autoInc++;
     }
+
+    @Override
+    public Mono<Void> changeEveryGroupId(String fromGroupId, String toGroupId) {
+        todosById.values().stream()
+                .filter(t -> fromGroupId.equals(t.getGroupId()))
+                .forEach(t -> t.setGroupId(toGroupId));
+        return Mono.empty();
+    }
+
 }
