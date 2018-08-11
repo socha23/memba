@@ -12,4 +12,5 @@ public interface TodoStore<T extends Todo> {
 
     Mono<T> createTodo(Mono<? extends Todo> todo);
     Mono<T> updateTodo(Mono<? extends Todo> todo);
+    Mono<Void> deleteTodo(String id);
 }

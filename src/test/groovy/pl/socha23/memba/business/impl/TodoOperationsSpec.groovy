@@ -41,5 +41,18 @@ class TodoOperationsSpec extends Specification {
         changedTodo.color == "red"
     }
 
+    def "deleting a todo"() {
+        given:
+        def todoStore = new MemTodoStore()
+        def ops = new TodosOperationsImpl(todoStore, new TestUserProvider())
+        Todo t1 = ops.createTodo(TestCreateUpdateTodo.monoWithText("one")).block()
+        Todo t2 = ops.createTodo(TestCreateUpdateTodo.monoWithText("two")).block()
+
+        when:
+        ops.deleteTodo(t1.id)
+
+        then:
+        toList(ops.listCurrentUserTodos())*.text == [t2.text]
+    }
 
 }

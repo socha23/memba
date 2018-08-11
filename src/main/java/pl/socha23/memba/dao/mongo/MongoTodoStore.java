@@ -41,4 +41,9 @@ class MongoTodoStore implements TodoStore<MongoTodoImpl> {
                         });
 
     }
+
+    @Override
+    public Mono<Void> deleteTodo(String id) {
+        return repository.deleteById(id);
+    }
 }

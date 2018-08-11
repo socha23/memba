@@ -43,6 +43,12 @@ public class MemTodoStore implements TodoStore<BasicTodo> {
         return todo.map(this::doUpdateTodo);
     }
 
+    @Override
+    public Mono<Void> deleteTodo(String id) {
+        todosById.remove(id);
+        return Mono.empty();
+    }
+
     private BasicTodo doUpdateTodo(Todo todo) {
         return todosById.put(todo.getId(), BasicTodo.copy(todo));
     }
@@ -54,7 +60,7 @@ public class MemTodoStore implements TodoStore<BasicTodo> {
                 .collect(Collectors.toList());
     }
 
-    public BasicTodo addTodo(Todo todo) {
+    BasicTodo addTodo(Todo todo) {
         var newTodo = BasicTodo.copy(todo);
 
         if (newTodo.getId() == null) {

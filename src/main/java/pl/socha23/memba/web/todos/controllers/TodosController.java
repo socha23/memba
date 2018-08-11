@@ -30,4 +30,9 @@ public class TodosController {
     public Mono<? extends Todo> setCompleted(@PathVariable("todoId") String todoId, @RequestBody boolean completed) {
         return todosOperations.updateTodo(todoId, Mono.just(UpdateTodoRequest.withCompleted(completed)));
     }
+
+    @DeleteMapping("/api/todos/{todoId}")
+    public Mono<Void> deleteTodo(@PathVariable("todoId") String todoId) {
+        return todosOperations.deleteTodo(todoId);
+    }
 }

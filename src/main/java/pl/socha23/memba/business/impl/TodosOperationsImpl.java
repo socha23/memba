@@ -58,6 +58,11 @@ public class TodosOperationsImpl implements TodosOperations {
                 .compose(todoStore::updateTodo);
     }
 
+    @Override
+    public Mono<Void> deleteTodo(String todoId) {
+        return todoStore.deleteTodo(todoId);
+    }
+
     private BasicTodo doUpdateTodo(Todo todo, UpdateTodo updateTodo) {
         var newTodo = BasicTodo.copy(todo);
 
