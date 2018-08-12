@@ -5,3 +5,10 @@ export const groupBy = function (xs, key) {
         return rv;
     }, {});
 };
+
+export const indexById = function (xs) {
+    return xs.reduce(function (rv, x) {
+        rv[x.id] = x;
+        return rv;
+    }, {});
+};
