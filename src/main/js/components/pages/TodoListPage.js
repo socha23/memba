@@ -11,6 +11,7 @@ class TodoListPage extends React.Component {
     state = {
         generation: 0,
         showCompleted: false,
+        reorderMode: false
     };
 
     render() {
@@ -19,6 +20,8 @@ class TodoListPage extends React.Component {
                 groupId={this.getGroupId()}
                 showCompleted={this.state.showCompleted}
                 onToggleShowCompleted={() => this.onToggleShowCompleted()}
+                reorderMode={this.state.reorderMode}
+                onToggleReorderMode={() => this.onToggleReorderMode()}
             />
             <TodoListView
                 showCompleted={this.state.showCompleted}
@@ -37,6 +40,10 @@ class TodoListPage extends React.Component {
 
     onToggleShowCompleted() {
         this.setState({showCompleted: !this.state.showCompleted})
+    }
+
+    onToggleReorderMode() {
+        this.setState({reorderMode: !this.state.reorderMode})
     }
 
     componentDidMount() {

@@ -24,13 +24,14 @@ export const TitleWithBackNavbar = ({title = "Memba", to = "/", query = {}, chil
 </PageTopNavbar>;
 
 
-export const ToolbarButton = ({className="", onClick=() => {}, inactive=false}) =>
+export const ToolbarButton = ({className="", onClick=() => {}, active=false}) =>
     <i className={className} onClick={() => onClick()}
        style={{
+           fontSize: 20,
            padding: 10,
            paddingRight: 8,
            cursor: "pointer",
-           color: inactive ? "#7A8288" : "white"
+           color: active ? "#62c462" : "white",
        }}
     />;
 

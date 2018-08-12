@@ -11,8 +11,8 @@ function isRoot(groupId) {
 
 const TodoListPageNavbar = withRouterWithQuery(({
                                                     groupId = todoLogic.ROOT_GROUP_ID,
-                                                    showCompleted = false,
-                                                    onToggleShowCompleted,
+                                                    showCompleted, onToggleShowCompleted,
+                                                    reorderMode, onToggleReorderMode,
                                                     history
                                                 }) => {
 
@@ -29,8 +29,14 @@ const TodoListPageNavbar = withRouterWithQuery(({
 
     const showCompletedButton = <ToolbarButton
         className="far fa-check-square"
-        inactive={!showCompleted}
+        active={showCompleted}
         onClick={() => onToggleShowCompleted()}
+    />;
+
+    const reordererModeButton = <ToolbarButton
+        className="fas fa-sort"
+        active={reorderMode}
+        onClick={() => onToggleReorderMode()}
     />;
 
     const editGroupButton = isRoot(groupId) ? <span/> :
@@ -43,6 +49,7 @@ const TodoListPageNavbar = withRouterWithQuery(({
         {navbarFirstElem}
         <div className="btn-toolbar">
             {editGroupButton}
+            {reordererModeButton}
             {showCompletedButton}
         </div>
     </PageTopNavbar>
