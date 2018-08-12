@@ -7,13 +7,11 @@ import GroupSelect from './GroupSelect'
 const TodoForm = ({item, onChangeFields, createMode}) => <div>
     <TodoTextInput value={item.text} onChangeValue={v => onChangeFields({text: v})} autofocus={createMode}/>
     <ColorPicker value={item.color} onChangeValue={v => onChangeFields({color: v})}/>
-    {
-        createMode ? <span/> : <GroupSelect
-            value={item.groupId}
-            onChangeValue={v => onChangeFields({groupId: v})}
-            disabledId={item.id}
-        />
-    }
+    <GroupSelect
+                value={item.groupId}
+                onChangeValue={v => onChangeFields({groupId: v})}
+                disabledId={item.id}
+            />
     {
         createMode ? <span/> : <DeleteButton style={{marginTop: 30}} item={item} onDelete={() => todoLogic.deleteTodo(item.id)}/>
     }

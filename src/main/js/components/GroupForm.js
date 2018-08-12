@@ -8,13 +8,11 @@ import GroupSelect from "./GroupSelect";
 const GroupForm = ({item, onChangeFields, createMode}) => <div>
     <GroupInput value={item.text} onChangeValue={v => onChangeFields({text: v})} autofocus={createMode}/>
     <ColorPicker value={item.color} onChangeValue={v => onChangeFields({color: v})}/>
-    {
-        createMode ? <span/> : <GroupSelect
+    <GroupSelect
             value={item.groupId}
             onChangeValue={v => onChangeFields({groupId: v})}
             disabledId={item.id}
         />
-    }
     {
         createMode ? <span/> : <DeleteButton
             style={{marginTop: 30}}
