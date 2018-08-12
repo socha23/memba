@@ -1,11 +1,12 @@
 import {jsonGet, jsonPost, jsonPut, restDelete} from './apiHelper'
 
-const REFRESH_ITEMS_EVERY_MS = 10 * 1000;
+const REFRESH_ITEMS_EVERY_MS = 60 * 1000;
 
 export default class ServerData {
 
     reloadIntervalHandler = null;
     onReceiveItems = null;
+    lastFetchOn = 0;
 
     constructor(onReceiveItems) {
         this.onReceiveItems = onReceiveItems;
@@ -27,9 +28,13 @@ export default class ServerData {
     }
 
     _fetchItems() {
+        const fetchTime = Date.now();
+        this.lastFetchOn = fetchTime;
         jsonGet("/items")
             .then(r => {
-                this._receiveItems(r)
+                if (this.lastFetchOn === fetchTime) {
+                    this._receiveItems(r)
+                }
             });
     }
 
@@ -46,12 +51,14 @@ export default class ServerData {
     }
 
     _addItem(path, item) {
-        return jsonPost(path, item);
+        return jsonPost(path, item)
+            .then(i => {this._reload(); return i});
     }
 
 
     setCompleted(todoId, completed) {
-        return jsonPut("/todos/" + todoId + "/completed", completed);
+        return jsonPut("/todos/" + todoId + "/completed", completed)
+            .then(i => {this._reload(); return i});
     }
 
     updateTodo(todo) {
@@ -63,7 +70,8 @@ export default class ServerData {
     }
 
     _updateItem(path, item) {
-        return jsonPut(path + "/" + item.id, item);
+        return jsonPut(path + "/" + item.id, item)
+            .then(i => {this._reload(); return i});
     }
 
     deleteTodo(todoId) {
@@ -76,5 +84,6 @@ export default class ServerData {
 
     _deleteItem(path, idToRemove) {
         return restDelete(path + "/" + idToRemove)
+            .then(i => {this._reload(); return i})
     }
 }
