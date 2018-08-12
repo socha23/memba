@@ -15,7 +15,7 @@ const TodoForm = ({item, onChangeFields, createMode}) => <div>
         />
     }
     {
-        createMode ? <span/> : <DeleteButton style={{marginTop: 10}} item={item} onDelete={() => todoLogic.deleteTodo(item.id)}/>
+        createMode ? <span/> : <DeleteButton style={{marginTop: 30}} item={item} onDelete={() => todoLogic.deleteTodo(item.id)}/>
     }
 </div>;
 

@@ -17,6 +17,7 @@ const GroupForm = ({item, onChangeFields, createMode}) => <div>
     }
     {
         createMode ? <span/> : <DeleteButton
+            style={{marginTop: 30}}
             item={item}
             onDelete={() => todoLogic.deleteGroup(item.id)}
             buttonTitle="Delete group"

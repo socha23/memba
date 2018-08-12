@@ -1,41 +1,99 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+
 import todoLogic from '../logic/todoLogic'
 import {groupTreeAsListWithIdent} from "../logic/groupTree";
+import Modal from "react-bootstrap4-modal";
 
-export default ({value, disabledId = 0, onChangeValue}) => {
+class GroupSelect extends React.Component {
+    static propTypes = {
+        value: PropTypes.string.isRequired,
+        onChangeValue: PropTypes.func.isRequired,
+    };
 
-    const rootGroup = {id: "root", text: "(none)", ident: 0};
+    state = {
+        modalShown: false
+    };
 
-    const currentGroup = value === todoLogic.ROOT_GROUP_ID ? rootGroup : todoLogic.findGroupById(value);
 
-    const rows = groupTreeAsListWithIdent(todoLogic.listGroups({groupId: ""}));
-    return <div className="form-group">
-        <label htmlFor="groupSelect">Parent group:</label>
-        <select id="groupSelect" className="form-control"
-                value={value}
-                style={{padding: 4, height: 35}}
-                onChange={e => {
-                    let val = e.target.value;
-                    if (val.startsWith("_")) {
-                        val = val.substring(1);
+    render() {
+        const rootGroup = {id: "root", text: "(none)", color: "black", ident: 0};
+        const currentGroup = this.props.value === todoLogic.ROOT_GROUP_ID ? rootGroup : todoLogic.findGroupById(this.props.value);
+
+        const allGroups = groupTreeAsListWithIdent(todoLogic.listGroups({groupId: ""}));
+        allGroups.unshift(rootGroup);
+
+        return <div>
+            <button className="btn btn-block btn-primary" onClick={() => {
+                this.setState({modalShown: true})
+            }}>
+                Group: {this.groupPath(currentGroup)}
+            </button>
+
+            <Modal
+                visible={this.state.modalShown}
+                dialogClassName="modal-dialog-centered"
+                onClickBackdrop={() => {
+                    this.onCancel()
+                }}>
+                <div className="modal-header">
+                    <h5 className="modal-title">Choose a group</h5>
+                </div>
+                <div className="modal-body">
+                    {
+                        allGroups.map(g =>
+                            <div key={g.id}>
+                                <div
+                                    onClick={() => {
+                                        this.onSelect(g.id)
+                                    }}
+                                    style={{
+                                        border: g.id === this.props.value ? "2px solid white": "2px solid transparent",
+                                        borderRadius: 4,
+                                        marginLeft: g.ident * 30,
+                                        cursor: "pointer",
+                                        marginTop: -2,
+                                        marginBottom: -2,
+                                    }}>
+                                        <div style={{
+                                            minHeight: 45,
+                                            display: "flex",
+                                            justifyContent: "space-around",
+                                            backgroundColor: g.color,
+                                            color: g.color === "black" ? "white" :"black",
+                                            alignItems: "center",
+                                            margin: 2,
+                                        }}>
+                                            <h4>{g.text}</h4>
+                                        </div>
+                                </div>
+                            </div>
+                        )
                     }
-                    onChangeValue(val);
-                }}
-        >
-            <option value={value} key={"current"}>{currentGroup.text}</option>
-            <option disabled={true}></option>
-            <option value="_root" key={"root"}>{rootGroup.text}</option>
-            {
+                </div>
+            </Modal>
 
-                rows.map(r => <option key={r.id}
-                                      value={"_" + r.id}
-                                      disabled={r.id === value || r.id === disabledId}
-                >
-                    {"\u00A0".repeat(r.ident * 5) + r.text}
-                </option>)
-            }
+        </div>
+    }
 
-        </select>
-    </div>
-};
+    groupPath(group) {
+        if (group.id === todoLogic.ROOT_GROUP_ID || group.groupId === todoLogic.ROOT_GROUP_ID) {
+            return group.text
+        } else {
+            return this.groupPath(todoLogic.findGroupById(group.groupId))
+                    + " > "
+                    + group.text
+        }
+    }
 
+    onCancel() {
+        this.setState({modalShown: false});
+    }
+
+    onSelect(value) {
+        this.setState({modalShown: false});
+        this.props.onChangeValue(value);
+    }
+}
+
+export default GroupSelect
