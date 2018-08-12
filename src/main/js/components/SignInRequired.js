@@ -1,6 +1,6 @@
 import React from 'react'
 import moment from 'moment'
-import {setIdToken} from '../apiHelper'
+import {setIdToken} from '../logic/apiHelper'
 import BigMemba from './BigMemba'
 import {BrandedNavbar} from './PageTopNavbar'
 import {BorderlessBottomNavbar, PageBottomNavbar} from './PageBottomNavbar'

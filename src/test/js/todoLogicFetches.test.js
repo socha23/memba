@@ -1,4 +1,4 @@
-import todoLogic from '../../main/js/todoLogic'
+import todoLogic from './logic/todoLogic'
 
 it("returns empty list", () => {
     // when:

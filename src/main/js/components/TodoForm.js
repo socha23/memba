@@ -1,5 +1,5 @@
 import React from 'react'
-import todoLogic from '../todoLogic'
+import todoLogic from '../logic/todoLogic'
 import ColorPicker from './ColorPicker'
 import DeleteButton from './DeleteButton'
 

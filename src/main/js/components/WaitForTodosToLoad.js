@@ -1,6 +1,6 @@
 import React from 'react'
 
-import todoLogic from '../todoLogic'
+import todoLogic from '../logic/todoLogic'
 import {BrandedNavbar} from './PageTopNavbar'
 import PageBody from './PageBody'
 import BigMemba from './BigMemba'

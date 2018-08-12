@@ -1,9 +1,9 @@
 import React from 'react'
 
-import {withRouterWithQuery, encodeQuery} from "../routerUtils";
+import {encodeQuery, withRouterWithQuery} from "../routerUtils";
 import Modal from 'react-bootstrap4-modal'
 
-import todoLogic from '../todoLogic'
+import todoLogic from '../logic/todoLogic'
 import TodoList from './TodoList'
 import GroupList from './GroupList'
 import ButtonIcon from './ButtonIcon'

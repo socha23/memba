@@ -1,6 +1,6 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
-import todoLogic from '../todoLogic'
+import todoLogic from '../logic/todoLogic'
 import {DEFAULT_COLOR} from "./ColorPicker";
 
 const TodoView = ({todo}) => {
