@@ -11,12 +11,14 @@ class DeleteButton extends React.Component {
     static propTypes = {
         history: PropTypes.object.isRequired,
         buttonTitle: PropTypes.string,
+        style: PropTypes.object,
         message: PropTypes.string,
         item: PropTypes.object.isRequired,
         onDelete: PropTypes.func.isRequired,
     };
 
     static defaultProps = {
+        style: {},
         buttonTitle: "Delete item",
         message: "Are you sure you want to delete this item?"
     };
@@ -36,7 +38,7 @@ class DeleteButton extends React.Component {
 
     render() {
         return <div>
-            <button className="btn btn-block btn-danger" onClick={() => this.setState({confirmShown: true})}>
+            <button style={{...this.props.style}} className="btn btn-block btn-danger" onClick={() => this.setState({confirmShown: true})}>
             <ButtonIcon className="fas fa-trash-alt"/>
                 {this.props.buttonTitle}
             </button>

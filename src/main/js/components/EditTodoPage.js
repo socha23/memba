@@ -5,7 +5,6 @@ import todoLogic from '../logic/todoLogic'
 import AbstractItemFormPage from './AbstractItemFormPage'
 import TodoForm from './TodoForm'
 
-
 const EditTodoPage = ({match}) =>
     <AbstractItemFormPage
         formComponent={TodoForm}

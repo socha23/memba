@@ -30,7 +30,7 @@ export default class DataStore {
     }
 
     _groupFilter(groupId) {
-        return t => (t.groupId || this.ROOT_GROUP_ID) === groupId
+        return t => (groupId === "") || ((t.groupId || this.ROOT_GROUP_ID) === groupId)
     }
 
 
