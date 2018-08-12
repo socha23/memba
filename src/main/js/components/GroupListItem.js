@@ -1,9 +1,8 @@
 import React from 'react'
-import {encodeQuery, withRouterWithQuery} from '../routerUtils'
 import {DEFAULT_COLOR} from "./ColorPicker";
 
-const GroupView = ({group, history}) => {
-    return <div className="todoItem" >
+const GroupView = ({group, onClick, children}) => {
+    return <div className="todoItem">
         <div style={{
             minHeight: 70,
             paddingLeft: 12,
@@ -14,20 +13,21 @@ const GroupView = ({group, history}) => {
             color: "black",
             backgroundColor: (group.color == null ? DEFAULT_COLOR : group.color),
             cursor: "pointer",
-        }}
-             onClick={() => { history.push(encodeQuery("/", {groupId: group.id})) }}
-        >
+        }}>
             <span/>
-            <span style={{
-                fontSize: 26,
-                fontWeight: 500,
-                paddingBottom: 6
-            }}>{group.text}</span>
-            <i style={{fontSize: 40}} className={"fas fa-chevron-right"}/>
-
+            <div
+                style={{flexGrow: 1, textAlign: "center"}}
+                onClick={() => {onClick(group)}}>
+                <span style={{
+                    fontSize: 26,
+                    fontWeight: 500,
+                    paddingBottom: 6
+                }}>{group.text}</span>
+            </div>
+            {children}
         </div>
     </div>
 };
 
 
-export default withRouterWithQuery(GroupView);
+export default GroupView;
