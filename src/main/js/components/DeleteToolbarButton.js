@@ -27,7 +27,7 @@ class DeleteToolbarButton extends React.Component {
 
     onConfirm() {
         this.props.onDelete(this.props.item);
-        this.props.history.push(encodeQuery("/", {groupId: this.props.item.groupId}))
+        this.props.history.goBack()
     }
 
     onCancel() {

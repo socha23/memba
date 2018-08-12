@@ -7,7 +7,7 @@ import Modal from "react-bootstrap4-modal";
 
 class GroupSelect extends React.Component {
     static propTypes = {
-        value: PropTypes.string.isRequired,
+        value: PropTypes.string,
         onChangeValue: PropTypes.func.isRequired,
         disabledId: PropTypes.string,
     };
