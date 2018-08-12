@@ -9,12 +9,9 @@ import GroupListItem from '../../GroupListItem'
 
 const TodoListPageViewStandardMode = ({
                                           history,
-                                          groupId = todoLogic.ROOT_GROUP_ID,
-                                          showCompleted = false,
+                                          groups = [],
+                                          todos = [],
                                       }) => {
-
-    const groups = todoLogic.listGroups({groupId: groupId});
-    const todos = todoLogic.listTodos({groupId: groupId, showCompleted: showCompleted});
 
     return <PageBody>
         <AnimatedList>

@@ -54,7 +54,13 @@ const TodoListView = ({
                           groupId = todoLogic.ROOT_GROUP_ID,
                           showCompleted = false,
                       }) => {
-    return <TodoListPageViewStandardMode groupId={groupId} showCompleted={showCompleted}/>
+    const groups = todoLogic.listGroups({groupId: groupId});
+    const todos = todoLogic.listTodos({groupId: groupId, showCompleted: showCompleted});
+
+    return <TodoListPageViewStandardMode
+        groups={groups}
+        todos={todos}
+    />
 };
 
 const TodoListPageBottomToolbar = ({addEnabled, groupId}) => addEnabled ? <BorderlessBottomNavbar>
