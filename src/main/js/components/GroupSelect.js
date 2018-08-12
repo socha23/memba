@@ -9,6 +9,7 @@ class GroupSelect extends React.Component {
     static propTypes = {
         value: PropTypes.string.isRequired,
         onChangeValue: PropTypes.func.isRequired,
+        disabledId: PropTypes.string,
     };
 
     state = {
@@ -17,8 +18,9 @@ class GroupSelect extends React.Component {
 
 
     render() {
+        const myGroupId = this.props.value || todoLogic.ROOT_GROUP_ID;
         const rootGroup = {id: "root", text: "(none)", color: "black", ident: 0};
-        const currentGroup = this.props.value === todoLogic.ROOT_GROUP_ID ? rootGroup : todoLogic.findGroupById(this.props.value);
+        const currentGroup = myGroupId === todoLogic.ROOT_GROUP_ID ? rootGroup : todoLogic.findGroupById(myGroupId);
 
         const allGroups = groupTreeAsListWithIdent(todoLogic.listGroups({groupId: ""}));
         allGroups.unshift(rootGroup);
@@ -45,6 +47,9 @@ class GroupSelect extends React.Component {
                             <div key={g.id}>
                                 <div
                                     onClick={() => {
+                                        if (g.id === this.props.disabledId) {
+                                            return;
+                                        }
                                         this.onSelect(g.id)
                                     }}
                                     style={{
