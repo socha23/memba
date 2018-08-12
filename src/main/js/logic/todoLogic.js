@@ -1,223 +1,83 @@
-import {jsonGet, jsonPost, jsonPut, restDelete} from './apiHelper'
-
-const REFRESH_ITEMS_EVERY_MS = 10 * 1000;
+import DataStore from './DataStore'
+import ServerData from './ServerData'
+import Subscriptions from './Subscriptions'
 
 class TodoLogic {
 
     ROOT_GROUP_ID = "root";
 
-    subscriptionIdAutoinc = 0;
+    dataStore = new DataStore();
+    subscriptions = new Subscriptions();
+    serverData = new ServerData((data) => {this.onReceiveServerData(data)});
 
-    todos = [];
-    groups = [];
-    itemsNotLoaded = true;
-    loading = false;
-    subscribers = {};
-    reloadIntervalHandler = null;
-
+    onReceiveServerData(data) {
+        this.dataStore.receiveItems(data);
+        this.subscriptions.callSubscribers();
+    }
 
     subscribe(component, onStateChanged) {
-        const subscriptionId = this.subscriptionIdAutoinc++;
-        component.subscriptionId = subscriptionId;
-        if (this.countSubscribers() === 0) {
-            this.setupIntervalReload()
+        if (this.subscriptions.countSubscribers() === 0) {
+            this.serverData.setupIntervalReload()
         }
-        this.subscribers[subscriptionId] = onStateChanged;
+        this.subscriptions.subscribe(component, onStateChanged);
     }
 
     unsubscribe(component) {
-        const subscriptionId = component.subscriptionId;
-        delete this.subscribers[subscriptionId];
-        if (this.countSubscribers() === 0) {
-            this.cancelIntervalReload();
+        this.subscriptions.unsubscribe(component);
+        if (this.subscriptions.countSubscribers() === 0) {
+            this.serverData.cancelIntervalReload()
         }
     }
 
-    countSubscribers() {
-        return Object.keys(this.subscribers).length;
-    }
+    areItemsNotLoaded() {return this.dataStore.areItemsNotLoaded()}
 
-
-    setupIntervalReload() {
-        this.reload();
-        this.reloadIntervalHandler = setInterval(() => {
-            this.reload()
-        }, REFRESH_ITEMS_EVERY_MS);
-    }
-
-    cancelIntervalReload() {
-        clearInterval(this.reloadIntervalHandler);
-    }
-
-    reload() {
-        this.fetchItems();
-    }
-
-    isLoading() {
-        return this.loading;
-    }
-
-    areItemsNotLoaded() {
-        return this.itemsNotLoaded;
-    }
-
-    listTodos({
-                  showNotCompleted = true,
-                  showCompleted = false,
-                  groupId = this.ROOT_GROUP_ID,
-              }) {
-
-        const rightGroup = t => ((t.groupId || this.ROOT_GROUP_ID) === groupId);
-        const rightCompletion = t => (t.completed && showCompleted) || ((!t.completed) && showNotCompleted);
-
-        return this.todos
-            .filter(rightGroup)
-            .filter(rightCompletion);
-    }
-
-    listGroups({
-                  groupId = this.ROOT_GROUP_ID,
-              }) {
-
-        const rightGroup = t => ((t.groupId || this.ROOT_GROUP_ID) === groupId);
-
-        return this.groups
-            .filter(rightGroup);
-    }
-
-    fetchItems() {
-        this.loading = true;
-        jsonGet("/items")
-            .then(r => {
-                this.receiveItems(r)
-            });
-    }
-
-    receiveItems(items) {
-        this.loading = false;
-        this.itemsNotLoaded = false;
-        this.todos = items
-            .filter(t => t.itemType === "todo")
-            .map(this.fillItemDefaults);
-        this.groups = items
-            .filter(t => t.itemType === "group")
-            .map(this.fillItemDefaults);
-        this.callSubscribers();
-    }
-
-    fillItemDefaults = (item) => {
-        return {groupId: this.ROOT_GROUP_ID, ...item}
-    };
-
-    _addItem(path, item, collection) {
-        this.loading = true;
-        jsonPost(path, item)
-            .then(r => {
-                this.loading = false;
-                collection.unshift(this.fillItemDefaults(r));
-                this.callSubscribers();
-            });
-    }
+    listTodos(params) {return this.dataStore.listTodos(params)};
+    listGroups(params) {return this.dataStore.listGroups(params)};
 
     addTodo(todo) {
-        this._addItem("/todos", todo, this.todos);
+        this.serverData.addTodo(todo)
+            .then(t => this.dataStore.addTodo(t))
+            .then(() => this.subscriptions.callSubscribers());
     }
 
     addGroup(group) {
-        this._addItem("/groups", group, this.groups);
+        this.serverData.addGroup(group)
+            .then(g => this.dataStore.addGroup(g))
+            .then(() => this.subscriptions.callSubscribers());
     }
 
     setCompleted(todoId, completed) {
-        if (this.loading) {
-            return;
-        }
-        this.loading = true;
-        this.findTodoById(todoId).completed = completed;
-        this.callSubscribers();
-        jsonPut("/todos/" + todoId + "/completed", completed)
-            .then(r => {
-                this.loading = false;
-            });
-    }
-
-    _updateItem(path, itemId, item, collection) {
-        if (this.loading) {
-            return;
-        }
-        this.loading = true;
-        jsonPut(path + "/" + itemId, item)
-            .then(t => {
-                this.loading = false;
-                const idx = collection.findIndex(t => t.id === itemId);
-                collection[idx] = this.fillItemDefaults(t);
-                this.callSubscribers();
-            });
+        this.dataStore.findTodoById(todoId).completed = completed;
+        this.serverData.setCompleted(todoId, completed);
+        this.subscriptions.callSubscribers();
     }
 
     updateTodo(todoId, todo) {
-        this._updateItem("/todos", todoId, todo, this.todos)
+        this.serverData.updateTodo(todo)
+            .then(t => this.dataStore.updateTodo(t))
+            .then(() => this.subscriptions.callSubscribers())
     }
 
     updateGroup(groupId, group) {
-        this._updateItem("/groups", groupId, group, this.groups)
+        this.serverData.updateGroup(group)
+            .then(g => this.dataStore.updateGroup(g))
+            .then(() => this.subscriptions.callSubscribers())
     }
 
     deleteTodo(todoId) {
-        if (this.loading) {
-            return;
-        }
-        this.loading = true;
-        restDelete("/todos/" + todoId)
-            .then(() => {
-                this.loading = false;
-                const idx = this.todos.findIndex(t => t.id === todoId);
-                this.todos.splice(idx, 1);
-                this.callSubscribers();
-            });
+        this.serverData.deleteTodo(todoId)
+            .then(() => this.dataStore.deleteTodo(todoId))
+            .then(() => this.subscriptions.callSubscribers())
     }
 
     deleteGroup(idToRemove) {
-        if (this.loading) {
-            return;
-        }
-        this.loading = true;
-        restDelete("/groups/" + idToRemove)
-            .then(() => {
-                this.loading = false;
-                const idx = this.groups.findIndex(g => g.id === idToRemove);
-                const groupToRemove = this.groups[idx];
-                this.groups.splice(idx, 1);
-
-                [this.todos, this.groups].forEach(collection =>
-                    collection
-                        .filter(i => i.groupId === idToRemove)
-                        .forEach(i => {i.groupId = groupToRemove.groupId})
-                );
-
-                this.callSubscribers();
-            });
+        this.serverData.deleteGroup(idToRemove)
+            .then(() => this.dataStore.deleteGroup(idToRemove))
+            .then(() => this.subscriptions.callSubscribers())
     }
 
-    _findItemById(id, collection) {
-        return collection.find(t => t.id === id)
-    }
-
-    findTodoById(id) {
-        return this._findItemById(id, this.todos)
-    }
-
-    findGroupById(id) {
-        return this._findItemById(id, this.groups)
-    }
-
-    callSubscribers() {
-        for (const subscriptionId in this.subscribers) {
-            this.subscribers[subscriptionId]()
-        }
-
-    }
-
-
+    findTodoById(id) { return this.dataStore.findTodoById(id)};
+    findGroupById(id) { return this.dataStore.findGroupById(id)};
 }
 
 const TODO_LOGIC = new TodoLogic();
