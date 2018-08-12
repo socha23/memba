@@ -4,7 +4,8 @@ import ButtonIcon from "./ButtonIcon";
 
 export const PageTopNavbar = ({children}) => <nav className="navbar fixed-top navbar-expand-lg navbar-dark bg-primary"
                                                   style={{
-                                                      paddingTop: 0,
+                                                      border: "none",
+                                                      paddingTop: 1,
                                                       paddingRight: 2,
                                                       paddingBottom: 0,
                                                       paddingLeft: 2
@@ -43,7 +44,7 @@ export const BackAndTitle = ({title = "Memba", to = "/", query = {}}) => <div st
 
 export const MembaIconAndTitle = ({title = "Memba"}) => <div>
     <img src="memba48x44.png" width={48} height={44}
-         style={{marginTop: 3, marginRight: 2, marginBottom: 0, marginLeft: 0}}
+         style={{marginTop: 3, marginRight: 1, marginBottom: 0, marginLeft: 1}}
          className="d-inline-block align-top"/>
     <PageTitle>{title}</PageTitle>
 </div>;
