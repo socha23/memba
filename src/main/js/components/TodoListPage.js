@@ -3,12 +3,13 @@ import React from 'react'
 import {encodeQuery, withRouterWithQuery} from "../routerUtils";
 
 import todoLogic from '../logic/todoLogic'
-import TodoList from './TodoList'
-import GroupList from './GroupList'
 import {BackAndTitle, MembaIconAndTitle, PageTopNavbar, ToolbarButton} from './PageTopNavbar'
 import {BorderlessBottomNavbar} from "./PageBottomNavbar";
 import PageBody from './PageBody'
 import AddItemButton from './AddItemButton'
+import AnimatedList from './AnimatedList'
+import TodoListItem from './TodoListItem'
+import GroupListItem from './GroupListItem'
 
 class TodoListPage extends React.Component {
     state = {
@@ -18,13 +19,13 @@ class TodoListPage extends React.Component {
 
     render() {
         return <div>
-            <TodoListNavbar
+            <TodoListPageNavbar
                 groupId={this.getGroupId()}
                 showCompleted={this.state.showCompleted}
                 onToggleShowCompleted={() => this.onToggleShowCompleted()}
             />
             <TodoListView showCompleted={this.state.showCompleted} groupId={this.getGroupId()}/>
-            <TodoListBottomToolbar groupId={this.getGroupId()} addEnabled={true}/>
+            <TodoListPageBottomToolbar groupId={this.getGroupId()} addEnabled={true}/>
         </div>
     }
 
@@ -44,6 +45,7 @@ class TodoListPage extends React.Component {
         todoLogic.unsubscribe(this)
     }
 }
+
 export default withRouterWithQuery(TodoListPage);
 
 function isRoot(groupId) {
@@ -59,17 +61,21 @@ const TodoListView = ({
     const todos = todoLogic.listTodos({groupId: groupId, showCompleted: showCompleted});
 
     return <PageBody>
-            <GroupList groups={groups}/>
-            <TodoList todos={todos}/>
-        </PageBody>
+        <AnimatedList>
+            {groups.map(g => <GroupListItem group={g}/>)}
+        </AnimatedList>
+        <AnimatedList>
+            {todos.map(t => <TodoListItem todo={t}/>)}
+        </AnimatedList>
+    </PageBody>
 };
 
-const TodoListNavbar = withRouterWithQuery(({
-                                                groupId = todoLogic.ROOT_GROUP_ID,
-                                                showCompleted = false,
-                                                onToggleShowCompleted,
-                                                history
-                                            }) => {
+const TodoListPageNavbar = withRouterWithQuery(({
+                                                    groupId = todoLogic.ROOT_GROUP_ID,
+                                                    showCompleted = false,
+                                                    onToggleShowCompleted,
+                                                    history
+                                                }) => {
 
     let navbarFirstElem;
     if (isRoot(groupId)) {
@@ -103,7 +109,7 @@ const TodoListNavbar = withRouterWithQuery(({
     </PageTopNavbar>
 });
 
-const TodoListBottomToolbar= ({addEnabled, groupId}) => addEnabled ? <BorderlessBottomNavbar>
+const TodoListPageBottomToolbar = ({addEnabled, groupId}) => addEnabled ? <BorderlessBottomNavbar>
     <AddItemButton groupId={groupId}/>
 </BorderlessBottomNavbar> : <span/>;
 
