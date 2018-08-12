@@ -18,9 +18,11 @@ const GroupView = ({group, history}) => {
              onClick={() => { history.push(encodeQuery("/", {groupId: group.id})) }}
         >
             <span/>
-            <h3 style={{
-                marginBottom: 7,
-            }}>{group.text}</h3>
+            <span style={{
+                fontSize: 26,
+                fontWeight: 500,
+                paddingBottom: 6
+            }}>{group.text}</span>
             <i style={{fontSize: 40}} className={"fas fa-chevron-right"}/>
 
         </div>
