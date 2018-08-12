@@ -1,7 +1,7 @@
 import React from 'react'
 import {DEFAULT_COLOR} from "./ColorPicker";
 
-const GroupView = ({group, onClick, children}) => {
+const GroupView = ({group, onClick = () => {}, children}) => {
     return <div className="todoItem">
         <div style={{
             minHeight: 70,

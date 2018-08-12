@@ -1,7 +1,7 @@
 import React from 'react'
 import {DEFAULT_COLOR} from "./ColorPicker";
 
-const TodoView = ({todo, onClick, children}) => {
+const TodoView = ({todo, onClick = () => {}, children}) => {
     const opacity = todo.completed ? 0.3 : 1;
 
     return <div className="todoItem">

@@ -6,6 +6,7 @@ import {BorderlessBottomNavbar} from "../structural/PageBottomNavbar";
 import AddItemButton from '../AddItemButton'
 import TodoListPageViewStandardMode from "./todoListComponents/TodoListPageViewStandardMode";
 import TodoListPageNavbar from './todoListComponents/TodoListPageNavbar'
+import TodoListPageViewReorderMode from "./todoListComponents/TodoListPageViewReorderMode";
 
 class TodoListPage extends React.Component {
     state = {
@@ -24,6 +25,7 @@ class TodoListPage extends React.Component {
                 onToggleReorderMode={() => this.onToggleReorderMode()}
             />
             <TodoListView
+                reorderMode={this.state.reorderMode}
                 showCompleted={this.state.showCompleted}
                 groupId={this.getGroupId()}
             />
@@ -59,15 +61,16 @@ export default withRouterWithQuery(TodoListPage);
 
 const TodoListView = ({
                           groupId = todoLogic.ROOT_GROUP_ID,
+                          reorderMode = false,
                           showCompleted = false,
                       }) => {
     const groups = todoLogic.listGroups({groupId: groupId});
     const todos = todoLogic.listTodos({groupId: groupId, showCompleted: showCompleted});
 
-    return <TodoListPageViewStandardMode
-        groups={groups}
-        todos={todos}
-    />
+    if (reorderMode) {
+        return <TodoListPageViewReorderMode groups={groups} todos={todos}/>
+    }
+    return <TodoListPageViewStandardMode groups={groups} todos={todos} />
 };
 
 const TodoListPageBottomToolbar = ({addEnabled, groupId}) => addEnabled ? <BorderlessBottomNavbar>
