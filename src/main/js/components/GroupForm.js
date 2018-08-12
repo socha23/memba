@@ -1,7 +1,5 @@
 import React from 'react'
-import todoLogic from '../logic/todoLogic'
 import ColorPicker from './ColorPicker'
-import DeleteButton from './DeleteButton'
 import GroupSelect from "./GroupSelect";
 
 
@@ -13,16 +11,6 @@ const GroupForm = ({item, onChangeFields, createMode}) => <div>
             onChangeValue={v => onChangeFields({groupId: v})}
             disabledId={item.id}
         />
-    {
-        createMode ? <span/> : <DeleteButton
-            style={{marginTop: 30}}
-            item={item}
-            onDelete={() => todoLogic.deleteGroup(item.id)}
-            buttonTitle="Delete group"
-            message="Are you sure you want to delete this group? Its members will be moved up."
-        />
-    }
-
 </div>;
 
 export default GroupForm;

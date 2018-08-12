@@ -17,11 +17,12 @@ class AbstractItemFormPage extends React.Component {
         saveButtonLabel: PropTypes.string,
         onSave: PropTypes.func.isRequired,
         createMode: PropTypes.bool.isRequired,
-        
+        toolbarButtons: PropTypes.element
     };
 
     static defaultProps = {
         title: "Enter details",
+        toolbarButtons: <span/>
     };
 
     state = {...this.props.item};
@@ -41,6 +42,7 @@ class AbstractItemFormPage extends React.Component {
             submitEnabled={this.isSubmitEnabled()}
             onSubmit={() => {this.onSubmit()}}
             createMode={this.props.createMode}
+            toolbarButtons={this.props.toolbarButtons}
         />;
     }
 
@@ -69,9 +71,12 @@ const AbstractItemFormPageView = ({
                              title, buttonClass, buttonContents,
                              item, onChangeFields,
                              submitEnabled, onSubmit,
+                             toolbarButtons,
                              createMode
                          }) => <div>
-    <TitleWithBackNavbar to="/" query={{groupId: item.groupId}} title={title}/>
+    <TitleWithBackNavbar to="/" query={{groupId: item.groupId}} title={title}>
+        {toolbarButtons}
+    </TitleWithBackNavbar>
 
     <PageBody>
         <div className="container" style={{padding: 2}}>

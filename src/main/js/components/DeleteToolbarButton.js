@@ -6,20 +6,18 @@ import Modal from 'react-bootstrap4-modal'
 
 import ButtonIcon from './ButtonIcon'
 
-class DeleteButton extends React.Component {
+import {ToolbarButton} from "./PageTopNavbar";
+
+class DeleteToolbarButton extends React.Component {
 
     static propTypes = {
         history: PropTypes.object.isRequired,
-        buttonTitle: PropTypes.string,
-        style: PropTypes.object,
         message: PropTypes.string,
         item: PropTypes.object.isRequired,
         onDelete: PropTypes.func.isRequired,
     };
 
     static defaultProps = {
-        style: {},
-        buttonTitle: "Delete item",
         message: "Are you sure you want to delete this item?"
     };
 
@@ -38,10 +36,7 @@ class DeleteButton extends React.Component {
 
     render() {
         return <div>
-            <button style={{...this.props.style}} className="btn btn-block btn-danger" onClick={() => this.setState({confirmShown: true})}>
-            <ButtonIcon className="fas fa-trash-alt"/>
-                {this.props.buttonTitle}
-            </button>
+            <ToolbarButton className="far fa-trash-alt" onClick={() => this.setState({confirmShown: true})}/>
             <Modal
                 visible={this.state.confirmShown}
                 dialogClassName="modal-dialog-centered"
@@ -64,6 +59,6 @@ class DeleteButton extends React.Component {
     }
 }
 
-export default withRouterWithQuery(DeleteButton)
+export default withRouterWithQuery(DeleteToolbarButton)
 
 

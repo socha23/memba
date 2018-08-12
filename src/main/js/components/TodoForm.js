@@ -1,7 +1,5 @@
 import React from 'react'
-import todoLogic from '../logic/todoLogic'
 import ColorPicker from './ColorPicker'
-import DeleteButton from './DeleteButton'
 import GroupSelect from './GroupSelect'
 
 const TodoForm = ({item, onChangeFields, createMode}) => <div>
@@ -12,9 +10,6 @@ const TodoForm = ({item, onChangeFields, createMode}) => <div>
                 onChangeValue={v => onChangeFields({groupId: v})}
                 disabledId={item.id}
             />
-    {
-        createMode ? <span/> : <DeleteButton style={{marginTop: 30}} item={item} onDelete={() => todoLogic.deleteTodo(item.id)}/>
-    }
 </div>;
 
 export default TodoForm;
