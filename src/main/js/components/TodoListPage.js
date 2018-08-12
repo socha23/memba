@@ -1,22 +1,19 @@
 import React from 'react'
 
 import {encodeQuery, withRouterWithQuery} from "../routerUtils";
-import Modal from 'react-bootstrap4-modal'
 
 import todoLogic from '../logic/todoLogic'
 import TodoList from './TodoList'
 import GroupList from './GroupList'
-import ButtonIcon from './ButtonIcon'
-import LongClickButton from './LongClickButton'
 import {BackAndTitle, MembaIconAndTitle, PageTopNavbar, ToolbarButton} from './PageTopNavbar'
 import {BorderlessBottomNavbar} from "./PageBottomNavbar";
 import PageBody from './PageBody'
+import AddItemButton from './AddItemButton'
 
 class TodoListPage extends React.Component {
     state = {
         generation: 0,
         showCompleted: false,
-        addModalShown: false,
     };
 
     render() {
@@ -27,21 +24,8 @@ class TodoListPage extends React.Component {
                 todos={todoLogic.listTodos({groupId: this.getGroupId(), showCompleted: this.state.showCompleted})}
                 showCompleted={this.state.showCompleted}
                 onToggleShowCompleted={() => this.onToggleShowCompleted()}
-                onClickAdd={() => this.onAddTodo()}
-                onLongClickAdd={() => this.showModal()}
                 onClickEditGroup={() => this.onEditGroup()}
             />
-            <AddModal
-                visible={this.state.addModalShown}
-                onClickBackdrop={() => {
-                    this.hideModal()
-                }}
-                onAddTodo={() => {
-                    this.onAddTodo()
-                }}
-                onAddGroup={() => {
-                    this.onAddGroup()
-                }}/>
         </div>
     }
 
@@ -65,27 +49,9 @@ class TodoListPage extends React.Component {
         this.setState({generation: this.state.generation + 1})
     }
 
-    onAddTodo() {
-        this.hideModal();
-        this.props.history.push(encodeQuery("/addTodo", {groupId: this.getGroupId()}))
-    }
-
     onEditGroup() {
         this.hideModal();
         this.props.history.push(encodeQuery("/group/" + this.getGroupId(), {groupId: this.getGroupId()}))
-    }
-
-    onAddGroup() {
-        this.hideModal();
-        this.props.history.push(encodeQuery("/addGroup", {groupId: this.getGroupId()}))
-    }
-
-    showModal() {
-        this.setState({addModalShown: true});
-    }
-
-    hideModal() {
-        this.setState({addModalShown: false});
     }
 }
 
@@ -137,27 +103,10 @@ const TodoListView = ({
             <TodoList todos={todos}/>
         </PageBody>
         <BorderlessBottomNavbar>
-            <LongClickButton className="btn btn-block btn-lg btn-info" onClick={() => {
-                onClickAdd()
-            }} onLongClick={() => {
-                onLongClickAdd()
-            }}>
-                <ButtonIcon className="fas fa-plus"/>Add new...
-            </LongClickButton>
+            <AddItemButton groupId={groupId}/>
         </BorderlessBottomNavbar>
     </div>
-}
+};
 
-const AddModal = ({visible, onClickBackdrop, onAddTodo, onAddGroup}) =>
-    <Modal visible={visible} dialogClassName="modal-dialog-centered" onClickBackdrop={onClickBackdrop}>
-        <div className="modal-body">
-            <button className="btn btn-block btn-lg btn-secondary" onClick={onAddTodo}>
-                Add new todo
-            </button>
-            <button className="btn btn-block btn-lg btn-secondary" onClick={onAddGroup}>
-                Add new group
-            </button>
-        </div>
-    </Modal>
 
 
