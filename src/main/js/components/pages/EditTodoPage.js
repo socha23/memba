@@ -1,10 +1,10 @@
 import React from 'react'
-import {withRouterWithQuery} from '../routerUtils'
+import {withRouterWithQuery} from '../../routerUtils'
 
-import todoLogic from '../logic/todoLogic'
+import todoLogic from '../../logic/todoLogic'
 import AbstractItemFormPage from './AbstractItemFormPage'
-import TodoForm from './TodoForm'
-import DeleteToolbarButton from "./DeleteToolbarButton";
+import TodoForm from '../TodoForm'
+import DeleteToolbarButton from "../DeleteToolbarButton";
 
 const EditTodoPage = ({match}) => {
     const item = todoLogic.findTodoById(match.params.todoId);

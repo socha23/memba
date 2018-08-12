@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {encodeQuery, withRouterWithQuery} from '../routerUtils'
+import {encodeQuery, withRouterWithQuery} from '../../routerUtils'
 
-import {TitleWithBackNavbar} from './PageTopNavbar'
-import PageBody from './PageBody'
-import {BorderlessBottomNavbar} from './PageBottomNavbar'
+import {TitleWithBackNavbar} from '../structural/PageTopNavbar'
+import PageBody from '../structural/PageBody'
+import {BorderlessBottomNavbar} from '../structural/PageBottomNavbar'
 
-import ButtonIcon from './ButtonIcon'
+import ButtonIcon from '../ButtonIcon'
 
 class AbstractItemFormPage extends React.Component {
 

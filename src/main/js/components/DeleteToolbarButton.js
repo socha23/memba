@@ -6,7 +6,7 @@ import Modal from 'react-bootstrap4-modal'
 
 import ButtonIcon from './ButtonIcon'
 
-import {ToolbarButton} from "./PageTopNavbar";
+import {ToolbarButton} from "./structural/PageTopNavbar";
 
 class DeleteToolbarButton extends React.Component {
 

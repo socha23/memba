@@ -1,11 +1,11 @@
 import React from 'react'
 import moment from 'moment'
-import {setIdToken} from '../logic/apiHelper'
-import BigMemba from './BigMemba'
+import {setIdToken} from '../../logic/apiHelper'
+import BigMemba from '../BigMemba'
 import {BrandedNavbar} from './PageTopNavbar'
 import {BorderlessBottomNavbar, PageBottomNavbar} from './PageBottomNavbar'
 import PageBody from './PageBody'
-import ButtonIcon from './ButtonIcon'
+import ButtonIcon from '../ButtonIcon'
 
 
 const TOKEN_VALID_CHECK_INTERVAL = 1 * 1000;

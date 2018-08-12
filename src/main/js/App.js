@@ -1,14 +1,14 @@
 import React from 'react'
 import {Switch, Route} from 'react-router-dom'
 
-import SignInRequired from './SignInRequired'
-import WaitForTodosToLoad from './WaitForTodosToLoad'
+import SignInRequired from './components/structural/SignInRequired'
+import WaitForTodosToLoad from './components/structural/WaitForTodosToLoad'
 
-import TodoListPage from './TodoListPage'
-import AddTodoPage from './AddTodoPage'
-import EditTodoPage from './EditTodoPage'
-import AddGroupPage from './AddGroupPage'
-import EditGroupPage from './EditGroupPage'
+import TodoListPage from './components/pages/TodoListPage'
+import AddTodoPage from './components/pages/AddTodoPage'
+import EditTodoPage from './components/pages/EditTodoPage'
+import AddGroupPage from './components/pages/AddGroupPage'
+import EditGroupPage from './components/pages/EditGroupPage'
 
 export default () => <div className="container" style={{padding: 0}}>
     <SignInRequired>

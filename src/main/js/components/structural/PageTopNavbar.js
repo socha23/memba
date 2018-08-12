@@ -1,6 +1,6 @@
 import React from 'react'
-import {LinkWithQuery} from "../routerUtils";
-import ButtonIcon from "./ButtonIcon";
+import {LinkWithQuery} from "../../routerUtils";
+import ButtonIcon from "../ButtonIcon";
 
 export const PageTopNavbar = ({children}) => <nav className="navbar fixed-top navbar-expand-lg navbar-dark bg-primary"
                                                   style={{

@@ -1,10 +1,10 @@
 import React from 'react'
-import {withRouterWithQuery} from '../routerUtils'
+import {withRouterWithQuery} from '../../routerUtils'
 
-import todoLogic from '../logic/todoLogic'
+import todoLogic from '../../logic/todoLogic'
 import AbstractItemFormPage from './AbstractItemFormPage'
-import GroupForm from './GroupForm'
-import DeleteToolbarButton from "./DeleteToolbarButton";
+import GroupForm from '../GroupForm'
+import DeleteToolbarButton from "../DeleteToolbarButton";
 
 
 const EditGroupPage = ({match}) => {

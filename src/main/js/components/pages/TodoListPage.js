@@ -1,15 +1,15 @@
 import React from 'react'
 
-import {encodeQuery, withRouterWithQuery} from "../routerUtils";
+import {encodeQuery, withRouterWithQuery} from "../../routerUtils";
 
-import todoLogic from '../logic/todoLogic'
-import {BackAndTitle, MembaIconAndTitle, PageTopNavbar, ToolbarButton} from './PageTopNavbar'
-import {BorderlessBottomNavbar} from "./PageBottomNavbar";
-import PageBody from './PageBody'
-import AddItemButton from './AddItemButton'
-import AnimatedList from './AnimatedList'
-import TodoListItem from './TodoListItem'
-import GroupListItem from './GroupListItem'
+import todoLogic from '../../logic/todoLogic'
+import {BackAndTitle, MembaIconAndTitle, PageTopNavbar, ToolbarButton} from '../structural/PageTopNavbar'
+import {BorderlessBottomNavbar} from "../structural/PageBottomNavbar";
+import PageBody from '../structural/PageBody'
+import AddItemButton from '../AddItemButton'
+import AnimatedList from '../AnimatedList'
+import TodoListItem from '../TodoListItem'
+import GroupListItem from '../GroupListItem'
 
 class TodoListPage extends React.Component {
     state = {
