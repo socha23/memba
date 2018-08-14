@@ -19,11 +19,22 @@ const TodoListPageViewStandardMode = ({
                     key={g.id}
                     group={g}
                     onClick={() => { history.push(encodeQuery("/", {groupId: g.id}))}}>
-                    <i
-                        style={{fontSize: 40}}
-                        className={"fas fa-chevron-right"}
-                        onClick={() => { history.push(encodeQuery("/", {groupId: g.id}))}}
-                    />
+
+                {todoLogic.countNotCompletedInGroup(g.id) === 0 ? <span/> : <span
+                    style={{
+                        fontSize: 30,
+                        fontWeight: 600,
+                        marginRight: 10,
+                        paddingBottom: 2,
+                    }}
+                >{todoLogic.countNotCompletedInGroup(g.id)}</span>}
+
+                <i
+                    style={{fontSize: 40}}
+                    className={"fas fa-chevron-right"}
+                    onClick={() => { history.push(encodeQuery("/", {groupId: g.id}))}}
+                />
+
                 </GroupListItem>
             )}
         </AnimatedList>

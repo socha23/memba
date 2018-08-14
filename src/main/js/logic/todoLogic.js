@@ -1,6 +1,7 @@
 import DataStore from './DataStore'
 import ServerData from './ServerData'
 import Subscriptions from './Subscriptions'
+import Statistics from "./Statistics";
 
 class TodoLogic {
 
@@ -10,8 +11,11 @@ class TodoLogic {
     subscriptions = new Subscriptions();
     serverData = new ServerData((data) => {this.onReceiveServerData(data)});
 
+    statistics = new Statistics([], []);
+
     onReceiveServerData(data) {
         this.dataStore.receiveItems(data);
+        this.statistics = new Statistics(this.dataStore.todos, this.dataStore.groups);
         this.subscriptions.callSubscribers();
     }
 
@@ -78,6 +82,11 @@ class TodoLogic {
 
     findTodoById(id) { return this.dataStore.findTodoById(id)};
     findGroupById(id) { return this.dataStore.findGroupById(id)};
+
+    countNotCompletedInGroup(groupId) {
+        return this.statistics.countNotCompletedInGroup(groupId);
+    }
+
 }
 
 const TODO_LOGIC = new TodoLogic();

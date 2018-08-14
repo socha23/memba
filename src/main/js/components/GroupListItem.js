@@ -21,7 +21,6 @@ const GroupView = ({group, onClick = () => {}, children}) => {
                 <span style={{
                     fontSize: 26,
                     fontWeight: 500,
-                    lineHeight: "70px",
                 }}>{group.text}</span>
             </div>
             {children}
