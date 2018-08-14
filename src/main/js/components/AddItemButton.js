@@ -40,23 +40,37 @@ class AddItemButton extends React.Component {
     hideModal() {
         this.setState({modalShown: false});
     }
-    
+
     render() {
-        return [<LongClickButton
-            key="a"
-            className="btn btn-block btn-lg btn-info"
-            onClick={() => {this.onAddTodo()}}
-            onLongClick={() => {this.setState({modalShown: true})}}
-        >
-            <ButtonIcon className="fas fa-plus"/>Add new item
-        </LongClickButton>,
-            <AddModal
-                key="b"
-                visible={this.state.modalShown}
-                onClickBackdrop={() => {this.onCancel()}}
-                onAddTodo={() => this.onAddTodo()}
-                onAddGroup={() => this.onAddGroup()}
-            />]
+        return <div style={{width: "100%"}}>
+        <div className="btn-group btn-block">
+            <LongClickButton
+                className="btn btn-info btn-lg btn-block"
+                onClick={() => {
+                    this.onAddTodo()
+                }}
+                onLongClick={() => {
+                    this.setState({modalShown: true})
+                }}
+            >
+                <ButtonIcon className="fas fa-plus"/>Add new item
+            </LongClickButton>
+            <button
+                className="btn btn-info btn-lg"
+                onClick={() => {this.setState({modalShown: true})}}
+            >
+                <i style={{fontSize: 30}} className="fas fa-align-justify"/>
+            </button>
+        </div>
+        <AddModal
+            visible={this.state.modalShown}
+            onClickBackdrop={() => {
+                this.onCancel()
+            }}
+            onAddTodo={() => this.onAddTodo()}
+            onAddGroup={() => this.onAddGroup()}
+        />
+        </div>
     }
 }
 

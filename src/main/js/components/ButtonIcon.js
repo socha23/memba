@@ -1,4 +1,4 @@
 import React from 'react'
 
-export default ({className}) => <i className={className} style={{marginRight: 10}}/>
+export default ({className, style={}}) => <i className={className} style={{marginRight: 10, ...style}}/>
 
