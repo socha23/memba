@@ -48,7 +48,7 @@ class AddItemButton extends React.Component {
             onClick={() => {this.onAddTodo()}}
             onLongClick={() => {this.setState({modalShown: true})}}
         >
-            <ButtonIcon className="fas fa-plus"/>Add new...
+            <ButtonIcon className="fas fa-plus"/>Add new item
         </LongClickButton>,
             <AddModal
                 key="b"
@@ -64,10 +64,10 @@ const AddModal = ({visible, onClickBackdrop, onAddTodo, onAddGroup}) =>
     <Modal visible={visible} dialogClassName="modal-dialog-centered" onClickBackdrop={onClickBackdrop}>
         <div className="modal-body">
             <button className="btn btn-block btn-lg btn-secondary" onClick={onAddTodo}>
-                Add new todo
+                Add new item
             </button>
             <button className="btn btn-block btn-lg btn-secondary" onClick={onAddGroup}>
-                Add new group
+                Add new list
             </button>
         </div>
     </Modal>;

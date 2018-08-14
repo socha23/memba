@@ -29,7 +29,7 @@ class GroupSelect extends React.Component {
             <button className="btn btn-block btn-primary" onClick={() => {
                 this.setState({modalShown: true})
             }}>
-                Group: {this.groupPath(currentGroup)}
+                List: {this.groupPath(currentGroup)}
             </button>
 
             <Modal

@@ -12,14 +12,14 @@ const EditGroupPage = ({match}) => {
     const deleteButton = <DeleteToolbarButton
                 item={item}
                 onDelete={() => todoLogic.deleteGroup(item.id)}
-                buttonTitle="Delete group"
-                message="Are you sure you want to delete this group? Its members will be moved up."
+                buttonTitle="Delete list"
+                message="Are you sure you want to delete this list? Its members will be moved up."
             />;
     return <AbstractItemFormPage
         formComponent={GroupForm}
         item={item}
         onSave={(i) => {todoLogic.updateGroup(i.id, i)}}
-        title="Edit group"
+        title="Edit list"
         createMode={false}
         toolbarButtons={deleteButton}
     />};

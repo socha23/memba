@@ -15,7 +15,7 @@ const EditTodoPage = ({match}) => {
         formComponent={TodoForm}
         item={item}
         onSave={(i) => {todoLogic.updateTodo(i.id, i)}}
-        title="Edit todo"
+        title="Edit item"
         createMode={false}
         toolbarButtons={deleteButton}
     />

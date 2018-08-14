@@ -20,8 +20,8 @@ const AddGroupPage = ({location}) =>
                 todoLogic.addGroup(item);
             });
         }}
-        title="New group"
-        saveButtonLabel="Add new group"
+        title="New list"
+        saveButtonLabel="Add new list"
         createMode={true}
     />;
 
