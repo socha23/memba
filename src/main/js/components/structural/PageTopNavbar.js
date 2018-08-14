@@ -1,5 +1,5 @@
 import React from 'react'
-import {LinkWithQuery} from "../../routerUtils";
+import {LinkWithQuery, withRouterWithQuery, encodeQuery} from "../../routerUtils";
 
 export const PageTopNavbar = ({children}) => <nav className="navbar fixed-top navbar-expand-lg navbar-dark bg-primary"
                                                   style={{
@@ -14,8 +14,14 @@ export const PageTopNavbar = ({children}) => <nav className="navbar fixed-top na
     </div>
 </nav>;
 
-export const PageTitle = ({children}) => <span className="navbar-brand"
-                                               style={{paddingLeft: 8, borderRight: "none"}}>{children}</span>
+export const PageTitle = ({children}) => <span
+    className="navbar-brand"
+    style={{
+        paddingLeft: 8,
+        borderRight: "none",
+        textOverflow: "ellipsis",
+        overflow: "hidden"
+    }}>{children}</span>;
 
 export const TitleWithBackNavbar = ({title = "Memba", to = "/", query = {}, children}) => <PageTopNavbar>
     <BackAndTitle title={title} to={to} query={query}/>
@@ -23,24 +29,34 @@ export const TitleWithBackNavbar = ({title = "Memba", to = "/", query = {}, chil
 </PageTopNavbar>;
 
 
-export const ToolbarButton = ({className="", onClick=() => {}, active=false}) =>
-    <i className={className} onClick={() => onClick()}
+export const ToolbarButton = ({className = "", onClick = () => {}, active = false, style={}}) =>
+    <i className={className}
+       onClick={() => onClick()}
        style={{
            fontSize: 20,
            padding: 10,
            paddingRight: 8,
            cursor: "pointer",
            color: active ? "#62c462" : "white",
+           ...style
        }}
     />;
 
-export const BackAndTitle = ({title = "Memba", to = "/", query = {}}) => <div style={{display: "flex", alignItems: "center"}}>
-        <LinkWithQuery to={to} query={query}>
-            <ToolbarButton className={"fas fa-backward"}/>
-            <PageTitle>{title}</PageTitle>
-        </LinkWithQuery>
+export const BackAndTitle = withRouterWithQuery(({title = "Memba", to = "/", query = {}, history}) => <div
+        style={{
+            display: "flex",
+            alignItems: "center",
+            flexWrap: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            cursor: "pointer",
+
+        }} onClick={() => {history.push(encodeQuery(to, query))}}
+    >
+        <ToolbarButton className={"fas fa-backward"}/>
+        <PageTitle>{title}</PageTitle>
     </div>
-;
+    );
 
 export const MembaIconAndTitle = ({title = "Memba"}) => <div>
     <img src="memba48x44.png" width={48} height={44}

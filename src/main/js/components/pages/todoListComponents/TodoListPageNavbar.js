@@ -47,7 +47,7 @@ const TodoListPageNavbar = withRouterWithQuery(({
 
     return <PageTopNavbar>
         {navbarFirstElem}
-        <div className="btn-toolbar">
+        <div className="btn-toolbar" style={{display: "flex", flexWrap: "nowrap"}}>
             {editGroupButton}
             {reordererModeButton}
             {showCompletedButton}
