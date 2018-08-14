@@ -26,7 +26,6 @@ const TodoListPageViewStandardMode = ({
                         fontWeight: 600,
                         marginRight: 6,
                         marginLeft: 6,
-                        paddingBottom: 4,
                     }}
                 >{todoLogic.countNotCompletedInGroup(g.id)}</span>}
 
