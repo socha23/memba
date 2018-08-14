@@ -22,9 +22,10 @@ const TodoListPageViewStandardMode = ({
 
                 {todoLogic.countNotCompletedInGroup(g.id) === 0 ? <span/> : <span
                     style={{
-                        fontSize: 30,
+                        fontSize: 34,
                         fontWeight: 600,
-                        marginRight: 10,
+                        marginRight: 6,
+                        marginLeft: 6,
                         paddingBottom: 2,
                     }}
                 >{todoLogic.countNotCompletedInGroup(g.id)}</span>}
