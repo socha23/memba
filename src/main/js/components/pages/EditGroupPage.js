@@ -7,8 +7,13 @@ import GroupForm from '../GroupForm'
 import DeleteToolbarButton from "../DeleteToolbarButton";
 
 
-const EditGroupPage = ({match}) => {
+const EditGroupPage = ({history, match}) => {
     const item = todoLogic.findGroupById(match.params.groupId);
+    if (item == null) {
+        history.push("/");
+        return <span/>;
+    }
+
     const deleteButton = <DeleteToolbarButton
                 item={item}
                 onDelete={() => todoLogic.deleteGroup(item.id)}

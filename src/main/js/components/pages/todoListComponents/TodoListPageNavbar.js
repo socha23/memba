@@ -21,6 +21,12 @@ const TodoListPageNavbar = withRouterWithQuery(({
         navbarFirstElem = <MembaIconAndTitle/>;
     } else {
         const group = todoLogic.findGroupById(groupId);
+        if (group == null) {
+            history.push("/");
+            return <span/>;
+        }
+
+
         navbarFirstElem = <BackAndTitle
             query={{groupId: group.groupId || todoLogic.ROOT_GROUP_ID}}
             title={group.text}
