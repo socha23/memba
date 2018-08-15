@@ -1,6 +1,9 @@
 package pl.socha23.memba.dao.mongo.migga;
 
+import org.springframework.data.mongodb.core.MongoTemplate;
+
 import java.util.*;
+import java.util.function.Consumer;
 
 public class BasicMigrations implements Migrations {
 
@@ -24,5 +27,9 @@ public class BasicMigrations implements Migrations {
         migrations.add(migration);
         idToMigrations.put(migration.getMigrationId(), migration);
         return this;
+    }
+
+    public final BasicMigrations add(String id, String desc, Consumer<MongoTemplate> action) {
+        return add(new BasicMigration(id, desc, action));
     }
 }
