@@ -39,13 +39,13 @@ class TodoLogic {
     listGroups(params) {return this.dataStore.listGroups(params)};
 
     addTodo(todo) {
-        this.serverData.addTodo(todo)
+        return this.serverData.addTodo(todo)
             .then(t => this.dataStore.addTodo(t))
             .then(() => this.subscriptions.callSubscribers());
     }
 
     addGroup(group) {
-        this.serverData.addGroup(group)
+        return this.serverData.addGroup(group)
             .then(g => this.dataStore.addGroup(g))
             .then(() => this.subscriptions.callSubscribers());
     }
@@ -57,25 +57,25 @@ class TodoLogic {
     }
 
     updateTodo(todoId, todo) {
-        this.serverData.updateTodo(todo)
+        return this.serverData.updateTodo(todo)
             .then(t => this.dataStore.updateTodo(t))
             .then(() => this.subscriptions.callSubscribers())
     }
 
     updateGroup(groupId, group) {
-        this.serverData.updateGroup(group)
+        return this.serverData.updateGroup(group)
             .then(g => this.dataStore.updateGroup(g))
             .then(() => this.subscriptions.callSubscribers())
     }
 
     deleteTodo(todoId) {
-        this.serverData.deleteTodo(todoId)
+        return this.serverData.deleteTodo(todoId)
             .then(() => this.dataStore.deleteTodo(todoId))
             .then(() => this.subscriptions.callSubscribers())
     }
 
     deleteGroup(idToRemove) {
-        this.serverData.deleteGroup(idToRemove)
+        return this.serverData.deleteGroup(idToRemove)
             .then(() => this.dataStore.deleteGroup(idToRemove))
             .then(() => this.subscriptions.callSubscribers())
     }

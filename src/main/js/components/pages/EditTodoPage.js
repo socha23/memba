@@ -1,6 +1,8 @@
 import React from 'react'
 import {withRouterWithQuery} from '../../routerUtils'
 
+import {message} from '../../toast'
+
 import todoLogic from '../../logic/todoLogic'
 import AbstractItemFormPage from './AbstractItemFormPage'
 import TodoForm from '../TodoForm'
@@ -14,11 +16,11 @@ const EditTodoPage = ({history, match}) => {
     }
     const deleteButton = <DeleteToolbarButton
         item={item}
-        onDelete={() => todoLogic.deleteTodo(item.id)}/>;
+        onDelete={() => todoLogic.deleteTodo(item.id).then(() => message("Item deleted"))}/>;
     return <AbstractItemFormPage
         formComponent={TodoForm}
         item={item}
-        onSave={(i) => {todoLogic.updateTodo(i.id, i)}}
+        onSave={(i) => {todoLogic.updateTodo(i.id, i).then(() => message("Changes saved"))}}
         title="Edit item"
         createMode={false}
         toolbarButtons={deleteButton}
