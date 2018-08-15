@@ -1,5 +1,7 @@
 import fetch from 'isomorphic-fetch'
 
+import {danger} from '../toast'
+
 var idToken = null;
 
 export function jsonGet(path) {
@@ -48,7 +50,7 @@ const unpackResponse = r => {
         return r.json()
     } else {
         console.log(r);
-        window.alert("Error " + r.status + " " + r.statusText);
+        danger("Connecting...");
     }
 };
 
