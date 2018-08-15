@@ -3,7 +3,7 @@ import moment from 'moment'
 import {setIdToken} from '../../logic/apiHelper'
 import BigMemba from '../BigMemba'
 import {BrandedNavbar} from './PageTopNavbar'
-import {BorderlessBottomNavbar, PageBottomNavbar} from './PageBottomNavbar'
+import {BottomButtonBar, StatusBar} from './PageBottomBar'
 import PageBody from './PageBody'
 import ButtonIcon from '../ButtonIcon'
 
@@ -19,13 +19,13 @@ const NotYetSignedIn = ({children, googleApisLoaded, onClickSignIn}) => <div>
         <BigMemba/>
     </PageBody>
     {googleApisLoaded ?
-    <BorderlessBottomNavbar>
+    <BottomButtonBar>
         <a id="signInButton" className="btn btn-block btn-primary" onClick={onClickSignIn}>
             <ButtonIcon className="fab fa-google"/>
             Sign in with Google
         </a>
-    </BorderlessBottomNavbar>
-        :  <PageBottomNavbar>Loading Google API...</PageBottomNavbar>
+    </BottomButtonBar>
+        :  <StatusBar>Loading Google API...</StatusBar>
             }
 </div>;
 

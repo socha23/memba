@@ -2,7 +2,7 @@ import React from 'react'
 
 import {withRouterWithQuery} from '../../routerUtils'
 import todoLogic from '../../logic/todoLogic'
-import {BorderlessBottomNavbar} from "../structural/PageBottomNavbar";
+import {BottomButtonBar} from "../structural/PageBottomBar";
 import AddItemButton from '../AddItemButton'
 import TodoListPageViewStandardMode from "./todoListComponents/TodoListPageViewStandardMode";
 import TodoListPageNavbar from './todoListComponents/TodoListPageNavbar'
@@ -73,8 +73,8 @@ const TodoListView = ({
     return <TodoListPageViewStandardMode groups={groups} todos={todos} />
 };
 
-const TodoListPageBottomToolbar = ({addEnabled, groupId}) => addEnabled ? <BorderlessBottomNavbar>
+const TodoListPageBottomToolbar = ({addEnabled, groupId}) => addEnabled ? <BottomButtonBar>
     <AddItemButton groupId={groupId}/>
-</BorderlessBottomNavbar> : <span/>;
+</BottomButtonBar> : <span/>;
 
 

@@ -4,7 +4,7 @@ import {encodeQuery, withRouterWithQuery} from '../../routerUtils'
 
 import {TitleWithBackNavbar} from '../structural/PageTopNavbar'
 import PageBody from '../structural/PageBody'
-import {BorderlessBottomNavbar} from '../structural/PageBottomNavbar'
+import {BottomButtonBar} from '../structural/PageBottomBar'
 
 import ButtonIcon from '../ButtonIcon'
 
@@ -84,7 +84,7 @@ const AbstractItemFormPageView = ({
         </div>
     </PageBody>
 
-    <BorderlessBottomNavbar>
+    <BottomButtonBar>
         <button
             className={"btn btn-lg btn-block " + buttonClass}
             disabled={!submitEnabled}
@@ -92,5 +92,5 @@ const AbstractItemFormPageView = ({
         >
             {buttonContents}
         </button>
-    </BorderlessBottomNavbar>
+    </BottomButtonBar>
 </div>;
