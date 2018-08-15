@@ -5,13 +5,18 @@ export class WithBottomBar extends React.Component {
 
     static statusDiv = null;
     static navDiv = null;
+    static toastDiv = null;
 
     state = {
         divsReady: false
     };
 
     checkIfDivsReady() {
-        if (WithBottomBar.statusDiv != null && WithBottomBar.navDiv != null && !this.state.divsReady) {
+        if (
+            WithBottomBar.statusDiv != null
+            && WithBottomBar.navDiv != null
+            && WithBottomBar.toastDiv != null
+            && !this.state.divsReady) {
             this.setState({divsReady: true});
         }
     }
@@ -20,6 +25,7 @@ export class WithBottomBar extends React.Component {
         return <div>
             {this.state.divsReady ? this.props.children : <span/>}
             <div className="fixed-bottom">
+                <div ref={e => {WithBottomBar.toastDiv = e; setTimeout(() => {this.checkIfDivsReady()})}}/>
                 <div ref={e => {WithBottomBar.statusDiv = e; setTimeout(() => {this.checkIfDivsReady()})}}/>
                 <div ref={e => {WithBottomBar.navDiv = e; setTimeout(() => {this.checkIfDivsReady()})}}/>
             </div>
