@@ -2,8 +2,6 @@ package pl.socha23.memba.dao.mongo.migga;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 
@@ -12,14 +10,14 @@ public class MigrationsRunner {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private MongoTemplate mongo;
-    
+
 
     public MigrationsRunner(MongoTemplate mongo) {
         this.mongo = mongo;
     }
 
-    @EventListener
-    public void runOnStartup(ContextRefreshedEvent event) {
-        logger.info("RUNNING MIGRATIONS");
+    void runMigrations(Migrations migrations) {
+        migrations.run(mongo);
+
     }
 }
