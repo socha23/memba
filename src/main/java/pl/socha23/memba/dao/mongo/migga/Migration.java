@@ -7,4 +7,6 @@ public interface Migration {
     String getMigrationId();
 
     void run(MongoTemplate mongo);
+
+    String getDesc();
 }

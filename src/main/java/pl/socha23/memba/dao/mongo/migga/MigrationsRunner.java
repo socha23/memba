@@ -17,7 +17,11 @@ public class MigrationsRunner {
     }
 
     void runMigrations(Migrations migrations) {
-        migrations.run(mongo);
+        migrations.getMigrations()
+                .stream().forEach(m -> {
+                    logger.info("Running migration " + m.getMigrationId() + " " + m.getDesc());
+                    m.run(mongo);
+        });
 
     }
 }
