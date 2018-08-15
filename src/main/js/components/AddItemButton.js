@@ -59,7 +59,7 @@ class AddItemButton extends React.Component {
                 className="btn btn-info btn-lg"
                 onClick={() => {this.setState({modalShown: true})}}
             >
-                <i style={{fontSize: 30}} className="fas fa-align-justify"/>
+                <i style={{fontSize: 30, paddingTop: 4}} className="fas fa-align-justify"/>
             </button>
         </div>
         <AddModal
