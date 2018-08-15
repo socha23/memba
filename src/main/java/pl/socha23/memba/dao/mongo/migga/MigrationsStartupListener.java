@@ -8,14 +8,15 @@ import org.springframework.stereotype.Component;
 public class MigrationsStartupListener {
 
     private MigrationsRunner runner;
+    private Migrations migrations;
 
-
-    public MigrationsStartupListener(MigrationsRunner runner) {
+    public MigrationsStartupListener(MigrationsRunner runner, Migrations migrations) {
+        this.migrations = migrations;
         this.runner = runner;
     }
 
     @EventListener
     public void runOnStartup(ContextRefreshedEvent event) {
-        runner.runMigrations(null);
+        runner.runMigrations(migrations);
     }
 }

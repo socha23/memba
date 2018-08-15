@@ -1,27 +1,28 @@
 package pl.socha23.memba.dao.mongo.migga;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
-class BasicMigrations implements Migrations {
+public class BasicMigrations implements Migrations {
 
     private List<Migration> migrations = new ArrayList<>();
+    private Map<String, Migration> idToMigrations = new HashMap<>();
 
     @Override
-    public Optional<Migration> findMigrationById(String migrationId) {
-        return migrations.stream()
-                .filter(m -> m.getMigrationId().equals(migrationId))
-                .findFirst();
+    public final Optional<Migration> findMigrationById(String migrationId) {
+        return Optional.ofNullable(idToMigrations.get(migrationId));
     }
 
     @Override
-    public List<Migration> getMigrations() {
+    public final List<Migration> getMigrations() {
         return migrations;
     }
 
-    public BasicMigrations add(Migration migration) {
+    public final BasicMigrations add(Migration migration) {
+        if (idToMigrations.containsKey(migration.getMigrationId())) {
+            throw new IllegalArgumentException("Duplicate migration id " + migration.getMigrationId());
+        }
         migrations.add(migration);
+        idToMigrations.put(migration.getMigrationId(), migration);
         return this;
     }
 }
