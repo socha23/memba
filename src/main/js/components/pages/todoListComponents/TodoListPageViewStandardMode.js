@@ -1,6 +1,6 @@
 import React from 'react'
 
-import {withRouterWithQuery, encodeQuery} from '../../../routerUtils'
+import {encodeQuery, withRouterWithQuery} from '../../../routerUtils'
 import todoLogic from '../../../logic/todoLogic'
 import PageBody from '../../structural/PageBody'
 import AnimatedList from '../../AnimatedList'
@@ -28,13 +28,6 @@ const TodoListPageViewStandardMode = ({
                         marginLeft: 6,
                     }}
                 >{todoLogic.countNotCompletedInGroup(g.id)}</span>}
-
-                <i
-                    style={{fontSize: 40}}
-                    className={"fas fa-chevron-right"}
-                    onClick={() => { history.push(encodeQuery("/", {groupId: g.id}))}}
-                />
-
                 </GroupListItem>
             )}
         </AnimatedList>
