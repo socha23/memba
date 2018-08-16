@@ -21,12 +21,16 @@ public class TestOps {
     private TodosOperations todoOps;
     private GroupsOperations groupOps;
 
+    private OwnershipManager ownershipManager;
+
     public TestOps() {
         todoStore = new MemTodoStore();
         groupStore = new MemGroupStore();
         userProvider = new TestUserProvider();
 
-        todoOps = new TodosOperationsImpl(todoStore, userProvider);
+        ownershipManager = new OwnershipManagerImpl(groupStore);
+
+        todoOps = new TodosOperationsImpl(todoStore, userProvider, ownershipManager);
         groupOps = new GroupsOperationsImpl(todoStore, groupStore, userProvider);
     }
 
@@ -62,5 +66,21 @@ public class TestOps {
                 .block();
     }
 
+    public TestOps withTodo(Todo t) {
+        todoStore.createTodo(Mono.just(t)).block();
+        return this;
+    }
 
+    public TestOps withGroup(Group g) {
+        groupStore.createGroup(Mono.just(g)).block();
+        return this;
+    }
+
+    public Todo findTodoById(String id) {
+        return todoStore.findTodoById(id).block();
+    }
+
+    public Group findGroupById(String id) {
+        return groupStore.findGroupById(id).block();
+    }
 }

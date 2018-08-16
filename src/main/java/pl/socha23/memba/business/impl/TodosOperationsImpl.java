@@ -9,6 +9,8 @@ import pl.socha23.memba.business.api.model.CreateOrUpdateTodo;
 import pl.socha23.memba.business.api.model.Todo;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple2;
+import reactor.util.function.Tuples;
 
 import java.time.Instant;
 import java.util.Collections;
@@ -18,10 +20,15 @@ public class TodosOperationsImpl implements TodosOperations {
 
     private TodoStore<? extends Todo> todoStore;
     private CurrentUserProvider currentUserProvider;
+    private OwnershipManager ownershipManager;
 
-    public TodosOperationsImpl(TodoStore<? extends Todo> todoStore, CurrentUserProvider currentUserProvider) {
+    public TodosOperationsImpl(
+            TodoStore<? extends Todo> todoStore,
+            CurrentUserProvider currentUserProvider,
+            OwnershipManager ownershipManager) {
         this.todoStore = todoStore;
         this.currentUserProvider = currentUserProvider;
+        this.ownershipManager = ownershipManager;
     }
 
     @Override
@@ -34,10 +41,12 @@ public class TodosOperationsImpl implements TodosOperations {
 
         return createTodo
                 .map(this::doCreateTodo)
+                .zipWith(createTodo)
+                .flatMap(this::setOwnershipIfNeededTuple)
                 .compose(todoStore::createTodo);
     }
 
-    private Todo doCreateTodo(CreateOrUpdateTodo create) {
+    private BasicTodo doCreateTodo(CreateOrUpdateTodo create) {
         var todo = new BasicTodo();
 
         todo.setOwnerIds(create.getOwnerIds() != null ? create.getOwnerIds() : Collections.singleton(currentUserProvider.getCurrentUserId()));
@@ -51,16 +60,35 @@ public class TodosOperationsImpl implements TodosOperations {
     }
 
     @Override
-    public Mono<? extends Todo> updateTodo(String todoId, Mono<? extends CreateOrUpdateTodo> updateTodo) {
+    public Mono<? extends Todo> updateTodo(String todoId, Mono<? extends CreateOrUpdateTodo> updateTodoCommand) {
         return todoStore
                 .findTodoById(todoId)
-                .zipWith(updateTodo, this::doUpdateTodo)
-                .compose(todoStore::updateTodo);
+                .zipWith(updateTodoCommand)
+                .map(this::doUpdateTodoTuple)
+                .map(this::setOwnershipIfNeededTuple)
+                .flatMap(todoStore::updateTodo);
     }
 
     @Override
     public Mono<Void> deleteTodo(String todoId) {
         return todoStore.deleteTodo(todoId);
+    }
+
+    private Mono<BasicTodo> setOwnershipIfNeededTuple(Tuple2<? extends BasicTodo, ? extends CreateOrUpdateTodo> todoAndUpdate) {
+        return setOwnershipIfNeeded(todoAndUpdate.getT1(), todoAndUpdate.getT2());
+    }
+
+
+    private Mono<BasicTodo> setOwnershipIfNeeded(BasicTodo todo, CreateOrUpdateTodo updateTodo) {
+        if (updateTodo.getGroupId() != null) {
+            return ownershipManager.setOwnersToParentGroupOwners(todo);
+        } else {
+            return Mono.just(todo);
+        }
+    }
+
+    private Tuple2<BasicTodo, CreateOrUpdateTodo> doUpdateTodoTuple(Tuple2<? extends Todo, ? extends CreateOrUpdateTodo> todoAndUpdate) {
+        return Tuples.of(doUpdateTodo(todoAndUpdate.getT1(), todoAndUpdate.getT2()), todoAndUpdate.getT2());
     }
 
     private BasicTodo doUpdateTodo(Todo todo, CreateOrUpdateTodo updateTodo) {
