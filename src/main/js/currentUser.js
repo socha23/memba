@@ -1,9 +1,9 @@
-let currentUserId = null;
+let _currentUserId = null;
 
 export function setCurrentUserId(id) {
-    currentUserId = id;
+    _currentUserId = id;
 }
 
 export function currentUserId() {
-    return currentUserId;
+    return _currentUserId;
 }

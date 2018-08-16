@@ -52,7 +52,7 @@ class SignInRequired extends React.Component {
 
     onAuth(authResponse) {
         setIdToken(authResponse.id_token);
-        setCurrentUserId(this.auth2.currentUser.get().getId());
+        setCurrentUserId(this.auth2.currentUser.get().getBasicProfile().getEmail());
         this.setState({signedIn: true, tokenExpiryOn: moment().add(authResponse.expires_in, "seconds")});
     }
 
