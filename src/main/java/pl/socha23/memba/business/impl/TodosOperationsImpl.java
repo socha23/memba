@@ -65,8 +65,8 @@ public class TodosOperationsImpl implements TodosOperations {
                 .findTodoById(todoId)
                 .zipWith(updateTodoCommand)
                 .map(this::doUpdateTodoTuple)
-                .map(this::setOwnershipIfNeededTuple)
-                .flatMap(todoStore::updateTodo);
+                .flatMap(this::setOwnershipIfNeededTuple)
+                .compose(todoStore::updateTodo);
     }
 
     @Override
