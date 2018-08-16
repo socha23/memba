@@ -31,7 +31,7 @@ public class TestOps {
         ownershipManager = new OwnershipManagerImpl(groupStore);
 
         todoOps = new TodosOperationsImpl(todoStore, userProvider, ownershipManager);
-        groupOps = new GroupsOperationsImpl(todoStore, groupStore, userProvider);
+        groupOps = new GroupsOperationsImpl(todoStore, groupStore, userProvider, ownershipManager);
     }
 
     public TodosOperations getTodoOps() {
@@ -74,6 +74,14 @@ public class TestOps {
     public TestOps withGroup(Group g) {
         groupStore.createGroup(Mono.just(g)).block();
         return this;
+    }
+
+    public MemTodoStore getTodoStore() {
+        return todoStore;
+    }
+
+    public MemGroupStore getGroupStore() {
+        return groupStore;
     }
 
     public Todo findTodoById(String id) {

@@ -2,9 +2,7 @@ package pl.socha23.memba.business.impl;
 
 import org.springframework.stereotype.Component;
 import pl.socha23.memba.business.api.dao.GroupStore;
-import pl.socha23.memba.business.api.model.BasicTodo;
-import pl.socha23.memba.business.api.model.Group;
-import pl.socha23.memba.business.api.model.ItemInGroup;
+import pl.socha23.memba.business.api.model.*;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -17,7 +15,7 @@ class OwnershipManagerImpl implements OwnershipManager {
     }
 
     @Override
-    public Mono<BasicTodo> setOwnersToParentGroupOwners(BasicTodo item) {
+    public <T extends BasicItemInGroup> Mono<T> setOwnersToParentGroupOwners(T item) {
         if (ItemInGroup.belongsToRoot(item)) {
             return Mono.just(item);
         } else {
@@ -25,7 +23,7 @@ class OwnershipManagerImpl implements OwnershipManager {
         }
     }
 
-    private Mono<BasicTodo> setOwnersToNonRootParentGroupOwners(BasicTodo it) {
+    private <T extends BasicItemInGroup> Mono<T> setOwnersToNonRootParentGroupOwners(T it) {
         return groupStore
                 .findGroupById(it.getGroupId())
                 .map(group -> {

@@ -9,7 +9,6 @@ import pl.socha23.memba.business.api.model.CreateOrUpdateTodo;
 import pl.socha23.memba.business.api.model.Todo;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.util.function.Tuple2;
 import reactor.util.function.Tuples;
 
 import java.time.Instant;
@@ -42,7 +41,7 @@ public class TodosOperationsImpl implements TodosOperations {
         return createTodo
                 .map(this::doCreateTodo)
                 .zipWith(createTodo)
-                .flatMap(this::setOwnershipIfNeededTuple)
+                .flatMap(t -> setOwnershipIfNeeded(t.getT1(), t.getT2()))
                 .compose(todoStore::createTodo);
     }
 
@@ -64,8 +63,8 @@ public class TodosOperationsImpl implements TodosOperations {
         return todoStore
                 .findTodoById(todoId)
                 .zipWith(updateTodoCommand)
-                .map(this::doUpdateTodoTuple)
-                .flatMap(this::setOwnershipIfNeededTuple)
+                .map(t -> Tuples.of(doUpdateTodo(t.getT1(), t.getT2()), t.getT2()))
+                .flatMap(t -> setOwnershipIfNeeded(t.getT1(), t.getT2()))
                 .compose(todoStore::updateTodo);
     }
 
@@ -74,21 +73,12 @@ public class TodosOperationsImpl implements TodosOperations {
         return todoStore.deleteTodo(todoId);
     }
 
-    private Mono<BasicTodo> setOwnershipIfNeededTuple(Tuple2<? extends BasicTodo, ? extends CreateOrUpdateTodo> todoAndUpdate) {
-        return setOwnershipIfNeeded(todoAndUpdate.getT1(), todoAndUpdate.getT2());
-    }
-
-
     private Mono<BasicTodo> setOwnershipIfNeeded(BasicTodo todo, CreateOrUpdateTodo updateTodo) {
         if (updateTodo.getGroupId() != null) {
             return ownershipManager.setOwnersToParentGroupOwners(todo);
         } else {
             return Mono.just(todo);
         }
-    }
-
-    private Tuple2<BasicTodo, CreateOrUpdateTodo> doUpdateTodoTuple(Tuple2<? extends Todo, ? extends CreateOrUpdateTodo> todoAndUpdate) {
-        return Tuples.of(doUpdateTodo(todoAndUpdate.getT1(), todoAndUpdate.getT2()), todoAndUpdate.getT2());
     }
 
     private BasicTodo doUpdateTodo(Todo todo, CreateOrUpdateTodo updateTodo) {

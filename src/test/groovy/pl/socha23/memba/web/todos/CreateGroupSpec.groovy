@@ -15,13 +15,11 @@ class CreateGroupSpec extends Specification {
         when:
         def request = new CreateOrUpdateGroupRequest()
         request.text  = "my group"
-        request.groupId = "ggg"
         controller.addGroup(request).block()
 
         then:
         def group = ops.listGroups()[0]
         group.text == "my group"
-        group.groupId == "ggg"
     }
 
 }

@@ -1,9 +1,8 @@
 package pl.socha23.memba.business.impl
 
+import pl.socha23.memba.business.api.model.BasicGroup
 import pl.socha23.memba.business.api.model.BasicTodo
 import pl.socha23.memba.business.api.model.Group
-import pl.socha23.memba.dao.mem.MemGroupStore
-import pl.socha23.memba.dao.mem.MemTodoStore
 import reactor.core.publisher.Mono
 import spock.lang.Specification
 
@@ -13,8 +12,7 @@ class GroupOperationsSpec extends Specification {
 
     def "adding a group"() {
         given:
-        def groupStore = new MemGroupStore()
-        def ops = new GroupsOperationsImpl(new MemTodoStore(), groupStore, new TestUserProvider())
+        def ops = new TestOps().groupOps
 
         when:
         ops.createGroup(TestCreateUpdateGroup.monoWithText("one")).block()
@@ -26,8 +24,7 @@ class GroupOperationsSpec extends Specification {
 
     def "updating a group"() {
         given:
-        def groupStore = new MemGroupStore()
-        def ops = new GroupsOperationsImpl(new MemTodoStore(), groupStore, new TestUserProvider())
+        def ops = new TestOps().groupOps
 
         when:
         Group g = ops.createGroup(new TestCreateUpdateGroup()
@@ -45,8 +42,7 @@ class GroupOperationsSpec extends Specification {
 
     def "deleting a group"() {
         given:
-        def groupStore = new MemGroupStore()
-        def ops = new GroupsOperationsImpl(new MemTodoStore(), groupStore, new TestUserProvider())
+        def ops = new TestOps().groupOps
         Group g = ops.createGroup(new TestCreateUpdateGroup()
                 .withText("original")
                 .withColor("red")
@@ -62,32 +58,76 @@ class GroupOperationsSpec extends Specification {
 
     def "deleting a group moves its children to supergroup"() {
         given:
-        def groupStore = new MemGroupStore()
-        def todoStore = new MemTodoStore()
+        def ops = new TestOps()
 
-        def ops = new GroupsOperationsImpl(todoStore, groupStore, new TestUserProvider())
-
-        def g1 = ops.createGroup(new TestCreateUpdateGroup(groupId: "root", text: "g1").toMono()).block()
-        def g1a = ops.createGroup(new TestCreateUpdateGroup(groupId: g1.id, text: "g1a").toMono()).block()
-        def g2 = ops.createGroup(new TestCreateUpdateGroup(groupId: "root", text: "g2").toMono()).block()
-        def g2a = ops.createGroup(new TestCreateUpdateGroup(groupId: g2.id, text: "g1a").toMono()).block()
-        def t = todoStore.createTodo(Mono.just(new BasicTodo(groupId: "root", text: "t"))).block()
-        def t1 = todoStore.createTodo(Mono.just(new BasicTodo(groupId: g1.id, text: "t1"))).block()
-        def t2 = todoStore.createTodo(Mono.just(new BasicTodo(groupId: g2.id, text: "t2"))).block()
+        def g1 = ops.groupOps.createGroup(new TestCreateUpdateGroup(groupId: "root", text: "g1").toMono()).block()
+        def g1a = ops.groupOps.createGroup(new TestCreateUpdateGroup(groupId: g1.id, text: "g1a").toMono()).block()
+        def g2 = ops.groupOps.createGroup(new TestCreateUpdateGroup(groupId: "root", text: "g2").toMono()).block()
+        def g2a = ops.groupOps.createGroup(new TestCreateUpdateGroup(groupId: g2.id, text: "g1a").toMono()).block()
+        def t = ops.todoStore.createTodo(Mono.just(new BasicTodo(groupId: "root", text: "t"))).block()
+        def t1 = ops.todoStore.createTodo(Mono.just(new BasicTodo(groupId: g1.id, text: "t1"))).block()
+        def t2 = ops.todoStore.createTodo(Mono.just(new BasicTodo(groupId: g2.id, text: "t2"))).block()
 
         when:
-        ops.deleteGroup(g1.id).block()
+        ops.groupOps.deleteGroup(g1.id).block()
 
         then:
         // we deleted g1. g1a and t1 should move to root. t, g2, g2a and t2 shouldn't change
-        groupStore.findGroupById(g1.id).block() == null
+        ops.groupStore.findGroupById(g1.id).block() == null
 
-        groupStore.findGroupById(g1a.id).block().groupId == 'root'
-        todoStore.findTodoById(t1.id).block().groupId == 'root'
+        ops. groupStore.findGroupById(g1a.id).block().groupId == 'root'
+        ops. todoStore.findTodoById(t1.id).block().groupId == 'root'
 
-        todoStore.findTodoById(t.id).block().groupId == 'root'
-        groupStore.findGroupById(g2.id).block().groupId == 'root'
-        groupStore.findGroupById(g2a.id).block().groupId == g2.id
-        todoStore.findTodoById(t2.id).block().groupId == g2.id
+        ops. todoStore.findTodoById(t.id).block().groupId == 'root'
+        ops. groupStore.findGroupById(g2.id).block().groupId == 'root'
+        ops. groupStore.findGroupById(g2a.id).block().groupId == g2.id
+        ops. todoStore.findTodoById(t2.id).block().groupId == g2.id
     }
+
+    def "adding group to group copies group ownership"() {
+        given:
+        def ops = new TestOps()
+            .withGroup(new BasicGroup(id: "g1", groupId: "root", ownerIds: ["A", "B"]))
+
+        when:
+        def newGroup = ops.groupOps
+            .createGroup(new TestCreateUpdateGroup(groupId: "g1").toMono()).block()
+
+        then:
+        ops.findGroupById(newGroup.id).ownerIds == ["A", "B"] as Set
+
+    }
+
+    def "moving group to group copies group ownership"() {
+        given:
+        def ops = new TestOps()
+            .withGroup(new BasicGroup(id: "g1", groupId: "root", ownerIds: ["A", "B"]))
+            .withGroup(new BasicGroup(id: "g2", groupId: "root", ownerIds: ["A"]))
+
+        when:
+        ops.groupOps
+            .updateGroup("g2", new TestCreateUpdateGroup(groupId: "g1").toMono()).block()
+
+        then:
+        ops.findGroupById("g2").ownerIds == ["A", "B"] as Set
+
+
+    }
+
+    def "moving group from group to root doesn't change ownership"() {
+        given:
+        def ops = new TestOps()
+            .withGroup(new BasicGroup(id: "g1", groupId: "root", ownerIds: ["A", "B"]))
+            .withGroup(new BasicGroup(id: "g2", groupId: "g1", ownerIds: ["A", "B"]))
+
+        when:
+        ops.groupOps
+            .updateGroup("g2", new TestCreateUpdateGroup(groupId: "root").toMono()).block()
+
+        then:
+        ops.findGroupById("g2").ownerIds == ["A", "B"] as Set
+
+    }
+
+
 }
