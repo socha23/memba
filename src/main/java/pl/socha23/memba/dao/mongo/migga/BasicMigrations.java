@@ -24,7 +24,7 @@ public class BasicMigrations implements Migrations {
         if (idToMigrations.containsKey(migration.getMigrationId())) {
             throw new IllegalArgumentException("Duplicate migration id " + migration.getMigrationId());
         }
-        migrations.add(migration);
+        migrations.add(0, migration);
         idToMigrations.put(migration.getMigrationId(), migration);
         return this;
     }

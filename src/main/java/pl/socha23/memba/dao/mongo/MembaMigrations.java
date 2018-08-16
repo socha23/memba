@@ -14,7 +14,7 @@ public class MembaMigrations extends BasicMigrations implements InitializingBean
 
     @Override
     public void afterPropertiesSet() {
-        add("2018-08-16 00:18", "Added owners to todos and groups", mongo -> {
+        add("2018-08-16 13:12 ", "Added owners to todos and groups", mongo -> {
 
             for (Document todo : mongo.getCollection("todo").find()) {
                 todo.put("ownerIds", Collections.singleton(todo.get("ownerId")));
