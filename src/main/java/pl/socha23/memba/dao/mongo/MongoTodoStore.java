@@ -30,7 +30,7 @@ class MongoTodoStore implements TodoStore<MongoTodoImpl> {
 
     @Override
     public Flux<MongoTodoImpl> listTodosByOwnerId(String userId) {
-        return repository.findByOwnerIdOrderByCreatedOnDesc(userId);
+        return repository.findByOwnerIdsContainingOrderByCreatedOnDesc(userId);
     }
 
     @Override

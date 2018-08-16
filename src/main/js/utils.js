@@ -12,3 +12,7 @@ export const indexById = function (xs) {
         return rv;
     }, {});
 };
+
+export const randomFrom = function(items) {
+    return items[Math.floor(Math.random() * items.length)]
+};

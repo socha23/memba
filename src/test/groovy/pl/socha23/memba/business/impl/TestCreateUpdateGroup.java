@@ -1,9 +1,9 @@
 package pl.socha23.memba.business.impl;
 
-import pl.socha23.memba.web.todos.model.CreateUpdateGroupRequest;
+import pl.socha23.memba.web.todos.model.CreateOrUpdateGroupRequest;
 import reactor.core.publisher.Mono;
 
-public class TestCreateUpdateGroup extends CreateUpdateGroupRequest {
+public class TestCreateUpdateGroup extends CreateOrUpdateGroupRequest {
 
     public TestCreateUpdateGroup withText(String text) {
         this.setText(text);

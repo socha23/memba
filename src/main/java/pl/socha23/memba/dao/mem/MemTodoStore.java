@@ -55,12 +55,12 @@ public class MemTodoStore implements TodoStore<BasicTodo> {
 
     private List<BasicTodo> getUserTodos(String userId) {
         return todosById.values().stream()
-                .filter(t -> t.getOwnerId().equals(userId))
+                .filter(t -> t.getOwnerIds().contains(userId))
                 .sorted(Comparator.comparing(Item::getId).reversed())
                 .collect(Collectors.toList());
     }
 
-    BasicTodo addTodo(Todo todo) {
+    private BasicTodo addTodo(Todo todo) {
         var newTodo = BasicTodo.copy(todo);
 
         if (newTodo.getId() == null) {

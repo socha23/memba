@@ -1,11 +1,12 @@
 package pl.socha23.memba.business.api.model;
 
 import java.time.Instant;
+import java.util.Set;
 
-public class BasicItemInGroup {
+public class BasicItemInGroup implements ItemInGroup {
     private String id;
     private Instant createdOn;
-    private String ownerId;
+    private Set<String> ownerIds;
     private String groupId;
 
     public String getId() {
@@ -16,12 +17,13 @@ public class BasicItemInGroup {
         this.id = id;
     }
 
-    public String getOwnerId() {
-        return ownerId;
+    @Override
+    public Set<String> getOwnerIds() {
+        return ownerIds;
     }
 
-    public void setOwnerId(String ownerId) {
-        this.ownerId = ownerId;
+    public void setOwnerIds(Set<String> ownerIds) {
+        this.ownerIds = ownerIds;
     }
 
     public String getGroupId() {
@@ -43,7 +45,7 @@ public class BasicItemInGroup {
     protected static <T extends BasicItemInGroup, Q extends ItemInGroup> T copy(Q from, T to) {
         to.setId(from.getId());
         to.setCreatedOn(from.getCreatedOn());
-        to.setOwnerId(from.getOwnerId());
+        to.setOwnerIds(from.getOwnerIds());
         to.setGroupId(from.getGroupId());
         return to;
 

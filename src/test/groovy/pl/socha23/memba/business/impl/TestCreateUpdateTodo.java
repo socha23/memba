@@ -1,11 +1,10 @@
 package pl.socha23.memba.business.impl;
 
-import pl.socha23.memba.business.api.model.CreateTodo;
-import pl.socha23.memba.business.api.model.UpdateTodo;
-import pl.socha23.memba.web.todos.model.CreateTodoRequest;
+import pl.socha23.memba.business.api.model.CreateOrUpdateTodo;
+import pl.socha23.memba.web.todos.model.CreateOrUpdateTodoRequest;
 import reactor.core.publisher.Mono;
 
-public class TestCreateUpdateTodo extends CreateTodoRequest implements CreateTodo, UpdateTodo {
+public class TestCreateUpdateTodo extends CreateOrUpdateTodoRequest implements CreateOrUpdateTodo {
 
     private Boolean completed;
 

@@ -10,6 +10,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Instant;
+import java.util.Collections;
 
 @Component
 public class GroupsOperationsImpl implements GroupsOperations {
@@ -30,15 +31,15 @@ public class GroupsOperationsImpl implements GroupsOperations {
     }
 
     @Override
-    public Mono<? extends Group> createGroup(Mono<? extends CreateGroup> createGroup) {
+    public Mono<? extends Group> createGroup(Mono<? extends CreateOrUpdateGroup> createGroup) {
         return createGroup
                 .map(this::doCreateGroup)
                 .compose(groupStore::createGroup);
     }
 
-    private Group doCreateGroup(CreateGroup create) {
+    private Group doCreateGroup(CreateOrUpdateGroup create) {
         var group = new BasicGroup();
-        group.setOwnerId(currentUserProvider.getCurrentUserId());
+        group.setOwnerIds(create.getOwnerIds() != null ? create.getOwnerIds() : Collections.singleton(currentUserProvider.getCurrentUserId()));
         group.setGroupId(create.getGroupId());
         group.setText(create.getText());
         group.setColor(create.getColor());
@@ -48,7 +49,7 @@ public class GroupsOperationsImpl implements GroupsOperations {
     }
 
     @Override
-    public Mono<? extends Group> updateGroup(String groupId, Mono<? extends UpdateGroup> updateGroup) {
+    public Mono<? extends Group> updateGroup(String groupId, Mono<? extends CreateOrUpdateGroup> updateGroup) {
         return groupStore
                 .findGroupById(groupId)
                 .zipWith(updateGroup, this::doUpdateGroup)
@@ -67,7 +68,7 @@ public class GroupsOperationsImpl implements GroupsOperations {
                 );
     }
 
-    private BasicGroup doUpdateGroup(Group group, UpdateGroup updateGroup) {
+    private BasicGroup doUpdateGroup(Group group, CreateOrUpdateGroup updateGroup) {
         var newGroup = BasicGroup.copy(group);
 
         if (updateGroup.getGroupId() != null) {
@@ -80,6 +81,10 @@ public class GroupsOperationsImpl implements GroupsOperations {
 
         if (updateGroup.getColor() != null) {
             newGroup.setColor(updateGroup.getColor());
+        }
+
+        if (updateGroup.getOwnerIds() != null) {
+            newGroup.setOwnerIds(updateGroup.getOwnerIds());
         }
 
         return newGroup;

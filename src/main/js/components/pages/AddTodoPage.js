@@ -1,6 +1,7 @@
 import React from 'react'
 import {withRouterWithQuery} from '../../routerUtils'
 
+import {currentUserId} from '../../currentUser'
 import todoLogic from '../../logic/todoLogic'
 import AbstractItemFormPage from './AbstractItemFormPage'
 import TodoForm from '../TodoForm'
@@ -14,6 +15,7 @@ const AddTodoPage = ({location}) =>
             text: '',
             color: DEFAULT_COLOR,
             groupId: location.query.groupId || todoLogic.ROOT_GROUP_ID,
+            ownerIds: [currentUserId()],
         }}
         onSave={(item) => {
             setTimeout(() => {

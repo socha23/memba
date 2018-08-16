@@ -5,15 +5,19 @@ import todoLogic from '../../logic/todoLogic'
 import AbstractItemFormPage from './AbstractItemFormPage'
 import GroupForm from '../GroupForm'
 
-import {DEFAULT_COLOR} from "../ColorPicker";
+import {COLORS} from "../ColorPicker";
+import {randomFrom} from "../../utils";
+
+import {currentUserId} from "../../currentUser";
 
 const AddGroupPage = ({location}) =>
     <AbstractItemFormPage
         formComponent={GroupForm}
         item={{
             text: '',
-            color: DEFAULT_COLOR,
+            color: randomFrom(COLORS),
             groupId: location.query.groupId || todoLogic.ROOT_GROUP_ID,
+            ownerIds: [currentUserId()],
         }}
         onSave={(item) => {
             setTimeout(() => {

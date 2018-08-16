@@ -2,8 +2,8 @@ package pl.socha23.memba.business.impl;
 
 import pl.socha23.memba.business.api.logic.GroupsOperations;
 import pl.socha23.memba.business.api.logic.TodosOperations;
-import pl.socha23.memba.business.api.model.CreateGroup;
-import pl.socha23.memba.business.api.model.CreateTodo;
+import pl.socha23.memba.business.api.model.CreateOrUpdateGroup;
+import pl.socha23.memba.business.api.model.CreateOrUpdateTodo;
 import pl.socha23.memba.business.api.model.Group;
 import pl.socha23.memba.business.api.model.Todo;
 import pl.socha23.memba.dao.mem.MemGroupStore;
@@ -38,7 +38,7 @@ public class TestOps {
         return groupOps;
     }
 
-    public TestOps createTodo(CreateTodo todo) {
+    public TestOps createTodo(CreateOrUpdateTodo todo) {
         this.todoOps.createTodo(Mono.just(todo)).block();
         return this;
     }
@@ -50,7 +50,7 @@ public class TestOps {
                 .block();
     }
 
-    public TestOps createGroup(CreateGroup group) {
+    public TestOps createGroup(CreateOrUpdateGroup group) {
         this.groupOps.createGroup(Mono.just(group)).block();
         return this;
     }

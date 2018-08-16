@@ -1,22 +1,12 @@
 package pl.socha23.memba.web.todos.model;
 
-import pl.socha23.memba.business.api.model.UpdateTodo;
+import pl.socha23.memba.business.api.model.CreateOrUpdateTodo;
 
-public class UpdateTodoRequest implements UpdateTodo {
+public class CreateOrUpdateTodoRequest extends AbstractCreateOrUpdateItemInGroupRequest implements CreateOrUpdateTodo {
 
-    private String groupId;
     private String text;
     private Boolean completed;
     private String color;
-
-    @Override
-    public String getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(String groupId) {
-        this.groupId = groupId;
-    }
 
     @Override
     public String getText() {
@@ -45,8 +35,8 @@ public class UpdateTodoRequest implements UpdateTodo {
         this.color = color;
     }
 
-    public static UpdateTodoRequest withCompleted(boolean completed) {
-        var result = new UpdateTodoRequest();
+    public static CreateOrUpdateTodoRequest withCompleted(boolean completed) {
+        var result = new CreateOrUpdateTodoRequest();
         result.setCompleted(completed);
         return result;
     }

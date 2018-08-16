@@ -2,7 +2,7 @@ package pl.socha23.memba.web.todos
 
 import pl.socha23.memba.business.impl.TestOps
 import pl.socha23.memba.web.todos.controllers.GroupsController
-import pl.socha23.memba.web.todos.model.CreateUpdateGroupRequest
+import pl.socha23.memba.web.todos.model.CreateOrUpdateGroupRequest
 import spock.lang.Specification
 
 class CreateGroupSpec extends Specification {
@@ -13,7 +13,7 @@ class CreateGroupSpec extends Specification {
         def controller = new GroupsController(ops.groupOps)
 
         when:
-        def request = new CreateUpdateGroupRequest()
+        def request = new CreateOrUpdateGroupRequest()
         request.text  = "my group"
         request.groupId = "ggg"
         controller.addGroup(request).block()

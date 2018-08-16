@@ -64,7 +64,7 @@ public class MemGroupStore implements GroupStore<BasicGroup> {
 
     private List<BasicGroup> getUserGroups(String userId) {
         return groupsById.values().stream()
-                .filter(t -> t.getOwnerId().equals(userId))
+                .filter(t -> t.getOwnerIds().contains(userId))
                 .sorted(Comparator.comparing(Item::getId).reversed())
                 .collect(Collectors.toList());
     }

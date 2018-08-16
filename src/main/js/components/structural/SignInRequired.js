@@ -1,6 +1,7 @@
 import React from 'react'
 import moment from 'moment'
 import {setIdToken} from '../../logic/apiHelper'
+import {setCurrentUserId} from "../../currentUser";
 import BigMemba from '../BigMemba'
 import {BrandedNavbar} from './PageTopNavbar'
 import {BottomButtonBar, StatusBar} from './PageBottomBar'
@@ -51,6 +52,7 @@ class SignInRequired extends React.Component {
 
     onAuth(authResponse) {
         setIdToken(authResponse.id_token);
+        setCurrentUserId(this.auth2.currentUser.get().getId());
         this.setState({signedIn: true, tokenExpiryOn: moment().add(authResponse.expires_in, "seconds")});
     }
 

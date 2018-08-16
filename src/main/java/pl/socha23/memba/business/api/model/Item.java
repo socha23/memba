@@ -4,6 +4,5 @@ import java.time.Instant;
 
 public interface Item {
     String getId();
-    String getOwnerId();
     Instant getCreatedOn();
 }

@@ -5,13 +5,13 @@ import pl.socha23.memba.business.api.dao.TodoStore;
 import pl.socha23.memba.business.api.logic.CurrentUserProvider;
 import pl.socha23.memba.business.api.logic.TodosOperations;
 import pl.socha23.memba.business.api.model.BasicTodo;
-import pl.socha23.memba.business.api.model.CreateTodo;
+import pl.socha23.memba.business.api.model.CreateOrUpdateTodo;
 import pl.socha23.memba.business.api.model.Todo;
-import pl.socha23.memba.business.api.model.UpdateTodo;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Instant;
+import java.util.Collections;
 
 @Component
 public class TodosOperationsImpl implements TodosOperations {
@@ -30,17 +30,17 @@ public class TodosOperationsImpl implements TodosOperations {
     }
 
     @Override
-    public Mono<? extends Todo> createTodo(Mono<? extends CreateTodo> createTodo) {
+    public Mono<? extends Todo> createTodo(Mono<? extends CreateOrUpdateTodo> createTodo) {
 
         return createTodo
                 .map(this::doCreateTodo)
                 .compose(todoStore::createTodo);
     }
 
-    private Todo doCreateTodo(CreateTodo create) {
+    private Todo doCreateTodo(CreateOrUpdateTodo create) {
         var todo = new BasicTodo();
 
-        todo.setOwnerId(currentUserProvider.getCurrentUserId());
+        todo.setOwnerIds(create.getOwnerIds() != null ? create.getOwnerIds() : Collections.singleton(currentUserProvider.getCurrentUserId()));
         todo.setGroupId(create.getGroupId());
         todo.setText(create.getText());
         todo.setCompleted(false);
@@ -51,7 +51,7 @@ public class TodosOperationsImpl implements TodosOperations {
     }
 
     @Override
-    public Mono<? extends Todo> updateTodo(String todoId, Mono<? extends UpdateTodo> updateTodo) {
+    public Mono<? extends Todo> updateTodo(String todoId, Mono<? extends CreateOrUpdateTodo> updateTodo) {
         return todoStore
                 .findTodoById(todoId)
                 .zipWith(updateTodo, this::doUpdateTodo)
@@ -63,8 +63,12 @@ public class TodosOperationsImpl implements TodosOperations {
         return todoStore.deleteTodo(todoId);
     }
 
-    private BasicTodo doUpdateTodo(Todo todo, UpdateTodo updateTodo) {
+    private BasicTodo doUpdateTodo(Todo todo, CreateOrUpdateTodo updateTodo) {
         var newTodo = BasicTodo.copy(todo);
+
+        if (updateTodo.getOwnerIds() != null) {
+            newTodo.setOwnerIds(updateTodo.getOwnerIds());
+        }
 
         if (updateTodo.getGroupId() != null) {
             newTodo.setGroupId(updateTodo.getGroupId());
