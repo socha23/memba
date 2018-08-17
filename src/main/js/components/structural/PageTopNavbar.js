@@ -1,5 +1,5 @@
 import React from 'react'
-import {LinkWithQuery, withRouterWithQuery, encodeQuery} from "../../routerUtils";
+import {encodeQuery, withRouterWithQuery} from "../../routerUtils";
 
 export const PageTopNavbar = ({children}) => <nav className="navbar fixed-top navbar-expand-lg navbar-dark bg-primary"
                                                   style={{
@@ -29,7 +29,7 @@ export const TitleWithBackNavbar = ({title = "Memba", to = "/", query = {}, chil
 </PageTopNavbar>;
 
 
-export const ToolbarButton = ({className = "", onClick = () => {}, active = false, style={}}) =>
+export const ToolbarButton = ({className = "", onClick = () => {}, active = false, style = {}}) =>
     <i className={className}
        onClick={() => onClick()}
        style={{
@@ -42,25 +42,28 @@ export const ToolbarButton = ({className = "", onClick = () => {}, active = fals
        }}
     />;
 
-export const BackAndTitle = withRouterWithQuery(({title = "Memba", to = "/", query = {}, history}) => <div
-        style={{
-            display: "flex",
-            alignItems: "center",
-            flexWrap: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            cursor: "pointer",
+const LEFT_STYLE = {
+    display: "flex",
+    alignItems: "center",
+    flexWrap: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    cursor: "pointer",
 
-        }} onClick={() => {history.push(encodeQuery(to, query))}}
+};
+
+export const BackAndTitle = withRouterWithQuery(({title = "Memba", to = "/", query = {}, history}) => <div
+        style={LEFT_STYLE} onClick={() => {history.push(encodeQuery(to, query))}}
     >
         <ToolbarButton className={"fas fa-backward"}/>
         <PageTitle>{title}</PageTitle>
     </div>
-    );
+);
 
-export const MembaIconAndTitle = ({title = "Memba"}) => <div>
+export const MembaIconAndTitle = ({title = "Memba"}) => <div
+    style={LEFT_STYLE}>
     <img src="memba48x44.png" width={48} height={44}
-         style={{marginTop: 3, marginRight: 1, marginBottom: 0, marginLeft: 1}}
+         style={{marginRight: 1, marginLeft: 1}}
          className="d-inline-block align-top"/>
     <PageTitle>{title}</PageTitle>
 </div>;
