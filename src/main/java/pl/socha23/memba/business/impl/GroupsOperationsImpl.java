@@ -8,13 +8,13 @@ import pl.socha23.memba.business.api.logic.GroupsOperations;
 import pl.socha23.memba.business.api.model.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.util.function.Tuples;
+import reactor.util.function.Tuple2;
 
 import java.time.Instant;
 import java.util.Collections;
 
 @Component
-public class GroupsOperationsImpl implements GroupsOperations {
+public class GroupsOperationsImpl extends AbstractItemInGroupOperationsImpl<BasicGroup> implements GroupsOperations {
 
     private TodoStore<? extends Todo> todoStore;
     private GroupStore<? extends Group> groupStore;
@@ -26,6 +26,7 @@ public class GroupsOperationsImpl implements GroupsOperations {
             GroupStore<? extends Group> groupStore,
             CurrentUserProvider currentUserProvider,
             OwnershipManager ownershipManager) {
+        super(ownershipManager);
         this.todoStore = todoStore;
         this.groupStore = groupStore;
         this.currentUserProvider = currentUserProvider;
@@ -38,56 +39,40 @@ public class GroupsOperationsImpl implements GroupsOperations {
     }
 
     @Override
-    public Mono<? extends Group> createGroup(Mono<? extends CreateOrUpdateGroup> createGroup) {
-        return createGroup
-                .map(this::doCreateGroup)
-                .zipWith(createGroup)
-                .flatMap(t -> setOwnershipIfNeeded(t.getT1(), t.getT2()))
+    public Mono<? extends Group> createGroup(Mono<? extends CreateOrUpdateGroup> command) {
+        return command
+                .map(this::createGroupObject)
+                .flatMap(ownershipManager::copyParentOwnership)
                 .compose(groupStore::createGroup);
     }
 
-    private BasicGroup doCreateGroup(CreateOrUpdateGroup create) {
+    private BasicGroup createGroupObject(CreateOrUpdateGroup create) {
         var group = new BasicGroup();
         group.setOwnerIds(create.getOwnerIds() != null ? create.getOwnerIds() : Collections.singleton(currentUserProvider.getCurrentUserId()));
         group.setGroupId(create.getGroupId());
         group.setText(create.getText());
         group.setColor(create.getColor());
         group.setCreatedOn(Instant.now());
-
         return group;
     }
 
     @Override
-    public Mono<? extends Group> updateGroup(String groupId, Mono<? extends CreateOrUpdateGroup> updateGroup) {
+    public Mono<? extends Group> updateGroup(String groupId, Mono<? extends CreateOrUpdateGroup> command) {
         return groupStore
                 .findGroupById(groupId)
-                .zipWith(updateGroup)
-                .map(t -> Tuples.of(doUpdateGroup(t.getT1(), t.getT2()), t.getT2()))
-                .flatMap(t -> setOwnershipIfNeeded(t.getT1(), t.getT2()))
-                .compose(groupStore::updateGroup);
-    }
-
-    private Mono<BasicGroup> setOwnershipIfNeeded(BasicGroup group, CreateOrUpdateGroup updateGroup) {
-        if (updateGroup.getGroupId() != null) {
-            return ownershipManager.setOwnersToParentGroupOwners(group);
-        } else {
-            return Mono.just(group);
-        }
-    }
-
-    @Override
-    public Mono<Void> deleteGroup(String groupId) {
-        return groupStore
-                .findGroupById(groupId)
-                .flatMap(g -> Mono.when(
-                        groupStore.deleteGroup(g.getId()),
-                        groupStore.changeEveryGroupId(groupId, g.getGroupId()),
-                        todoStore.changeEveryGroupId(groupId, g.getGroupId())
-                        )
+                .zipWith(command)
+                .flatMap(t -> {
+                    var result = updateFields(t.getT1(), t.getT2());
+                    return setOwnershipIfNeeded(result, t.getT1(), t.getT2());
+                })
+                .compose(g -> groupStore
+                            .updateGroup(g)
+                            .zipWith(ownershipManager.copyOwnershipToChildren(g))
+                            .map(Tuple2::getT1)
                 );
     }
 
-    private BasicGroup doUpdateGroup(Group group, CreateOrUpdateGroup updateGroup) {
+    private BasicGroup updateFields(Group group, CreateOrUpdateGroup updateGroup) {
         var newGroup = BasicGroup.copy(group);
 
         if (updateGroup.getGroupId() != null) {
@@ -107,5 +92,17 @@ public class GroupsOperationsImpl implements GroupsOperations {
         }
 
         return newGroup;
+    }
+
+    @Override
+    public Mono<Void> deleteGroup(String groupId) {
+        return groupStore
+                .findGroupById(groupId)
+                .flatMap(g -> Mono.when(
+                        groupStore.deleteGroup(g.getId()),
+                        groupStore.changeEveryGroupId(groupId, g.getGroupId()),
+                        todoStore.changeEveryGroupId(groupId, g.getGroupId())
+                        )
+                );
     }
 }

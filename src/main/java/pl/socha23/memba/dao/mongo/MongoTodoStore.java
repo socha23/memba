@@ -10,6 +10,9 @@ import pl.socha23.memba.business.api.dao.TodoStore;
 import pl.socha23.memba.business.api.model.Todo;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import static org.springframework.data.mongodb.core.query.Criteria.*;
+
+import java.util.Set;
 
 @Component
 @Profile("mongo")
@@ -53,11 +56,20 @@ class MongoTodoStore implements TodoStore<MongoTodoImpl> {
 
     @Override
     public Mono<Void> changeEveryGroupId(String fromGroupId, String toGroupId) {
-        return template.updateMulti(
-                new Query(Criteria.where("groupId").is(fromGroupId)),
-                new Update().set("groupId", toGroupId),
-                MongoTodoImpl.class
-        ).then();
+        return updateAllInGroup(fromGroupId, new Update().set("groupId", toGroupId));
+    }
+
+    @Override
+    public Mono<Void> setOwnersInDirectGroupMembers(String groupId, Set<String> ownerIds) {
+        return updateAllInGroup(groupId, new Update().set("ownerIds", ownerIds));
+    }
+
+    private Mono<Void> updateAllInGroup(String groupId, Update update) {
+        return update(where("groupId").is(groupId), update);
+    }
+
+    private Mono<Void> update(Criteria criteria, Update update) {
+        return template.updateMulti(new Query(criteria), update, MongoTodoImpl.class).then();
     }
 
 }

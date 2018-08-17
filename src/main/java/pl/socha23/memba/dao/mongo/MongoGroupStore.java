@@ -11,6 +11,10 @@ import pl.socha23.memba.business.api.model.Group;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Set;
+
+import static org.springframework.data.mongodb.core.query.Criteria.where;
+
 @Component
 @Profile("mongo")
 class MongoGroupStore implements GroupStore<MongoGroupImpl> {
@@ -34,6 +38,11 @@ class MongoGroupStore implements GroupStore<MongoGroupImpl> {
     }
 
     @Override
+    public Flux<MongoGroupImpl> listSubGroups(String groupId) {
+        return find(inGroup(groupId));
+    }
+
+    @Override
     public Mono<MongoGroupImpl> createGroup(Mono<? extends Group> group) {
         return updateGroup(group);
     }
@@ -44,7 +53,6 @@ class MongoGroupStore implements GroupStore<MongoGroupImpl> {
                         .map(MongoGroupImpl::copy)
                         .compose(t -> repository.saveAll(t).next()
                         );
-
     }
 
     @Override
@@ -54,10 +62,29 @@ class MongoGroupStore implements GroupStore<MongoGroupImpl> {
 
     @Override
     public Mono<Void> changeEveryGroupId(String fromGroupId, String toGroupId) {
-        return template.updateMulti(
-                new Query(Criteria.where("groupId").is(fromGroupId)),
-                new Update().set("groupId", toGroupId),
-                MongoGroupImpl.class
-        ).then();
+        return updateAllInGroup(fromGroupId, new Update().set("groupId", toGroupId));
     }
+
+    @Override
+    public Mono<Void> setOwnersInDirectGroupMembers(String groupId, Set<String> ownerIds) {
+        return null;
+    }
+
+    private Mono<Void> updateAllInGroup(String groupId, Update update) {
+        return update(inGroup(groupId), update);
+    }
+
+    private Criteria inGroup(String groupId) {
+        return where("groupId").is(groupId);
+    }
+
+    private Mono<Void> update(Criteria criteria, Update update) {
+        return template.updateMulti(new Query(criteria), update, MongoGroupImpl.class).then();
+    }
+
+    private Flux<MongoGroupImpl> find(Criteria criteria) {
+        return template.find(new Query(criteria), MongoGroupImpl.class);
+    }
+
+
 }

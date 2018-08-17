@@ -9,10 +9,7 @@ import pl.socha23.memba.business.api.model.Item;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -30,6 +27,14 @@ public class MemGroupStore implements GroupStore<BasicGroup> {
     @Override
     public Flux<BasicGroup> listGroupsByOwnerId(String userId) {
         return Flux.fromIterable(getUserGroups(userId));
+    }
+
+    @Override
+    public Flux<BasicGroup> listSubGroups(String groupId) {
+        return Flux.fromStream(
+                groupsById.values().stream()
+                        .filter(g -> groupId.equals(g.getGroupId()))
+        );
     }
 
     @Override
@@ -83,4 +88,11 @@ public class MemGroupStore implements GroupStore<BasicGroup> {
         return Mono.empty();
     }
 
+    @Override
+    public Mono<Void> setOwnersInDirectGroupMembers(String groupId, Set<String> ownerIds) {
+        groupsById.values().stream()
+                .filter(t -> groupId.equals(t.getGroupId()))
+                .forEach(t -> t.setOwnerIds(ownerIds));
+        return Mono.empty();
+    }
 }

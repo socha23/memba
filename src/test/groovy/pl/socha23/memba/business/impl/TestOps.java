@@ -28,7 +28,7 @@ public class TestOps {
         groupStore = new MemGroupStore();
         userProvider = new TestUserProvider();
 
-        ownershipManager = new OwnershipManagerImpl(groupStore);
+        ownershipManager = new OwnershipManagerImpl(groupStore, todoStore);
 
         todoOps = new TodosOperationsImpl(todoStore, userProvider, ownershipManager);
         groupOps = new GroupsOperationsImpl(todoStore, groupStore, userProvider, ownershipManager);

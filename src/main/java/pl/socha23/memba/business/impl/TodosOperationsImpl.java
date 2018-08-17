@@ -9,13 +9,12 @@ import pl.socha23.memba.business.api.model.CreateOrUpdateTodo;
 import pl.socha23.memba.business.api.model.Todo;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.util.function.Tuples;
 
 import java.time.Instant;
 import java.util.Collections;
 
 @Component
-public class TodosOperationsImpl implements TodosOperations {
+public class TodosOperationsImpl extends AbstractItemInGroupOperationsImpl<BasicTodo> implements TodosOperations {
 
     private TodoStore<? extends Todo> todoStore;
     private CurrentUserProvider currentUserProvider;
@@ -25,6 +24,7 @@ public class TodosOperationsImpl implements TodosOperations {
             TodoStore<? extends Todo> todoStore,
             CurrentUserProvider currentUserProvider,
             OwnershipManager ownershipManager) {
+        super(ownershipManager);
         this.todoStore = todoStore;
         this.currentUserProvider = currentUserProvider;
         this.ownershipManager = ownershipManager;
@@ -39,49 +39,35 @@ public class TodosOperationsImpl implements TodosOperations {
     public Mono<? extends Todo> createTodo(Mono<? extends CreateOrUpdateTodo> createTodo) {
 
         return createTodo
-                .map(this::doCreateTodo)
-                .zipWith(createTodo)
-                .flatMap(t -> setOwnershipIfNeeded(t.getT1(), t.getT2()))
+                .map(this::createTodoObject)
+                .flatMap(ownershipManager::copyParentOwnership)
                 .compose(todoStore::createTodo);
     }
 
-    private BasicTodo doCreateTodo(CreateOrUpdateTodo create) {
+    private BasicTodo createTodoObject(CreateOrUpdateTodo create) {
         var todo = new BasicTodo();
-
         todo.setOwnerIds(create.getOwnerIds() != null ? create.getOwnerIds() : Collections.singleton(currentUserProvider.getCurrentUserId()));
         todo.setGroupId(create.getGroupId());
         todo.setText(create.getText());
         todo.setCompleted(false);
         todo.setColor(create.getColor());
         todo.setCreatedOn(Instant.now());
-
         return todo;
     }
 
     @Override
-    public Mono<? extends Todo> updateTodo(String todoId, Mono<? extends CreateOrUpdateTodo> updateTodoCommand) {
+    public Mono<? extends Todo> updateTodo(String todoId, Mono<? extends CreateOrUpdateTodo> command) {
         return todoStore
                 .findTodoById(todoId)
-                .zipWith(updateTodoCommand)
-                .map(t -> Tuples.of(doUpdateTodo(t.getT1(), t.getT2()), t.getT2()))
-                .flatMap(t -> setOwnershipIfNeeded(t.getT1(), t.getT2()))
+                .zipWith(command)
+                .flatMap(t -> {
+                    var result = updateFields(t.getT1(), t.getT2());
+                    return setOwnershipIfNeeded(result, t.getT1(), t.getT2());
+                })
                 .compose(todoStore::updateTodo);
     }
 
-    @Override
-    public Mono<Void> deleteTodo(String todoId) {
-        return todoStore.deleteTodo(todoId);
-    }
-
-    private Mono<BasicTodo> setOwnershipIfNeeded(BasicTodo todo, CreateOrUpdateTodo updateTodo) {
-        if (updateTodo.getGroupId() != null) {
-            return ownershipManager.setOwnersToParentGroupOwners(todo);
-        } else {
-            return Mono.just(todo);
-        }
-    }
-
-    private BasicTodo doUpdateTodo(Todo todo, CreateOrUpdateTodo updateTodo) {
+    private BasicTodo updateFields(Todo todo, CreateOrUpdateTodo updateTodo) {
         var newTodo = BasicTodo.copy(todo);
 
         if (updateTodo.getOwnerIds() != null) {
@@ -106,4 +92,10 @@ public class TodosOperationsImpl implements TodosOperations {
 
         return newTodo;
     }
+
+    @Override
+    public Mono<Void> deleteTodo(String todoId) {
+        return todoStore.deleteTodo(todoId);
+    }
+
 }

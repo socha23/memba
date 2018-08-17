@@ -9,10 +9,7 @@ import pl.socha23.memba.business.api.model.Todo;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -80,6 +77,14 @@ public class MemTodoStore implements TodoStore<BasicTodo> {
         todosById.values().stream()
                 .filter(t -> fromGroupId.equals(t.getGroupId()))
                 .forEach(t -> t.setGroupId(toGroupId));
+        return Mono.empty();
+    }
+
+    @Override
+    public Mono<Void> setOwnersInDirectGroupMembers(String groupId, Set<String> ownerIds) {
+        todosById.values().stream()
+                .filter(t -> t.getGroupId().equals(groupId))
+                .forEach(t -> t.setOwnerIds(ownerIds));
         return Mono.empty();
     }
 
