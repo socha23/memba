@@ -67,7 +67,7 @@ class GoogleJWTAuthenticationManager implements AuthenticationManager {
         }
 
         public String getFirstName() {
-            return (String)payload.get("first_name");
+            return (String)payload.get("given_name");
         }
 
         public String getFullName() {
@@ -76,6 +76,10 @@ class GoogleJWTAuthenticationManager implements AuthenticationManager {
 
         public String getEmail() {
             return payload.getEmail();
+        }
+
+        public String getPictureUrl() {
+            return (String)payload.get("picture");
         }
     }
 }

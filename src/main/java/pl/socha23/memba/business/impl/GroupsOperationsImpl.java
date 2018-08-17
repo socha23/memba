@@ -43,7 +43,7 @@ public class GroupsOperationsImpl extends AbstractItemInGroupOperationsImpl<Basi
         return command
                 .map(this::createGroupObject)
                 .flatMap(ownershipManager::copyParentOwnership)
-                .compose(groupStore::createGroup);
+                .transform(groupStore::createGroup);
     }
 
     private BasicGroup createGroupObject(CreateOrUpdateGroup create) {
@@ -65,7 +65,7 @@ public class GroupsOperationsImpl extends AbstractItemInGroupOperationsImpl<Basi
                     var result = updateFields(t.getT1(), t.getT2());
                     return setOwnershipIfNeeded(result, t.getT1(), t.getT2());
                 })
-                .compose(g -> groupStore
+                .transform(g -> groupStore
                             .updateGroup(g)
                             .zipWith(ownershipManager.copyOwnershipToChildren(g))
                             .map(Tuple2::getT1)

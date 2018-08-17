@@ -1,0 +1,22 @@
+package pl.socha23.memba.dao.mongo;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
+import pl.socha23.memba.business.api.dao.ProfileStore;
+import pl.socha23.memba.dao.cache.CachingProfileStore;
+
+@Profile("mongo")
+@Configuration
+public class MongoConfiguration {
+
+    @Bean
+    public ProfileStore getStore(ReactiveMongoTemplate mongo) {
+        return new CachingProfileStore(new MongoProfileStore(mongo));
+    }
+
+
+
+    
+}

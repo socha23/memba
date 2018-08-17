@@ -1,12 +1,15 @@
 package pl.socha23.memba.business.impl;
 
 import pl.socha23.memba.business.api.logic.GroupsOperations;
+import pl.socha23.memba.business.api.logic.ProfileOperations;
 import pl.socha23.memba.business.api.logic.TodosOperations;
 import pl.socha23.memba.business.api.model.CreateOrUpdateGroup;
 import pl.socha23.memba.business.api.model.CreateOrUpdateTodo;
 import pl.socha23.memba.business.api.model.Group;
 import pl.socha23.memba.business.api.model.Todo;
+import pl.socha23.memba.dao.cache.CachingProfileStore;
 import pl.socha23.memba.dao.mem.MemGroupStore;
+import pl.socha23.memba.dao.mem.MemProfileStore;
 import pl.socha23.memba.dao.mem.MemTodoStore;
 import reactor.core.publisher.Mono;
 
@@ -14,32 +17,27 @@ import java.util.List;
 
 public class TestOps {
 
-    private MemTodoStore todoStore;
-    private MemGroupStore groupStore;
-    private TestUserProvider userProvider;
+    private MemTodoStore todoStore = new MemTodoStore();
+    private MemGroupStore groupStore = new MemGroupStore();
+    private TestUserProvider userProvider = new TestUserProvider();
+    private MemProfileStore profileStore = new MemProfileStore();
+    private OwnershipManager ownershipManager = new OwnershipManagerImpl(groupStore, todoStore);
 
-    private TodosOperations todoOps;
-    private GroupsOperations groupOps;
 
-    private OwnershipManager ownershipManager;
-
-    public TestOps() {
-        todoStore = new MemTodoStore();
-        groupStore = new MemGroupStore();
-        userProvider = new TestUserProvider();
-
-        ownershipManager = new OwnershipManagerImpl(groupStore, todoStore);
-
-        todoOps = new TodosOperationsImpl(todoStore, userProvider, ownershipManager);
-        groupOps = new GroupsOperationsImpl(todoStore, groupStore, userProvider, ownershipManager);
-    }
-
+    private TodosOperations todoOps = new TodosOperationsImpl(todoStore, userProvider, ownershipManager);;
+    private GroupsOperations groupOps = new GroupsOperationsImpl(todoStore, groupStore, userProvider, ownershipManager);
+    private ProfileOperations profileOps = new ProfileOperationsImpl(new CachingProfileStore(profileStore));
+    
     public TodosOperations getTodoOps() {
         return todoOps;
     }
 
     public GroupsOperations getGroupOps() {
         return groupOps;
+    }
+
+    public ProfileOperations getProfileOps() {
+        return profileOps;
     }
 
     public TestOps createTodo(CreateOrUpdateTodo todo) {
@@ -82,6 +80,10 @@ public class TestOps {
 
     public MemGroupStore getGroupStore() {
         return groupStore;
+    }
+
+    public MemProfileStore getProfileStore() {
+        return profileStore;
     }
 
     public Todo findTodoById(String id) {

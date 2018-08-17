@@ -15,6 +15,21 @@ class TestUserProvider implements CurrentUserProvider {
             String getId() {
                 return USER_ID
             }
+
+            @Override
+            String getFirstName() {
+                return "first name"
+            }
+
+            @Override
+            String getFullName() {
+                return "full name"
+            }
+
+            @Override
+            String getPictureUrl() {
+                return "picture url"
+            }
         }
     }
 }

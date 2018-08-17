@@ -51,7 +51,7 @@ class MongoGroupStore implements GroupStore<MongoGroupImpl> {
     public Mono<MongoGroupImpl> updateGroup(Mono<? extends Group> group) {
         return group
                         .map(MongoGroupImpl::copy)
-                        .compose(t -> repository.saveAll(t).next()
+                        .transform(t -> repository.saveAll(t).next()
                         );
     }
 

@@ -41,7 +41,7 @@ public class TodosOperationsImpl extends AbstractItemInGroupOperationsImpl<Basic
         return command
                 .map(this::createTodoObject)
                 .flatMap(ownershipManager::copyParentOwnership)
-                .compose(todoStore::createTodo);
+                .transform(todoStore::createTodo);
     }
 
     private BasicTodo createTodoObject(CreateOrUpdateTodo create) {
@@ -64,7 +64,7 @@ public class TodosOperationsImpl extends AbstractItemInGroupOperationsImpl<Basic
                     var result = updateFields(t.getT1(), t.getT2());
                     return setOwnershipIfNeeded(result, t.getT1(), t.getT2());
                 })
-                .compose(todoStore::updateTodo);
+                .transform(todoStore::updateTodo);
     }
 
     private BasicTodo updateFields(Todo todo, CreateOrUpdateTodo updateTodo) {

@@ -45,7 +45,7 @@ class MongoTodoStore implements TodoStore<MongoTodoImpl> {
     public Mono<MongoTodoImpl> updateTodo(Mono<? extends Todo> todo) {
         return todo
                 .map(MongoTodoImpl::copy)
-                .compose(t -> repository.saveAll(t).next());
+                .transform(t -> repository.saveAll(t).next());
 
     }
 
