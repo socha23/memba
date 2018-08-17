@@ -77,7 +77,7 @@ class SignInRequired extends React.Component {
     }
 
     authExpiredCheck() {
-        if (this.auth2 && this.state.apiInitialized) {
+        if (this.auth2 && this.state.apiInitialized &&  this.state.tokenExpiryOn) {
             const tokenValidForMs = this.state.tokenExpiryOn.diff(moment());
             this.setState({tokenValidForMs: tokenValidForMs});
             if (tokenValidForMs < RELOAD_WHEN_TOKEN_VALID_FOR_LESS_THEN_MS) {

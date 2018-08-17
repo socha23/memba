@@ -36,9 +36,9 @@ public class TodosOperationsImpl extends AbstractItemInGroupOperationsImpl<Basic
     }
 
     @Override
-    public Mono<? extends Todo> createTodo(Mono<? extends CreateOrUpdateTodo> createTodo) {
+    public Mono<? extends Todo> createTodo(Mono<? extends CreateOrUpdateTodo> command) {
 
-        return createTodo
+        return command
                 .map(this::createTodoObject)
                 .flatMap(ownershipManager::copyParentOwnership)
                 .compose(todoStore::createTodo);
