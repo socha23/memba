@@ -2,6 +2,7 @@ package pl.socha23.memba.dao.cache;
 
 import pl.socha23.memba.business.api.dao.ProfileStore;
 import pl.socha23.memba.business.api.model.User;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.HashMap;
@@ -48,5 +49,12 @@ public class CachingProfileStore implements ProfileStore {
     @Override
     public Mono<? extends User> findProfileById(String id) {
         return store.findProfileById(id);
+    }
+
+    @Override
+    public Flux<? extends User> listAllUsers() {
+        return store
+                .listAllUsers()
+                .map(this::putInCache);
     }
 }

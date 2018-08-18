@@ -1,4 +1,4 @@
-import {jsonGet, jsonPost, jsonPut, restDelete} from './apiHelper'
+import {jsonGet, jsonPost, jsonPut, restDelete} from '../apiHelper'
 
 const REFRESH_ITEMS_EVERY_MS = 60 * 1000;
 

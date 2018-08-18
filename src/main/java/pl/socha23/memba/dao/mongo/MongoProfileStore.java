@@ -32,5 +32,10 @@ class MongoProfileStore implements ProfileStore {
         return template.findById(id, MongoUserImpl.class);
     }
 
+    @Override
+    public Flux<? extends User> listAllUsers() {
+        return template.findAll(MongoUserImpl.class);
+    }
+
 
 }

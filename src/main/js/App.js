@@ -2,7 +2,7 @@ import React from 'react'
 import {Switch, Route} from 'react-router-dom'
 
 import SignInRequired from './components/structural/SignInRequired'
-import WaitForTodosToLoad from './components/structural/WaitForTodosToLoad'
+import WaitForInitialDataToLoad from './components/structural/WaitForInitialDataToLoad'
 import {WithBottomBar} from './components/structural/PageBottomBar'
 
 import TodoListPage from './components/pages/TodoListPage'
@@ -14,7 +14,7 @@ import EditGroupPage from './components/pages/EditGroupPage'
 export default () => <div className="container" style={{padding: 0}}>
     <WithBottomBar>
         <SignInRequired>
-            <WaitForTodosToLoad>
+            <WaitForInitialDataToLoad>
                 <Switch>
                     <Route exact path="/" component={TodoListPage}/>
                     <Route path="/addTodo" component={AddTodoPage}/>
@@ -22,7 +22,7 @@ export default () => <div className="container" style={{padding: 0}}>
                     <Route path="/addGroup" component={AddGroupPage}/>
                     <Route path="/group/:groupId" component={EditGroupPage}/>
                 </Switch>
-            </WaitForTodosToLoad>
+            </WaitForInitialDataToLoad>
         </SignInRequired>
     </WithBottomBar>
 </div>

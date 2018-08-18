@@ -1,5 +1,5 @@
-import DataStore from './DataStore'
-import ServerData from './ServerData'
+import DataStore from './todos/DataStore'
+import ServerData from './todos/ServerData'
 import Subscriptions from './Subscriptions'
 import Statistics from "./Statistics";
 

@@ -26,7 +26,7 @@ public class TestOps {
 
     private TodosOperations todoOps = new TodosOperationsImpl(todoStore, userProvider, ownershipManager);;
     private GroupsOperations groupOps = new GroupsOperationsImpl(todoStore, groupStore, userProvider, ownershipManager);
-    private ProfileOperations profileOps = new ProfileOperationsImpl(new CachingProfileStore(profileStore));
+    private ProfileOperations profileOps = new ProfileOperationsImpl(new CachingProfileStore(profileStore), userProvider);
     
     public TodosOperations getTodoOps() {
         return todoOps;

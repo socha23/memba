@@ -34,6 +34,11 @@ public class MemProfileStore implements ProfileStore {
         return profiles.containsKey(id) ? Mono.just(profiles.get(id)) : Mono.empty();
     }
 
+    @Override
+    public Flux<? extends User> listAllUsers() {
+        return Flux.fromIterable(profiles.values());
+    }
+
     public Instant getUpdateTime(String id) {
         return updateTimes.get(id);
     }

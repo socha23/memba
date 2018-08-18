@@ -1,4 +1,4 @@
-import DataStore from "../../main/js/logic/DataStore";
+import DataStore from "../../main/js/logic/todos/DataStore";
 
 it("returns empty list", () => {
     // given:

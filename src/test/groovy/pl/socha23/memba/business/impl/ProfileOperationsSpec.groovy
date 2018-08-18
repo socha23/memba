@@ -13,7 +13,7 @@ class ProfileOperationsSpec extends Specification {
         ops.profileOps.updateProfile(new TestUser(id: "u", firstName: "user"))
 
         then:
-        ops.profileOps.findProfileById("u").block().firstName == "user"
+        ops.profileOps.findUserById("u").block().firstName == "user"
     }
 
     def "updating a profile"() {
@@ -25,7 +25,7 @@ class ProfileOperationsSpec extends Specification {
         ops.profileOps.updateProfile(new TestUser(id: "u", firstName: "user changed"))
 
         then:
-        ops.profileOps.findProfileById("u").block().firstName == "user changed"
+        ops.profileOps.findUserById("u").block().firstName == "user changed"
     }
 
     def "updating a profile caches update operations"() {
@@ -47,4 +47,15 @@ class ProfileOperationsSpec extends Specification {
         bFirstTime != bSecondTime
 
     }
+
+    def "profile contains users not being the current user"() {
+        given:
+        def ops = new TestOps()
+        ops.profileOps.updateProfile(new TestUser(id: TestUserProvider.USER_ID, firstName: "a")).block()
+        ops.profileOps.updateProfile(new TestUser(id: "b", firstName: "b")).block()
+
+        expect:
+        ops.profileOps.currentUserProfile.block().friends[0].id == "b"
+    }
+
 }
