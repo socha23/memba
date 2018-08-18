@@ -1,11 +1,11 @@
 import React from 'react'
 import ColorPicker from './ColorPicker'
-import GroupSelect from './GroupSelect'
+import GroupSelectFormSection from './GroupSelectFormSection'
 
 const TodoForm = ({item, onChangeFields, createMode}) => <div>
     <TodoTextInput value={item.text} onChangeValue={v => onChangeFields({text: v})} autofocus={createMode}/>
     <ColorPicker value={item.color} onChangeValue={v => onChangeFields({color: v})}/>
-    <GroupSelect
+    <GroupSelectFormSection
                 value={item.groupId}
                 onChangeValue={v => onChangeFields({groupId: v})}
                 disabledId={item.id}

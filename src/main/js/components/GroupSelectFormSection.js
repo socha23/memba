@@ -1,11 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import Modal from "react-bootstrap4-modal";
 import todoLogic from '../logic/todoLogic'
 import {groupTreeAsListWithIdent} from "../logic/groupTree";
-import Modal from "react-bootstrap4-modal";
+import FormSectionContainer from './FormSectionContainer'
 
-class GroupSelect extends React.Component {
+class GroupSelectFormSection extends React.Component {
     static propTypes = {
         value: PropTypes.string,
         onChangeValue: PropTypes.func.isRequired,
@@ -24,14 +25,18 @@ class GroupSelect extends React.Component {
 
         const allGroups = groupTreeAsListWithIdent(todoLogic.listGroups({groupId: ""}));
         allGroups.unshift(rootGroup);
-
+        
         return <div>
-            <button className="btn btn-block btn-primary" onClick={() => {
-                this.setState({modalShown: true})
-            }}>
-                List: {this.groupPath(currentGroup)}
-            </button>
-
+            <FormSectionContainer>
+                <span>
+                    List: {this.groupPath(currentGroup)}
+                </span>
+                <button className="btn btn-primary" onClick={() => {
+                                this.setState({modalShown: true})
+                            }}>
+                    Move
+                </button>
+            </FormSectionContainer>
             <Modal
                 visible={this.state.modalShown}
                 dialogClassName="modal-dialog-centered"
@@ -39,7 +44,7 @@ class GroupSelect extends React.Component {
                     this.onCancel()
                 }}>
                 <div className="modal-header">
-                    <h5 className="modal-title">Choose a group</h5>
+                    <h5 className="modal-title">Move to list</h5>
                 </div>
                 <div className="modal-body">
                     {
@@ -77,8 +82,7 @@ class GroupSelect extends React.Component {
                     }
                 </div>
             </Modal>
-
-        </div>
+            </div>;
     }
 
     groupPath(group) {
@@ -101,4 +105,4 @@ class GroupSelect extends React.Component {
     }
 }
 
-export default GroupSelect
+export default GroupSelectFormSection
