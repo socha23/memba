@@ -1,6 +1,7 @@
 import React from 'react'
 import ColorPicker from './ColorPicker'
 import GroupSelectFormSection from "./GroupSelectFormSection";
+import SharingFormSection from "./SharingFormSection";
 
 
 const GroupForm = ({item, onChangeFields, createMode}) => <div>
@@ -11,6 +12,11 @@ const GroupForm = ({item, onChangeFields, createMode}) => <div>
             onChangeValue={v => onChangeFields({groupId: v})}
             disabledId={item.id}
         />
+    <SharingFormSection
+            item={item}
+            value={item.ownerIds}
+            onChangeValue={v => onChangeFields({ownerIds: v})}
+    />
 </div>;
 
 export default GroupForm;

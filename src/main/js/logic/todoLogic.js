@@ -2,10 +2,11 @@ import DataStore from './todos/DataStore'
 import ServerData from './todos/ServerData'
 import Subscriptions from './Subscriptions'
 import Statistics from "./Statistics";
+import {ROOT_GROUP_ID} from "./constants";
 
 class TodoLogic {
 
-    ROOT_GROUP_ID = "root";
+    ROOT_GROUP_ID = ROOT_GROUP_ID;
 
     dataStore = new DataStore();
     subscriptions = new Subscriptions();
@@ -87,6 +88,9 @@ class TodoLogic {
         return this.statistics.countNotCompletedInGroup(groupId);
     }
 
+    isTopLevel(item) {
+        return (item.groupId  || ROOT_GROUP_ID) === ROOT_GROUP_ID;
+    }
 }
 
 const TODO_LOGIC = new TodoLogic();
