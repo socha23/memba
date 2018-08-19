@@ -34,7 +34,11 @@ class GroupNavbar extends React.Component {
     };
 
     render() {
-        return <div id="navbar" style={{position: "relative", overflow: "hidden"}}>
+        return <div id="navbar" style={{
+            position: "relative",
+            overflow: "hidden",
+            textShadow: "2px 2px 2px rgba(0, 0, 0, 0.5)"
+        }}>
             <SmallToolbar group={this.props.group}/>
             <NavButtons group={this.props.group} showCompleted={this.props.showCompleted}
                         onToggleShowCompleted={this.props.onToggleShowCompleted}>
@@ -73,6 +77,7 @@ const BlockTitle = ({group}) => {
             bottom: 2,
             left: 4,
             fontSize: 14,
+            textShadow: "none"
         }}>with: {sharingLogic.getUsersItemIsSharedWithDescFull(group)}</div>;
 
 
@@ -89,6 +94,7 @@ const BlockTitle = ({group}) => {
             position: "relative",
             zIndex: Z_BLOCK_TITLE,
             borderBottom: "1px solid #444",
+
         }}>
             <span>{group.text}</span>
             {shareInfo}
