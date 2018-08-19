@@ -8,11 +8,18 @@ class SharingLogic {
             .map(uId => profileLogic.findFriendById(uId))
     }
 
-    getUsersItemIsSharedWithDesc(item) {
+    getUsersItemIsSharedWithDescShort(item) {
         return this.getUsersItemIsSharedWith(item)
             .map(u => u.firstName)
             .join(", ")
     }
+
+    getUsersItemIsSharedWithDescFull(item) {
+        return this.getUsersItemIsSharedWith(item)
+            .map(u => u.fullName)
+            .join(", ")
+    }
+
 
     getAllFriends() {
         return profileLogic.getProfile().friends;

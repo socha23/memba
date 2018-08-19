@@ -1,4 +1,4 @@
 import React from 'react'
 
-export default ({children}) => <div style={{paddingTop: 54, marginBottom: 48}}>{children}</div>
+export default ({children}) => <div style={{marginBottom: 48}}>{children}</div>
 

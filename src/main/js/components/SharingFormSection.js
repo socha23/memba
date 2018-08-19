@@ -63,7 +63,7 @@ class SharingFormSection extends React.Component {
 
         return <div>
             <FormSectionContainer>
-                <span>Shared with: {sharingLogic.getUsersItemIsSharedWithDesc(this.props.item)}</span>
+                <span>Shared with: {sharingLogic.getUsersItemIsSharedWithDescShort(this.props.item)}</span>
                 <button className="btn btn-primary" onClick={() => {this.onShowModal()}}>
                     Share
                 </button>
