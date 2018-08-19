@@ -82,7 +82,7 @@ const BlockTitle = ({group}) => {
             alignItems: "center",
             justifyContent: "center",
             minHeight: BLOCK_TITLE_HEIGHT,
-            paddingTop: 10,
+            paddingTop: 20,
             paddingBottom: 20,
             color: "white",
             fontSize: 36,
