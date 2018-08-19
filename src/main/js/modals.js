@@ -14,13 +14,11 @@ export function popModal(modal) {
 }
 
 export function onBackPressed() {
-    console.log("obp");
     const modal = _topModal();
     if (modal != null && modal.isShown()) {
         modal.hide();
         return false;
     } else {
-        console.log("back ok");
         return true;
     }
 }

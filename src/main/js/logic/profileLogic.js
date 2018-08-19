@@ -27,6 +27,18 @@ class ProfileLogic {
     }
 
     areItemsNotLoaded() {return this.profile == null}
+
+    getProfile() {
+        return this.profile
+    }
+
+    getCurrentUserId() {
+        return this.profile.id
+    }
+
+    findFriendById(id) {
+        return this.profile.friends.find(f => f.id === id)
+    }
 }
 
 const PROFILE_LOGIC = new ProfileLogic();
