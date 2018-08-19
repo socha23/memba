@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import Modal from "react-bootstrap4-modal";
+import Modal, {ModalHeader} from "./Modal";
 import todoLogic from '../logic/todoLogic'
 import {groupTreeAsListWithIdent} from "../logic/groupTree";
 import FormSectionContainer from './FormSectionContainer'
@@ -40,12 +40,11 @@ class GroupSelectFormSection extends React.Component {
             <Modal
                 visible={this.state.modalShown}
                 dialogClassName="modal-dialog-centered"
-                onClickBackdrop={() => {
+                onHide={() => {
                     this.onCancel()
                 }}>
-                <div className="modal-header">
-                    <h5 className="modal-title">Move to list</h5>
-                </div>
+                <ModalHeader title="Move to list" onCancel={() => {this.onCancel()}}/>
+
                 <div className="modal-body">
                     {
                         allGroups.map(g =>
