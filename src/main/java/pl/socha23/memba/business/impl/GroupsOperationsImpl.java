@@ -65,11 +65,8 @@ public class GroupsOperationsImpl extends AbstractItemInGroupOperationsImpl<Basi
                     var result = updateFields(t.getT1(), t.getT2());
                     return setOwnershipIfNeeded(result, t.getT1(), t.getT2());
                 })
-                .transform(g -> groupStore
-                            .updateGroup(g)
-                            .zipWith(ownershipManager.copyOwnershipToChildren(g))
-                            .map(Tuple2::getT1)
-                );
+                .transform(g -> groupStore.updateGroup(g))
+                .transform(g -> ownershipManager.copyOwnershipToChildren(g).then(g));
     }
 
     private BasicGroup updateFields(Group group, CreateOrUpdateGroup updateGroup) {

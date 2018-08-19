@@ -60,10 +60,12 @@ class GroupOwnershipSpec extends Specification {
                 .withTodo(new BasicTodo(id: "t1", groupId: "src"))
                 .withTodo(new BasicTodo(id: "t2", groupId: "sub"))
         when:
-        ops.groupOps
+        def result = ops.groupOps
                 .updateGroup("src", new TestCreateUpdateGroup(groupId: "dest").toMono()).block()
 
         then:
+        result != null
+
         ops.findGroupById("src").ownerIds == ["A", "B"] as Set
         ops.findGroupById("sub").ownerIds == ["A", "B"] as Set
         ops.findTodoById("t1").ownerIds == ["A", "B"] as Set
@@ -79,14 +81,17 @@ class GroupOwnershipSpec extends Specification {
                 .withTodo(new BasicTodo(id: "t1", groupId: "src"))
                 .withTodo(new BasicTodo(id: "t2", groupId: "sub"))
         when:
-        ops.groupOps
+        def result = ops.groupOps
                 .updateGroup("src", new TestCreateUpdateGroup(ownerIds: ["changed"]).toMono()).block()
 
         then:
+        result != null
+
         ops.findGroupById("src").ownerIds == ["changed"] as Set
         ops.findGroupById("sub").ownerIds == ["changed"] as Set
         ops.findTodoById("t1").ownerIds == ["changed"] as Set
         ops.findTodoById("t2").ownerIds == ["changed"] as Set
+
     }
 
 }

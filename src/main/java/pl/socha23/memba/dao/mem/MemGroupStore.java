@@ -64,7 +64,9 @@ public class MemGroupStore implements GroupStore<BasicGroup> {
     }
 
     private BasicGroup doUpdateGroup(Group group) {
-        return groupsById.put(group.getId(), BasicGroup.copy(group));
+        var result = BasicGroup.copy(group);
+        groupsById.put(group.getId(), result);
+        return result;
     }
 
     private List<BasicGroup> getUserGroups(String userId) {

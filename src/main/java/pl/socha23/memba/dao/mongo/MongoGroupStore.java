@@ -67,7 +67,7 @@ class MongoGroupStore implements GroupStore<MongoGroupImpl> {
 
     @Override
     public Mono<Void> setOwnersInDirectGroupMembers(String groupId, Set<String> ownerIds) {
-        return null;
+        return updateAllInGroup(groupId, new Update().set("ownerIds", ownerIds));
     }
 
     private Mono<Void> updateAllInGroup(String groupId, Update update) {

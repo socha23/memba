@@ -47,7 +47,9 @@ public class MemTodoStore implements TodoStore<BasicTodo> {
     }
 
     private BasicTodo doUpdateTodo(Todo todo) {
-        return todosById.put(todo.getId(), BasicTodo.copy(todo));
+        var result = BasicTodo.copy(todo);
+        todosById.put(todo.getId(), result);
+        return result;
     }
 
     private List<BasicTodo> getUserTodos(String userId) {
