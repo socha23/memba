@@ -17,7 +17,7 @@ const TodoListPageViewReorderMode = ({
                 const first = (idx === 0);
                 const last = (idx === groups.length - 1);
                 return <GroupListItem key={g.id} group={g}>
-                    <div>
+                    <div style={{display: "flex", flexWrap: "nowrap"}}>
                         {first ? <None/> :
                             <Icon className="fas fa-chevron-up"
                                   onClick={() => {onSwapGroups(idx, idx - 1)}}/>}
