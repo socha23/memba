@@ -93,7 +93,7 @@ const BlockTitle = ({group}) => {
             fontSize: 36,
             position: "relative",
             zIndex: Z_BLOCK_TITLE,
-            /* borderBottom: "1px solid #444",*/
+            marginBottom: 1
         }}>
             <span>{group.text}</span>
             {shareInfo}
@@ -108,6 +108,7 @@ const SmallToolbar = ({group}) => <div className="container" style={{
     left: 0,
     height: SMALL_TITLE_HEIGHT,
     backgroundColor: group.color,
+    borderBottom: "1px solid #444",
 }}/>;
 
 
