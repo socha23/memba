@@ -103,7 +103,7 @@ const BlockTitle = ({group}) => {
             color: "white",
             fontSize: 36,
         }}>
-            <span className={"bigTitle"}>{group.text}</span>
+            <span style={{textAlign: "center",}} className={"bigTitle"}>{group.text}</span>
             {shareInfo}
         </div>
     </div>;
