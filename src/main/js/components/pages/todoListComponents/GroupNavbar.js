@@ -49,21 +49,22 @@ class GroupNavbar extends React.Component {
                     textOverflow: "ellipsis",
                     whiteSpace: "nowrap",
                     display: "none"
-                }} ref={s => {this.smallTitleMounted(s)}}>{this.props.group.text}</div>
+                }} className="smallTitle">{this.props.group.text}</div>
             </NavButtons>
             <BlockTitle group={this.props.group}/>
         </div>
 
     };
 
-    smallTitleMounted(elem) {
-        this.smallTitleElem = elem;
+    componentDidMount() {
         $(window).scroll(() => {
             const pos = $(window).scrollTop();
             if (pos > BLOCK_TITLE_HEIGHT - 50) {
-                $(this.smallTitleElem).fadeIn();
+                $(".smallTitle").fadeIn();
+                $(".bigTitle").fadeOut();
             } else {
-                $(this.smallTitleElem).fadeOut();
+                $(".smallTitle").fadeOut();
+                $(".bigTitle").fadeIn();
             }
         });
     }
@@ -71,7 +72,7 @@ class GroupNavbar extends React.Component {
 
 const BlockTitle = ({group}) => {
     const shareInfo = sharingLogic.getUsersItemIsSharedWith(group).length === 0 ?
-        <span/> : <div style = {{
+        <span/> : <div className="bigTitle" style = {{
             maxWidth: 300,
             position: "absolute",
             bottom: 2,
@@ -95,7 +96,7 @@ const BlockTitle = ({group}) => {
             zIndex: Z_BLOCK_TITLE,
             marginBottom: 1
         }}>
-            <span>{group.text}</span>
+            <span className={"bigTitle"}>{group.text}</span>
             {shareInfo}
         </div>;
 };

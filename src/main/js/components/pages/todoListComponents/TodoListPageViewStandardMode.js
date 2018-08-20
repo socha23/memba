@@ -42,6 +42,7 @@ const TodoListPageViewStandardMode = ({
                 </div>
             </TodoListItem>)}
         </AnimatedList>
+        <div style={{height: 100}}/>
     </PageBody>
 };
 
