@@ -66,6 +66,7 @@ export default class ServerData {
     }
 
     updateGroup(group) {
+        console.log(group);
         return this._updateItem("/groups", group);
     }
 

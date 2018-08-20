@@ -1,18 +1,14 @@
 package pl.socha23.memba.dao.mongo;
 
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import pl.socha23.memba.business.api.dao.ProfileStore;
-import pl.socha23.memba.business.api.model.Group;
+import pl.socha23.memba.business.api.model.BasicUser;
 import pl.socha23.memba.business.api.model.User;
+import pl.socha23.memba.business.api.model.UserData;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.Set;
-
-import static org.springframework.data.mongodb.core.query.Criteria.where;
+import java.util.List;
 
 class MongoProfileStore implements ProfileStore {
 
@@ -23,18 +19,38 @@ class MongoProfileStore implements ProfileStore {
     }
 
     @Override
-    public Mono<User> updateProfile(User user) {
-        return template.save(MongoUserImpl.copy(user));
+    public Mono<User> updateUserData(UserData user) {
+        return template.findById(user.getId(), MongoUserImpl.class)
+                .defaultIfEmpty(MongoUserImpl.from(user))
+                .map(u -> u.updateUserData(user))
+                .compose(template::save);
+
     }
 
     @Override
     public Mono<? extends User> findProfileById(String id) {
-        return template.findById(id, MongoUserImpl.class);
+        return template
+                .findById(id, MongoUserImpl.class)
+                .flatMap(p ->
+                    listAllUsers()
+                            .filter(u -> !u.getId().equals(id))
+                            .collectList()
+                            .map(friends -> {
+                                p.setFriends(friends);
+                                return p;
+                            }));
     }
 
     @Override
-    public Flux<? extends User> listAllUsers() {
+    public Flux<? extends UserData> listAllUsers() {
         return template.findAll(MongoUserImpl.class);
+    }
+
+    @Override
+    public Mono<? extends User> updateRootOrder(String id, List<String> todoOrder, List<String> groupOrder) {
+        return template.findById(id, MongoUserImpl.class)
+                .map(u -> u.setRootOrder(todoOrder, groupOrder))
+                .compose(template::save);
     }
 
 

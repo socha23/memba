@@ -2,10 +2,12 @@ package pl.socha23.memba.dao.cache;
 
 import pl.socha23.memba.business.api.dao.ProfileStore;
 import pl.socha23.memba.business.api.model.User;
+import pl.socha23.memba.business.api.model.UserData;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -19,22 +21,22 @@ public class CachingProfileStore implements ProfileStore {
     }
 
     @Override
-    public Mono<User> updateProfile(User user) {
+    public Mono<? extends User> updateUserData(UserData user) {
         if (needsToUpdate(user)) {
             return store
-                    .updateProfile(user)
+                    .updateUserData(user)
                     .map(this::putInCache);
         } else {
             return Mono.just(cachedProfiles.get(user.getId()));
         }
     }
 
-    private User putInCache(User user) {
-        cachedProfiles.put(user.getId(), user);
-        return user;
+    private User putInCache(User profile) {
+        cachedProfiles.put(profile.getId(), profile);
+        return profile;
     }
 
-    private boolean needsToUpdate(User user) {
+    private boolean needsToUpdate(UserData user) {
         if (!cachedProfiles.containsKey(user.getId())) {
             return true;
         }
@@ -52,9 +54,14 @@ public class CachingProfileStore implements ProfileStore {
     }
 
     @Override
-    public Flux<? extends User> listAllUsers() {
+    public Flux<? extends UserData> listAllUsers() {
         return store
-                .listAllUsers()
+                .listAllUsers();
+    }
+
+    @Override
+    public Mono<? extends User> updateRootOrder(String id, List<String> todoOrder, List<String> groupOrder) {
+        return store.updateRootOrder(id, todoOrder, groupOrder)
                 .map(this::putInCache);
     }
 }

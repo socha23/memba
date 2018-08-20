@@ -10,7 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Component;
-import pl.socha23.memba.business.api.model.User;
+import pl.socha23.memba.business.api.model.UserData;
 import pl.socha23.memba.web.security.springsecurity.UserBasedAuthentication;
 
 import java.util.Collections;
@@ -53,7 +53,7 @@ class GoogleJWTAuthenticationManager implements AuthenticationManager {
         return null;
     }
 
-    private static class PayloadBasedUser implements User {
+    private static class PayloadBasedUser implements UserData {
 
         private GoogleIdToken.Payload payload;
 

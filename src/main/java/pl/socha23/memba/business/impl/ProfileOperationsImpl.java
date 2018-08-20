@@ -4,11 +4,11 @@ import org.springframework.stereotype.Component;
 import pl.socha23.memba.business.api.dao.ProfileStore;
 import pl.socha23.memba.business.api.logic.CurrentUserProvider;
 import pl.socha23.memba.business.api.logic.ProfileOperations;
-import pl.socha23.memba.business.api.model.BasicProfile;
-import pl.socha23.memba.business.api.model.Profile;
 import pl.socha23.memba.business.api.model.User;
-import reactor.core.publisher.Flux;
+import pl.socha23.memba.business.api.model.UserData;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @Component
 public class ProfileOperationsImpl implements ProfileOperations {
@@ -23,19 +23,14 @@ public class ProfileOperationsImpl implements ProfileOperations {
     }
 
     @Override
-    public Mono<Profile> getCurrentUserProfile() {
-        BasicProfile p = BasicProfile.from(currentUserProvider.currentUser());
-        return getFriends(p.getId())
-                .collectList()
-                .map(f -> {
-                    p.setFriends(f);
-                    return p;
-                });
+    public Mono<? extends User> getCurrentUser() {
+        String id = currentUserProvider.currentUser().getId();
+        return profileStore.findProfileById(id);
     }
 
     @Override
-    public Mono<User> updateProfile(User user) {
-        return profileStore.updateProfile(user);
+    public Mono<? extends User> updateProfile(UserData user) {
+        return profileStore.updateUserData(user);
     }
 
     @Override
@@ -43,8 +38,8 @@ public class ProfileOperationsImpl implements ProfileOperations {
         return profileStore.findProfileById(id);
     }
 
-    private Flux<? extends User> getFriends(String userId) {
-        return profileStore.listAllUsers()
-                .filter(t -> !userId.equals(t.getId()));
+    @Override
+    public Mono<? extends User> updateRootOrders(String userId, List<String> todoOrder, List<String> groupOrder) {
+        return profileStore.updateRootOrder(userId, todoOrder, groupOrder);
     }
 }

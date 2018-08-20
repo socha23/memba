@@ -20,14 +20,14 @@ public class TestOps {
     private MemTodoStore todoStore = new MemTodoStore();
     private MemGroupStore groupStore = new MemGroupStore();
     private TestUserProvider userProvider = new TestUserProvider();
-    private MemProfileStore profileStore = new MemProfileStore();
+    private MemProfileStore profileStore = new MemProfileStore(userProvider);
     private OwnershipManager ownershipManager = new OwnershipManagerImpl(groupStore, todoStore);
 
 
-    private TodosOperations todoOps = new TodosOperationsImpl(todoStore, userProvider, ownershipManager);;
-    private GroupsOperations groupOps = new GroupsOperationsImpl(todoStore, groupStore, userProvider, ownershipManager);
+    private TodosOperations todoOps = new TodosOperationsImpl(todoStore, userProvider, ownershipManager);
     private ProfileOperations profileOps = new ProfileOperationsImpl(new CachingProfileStore(profileStore), userProvider);
-    
+    private GroupsOperations groupOps = new GroupsOperationsImpl(todoStore, groupStore, userProvider, ownershipManager, profileOps);
+
     public TodosOperations getTodoOps() {
         return todoOps;
     }

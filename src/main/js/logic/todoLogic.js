@@ -85,12 +85,8 @@ class TodoLogic {
 
     findTodoById(id) { return this.dataStore.findTodoById(id)};
 
-    findGroupById(id) { if (this.isRootId(id)) {
-        return {color: "#3A3F44", text: "root", groupId: "none"}
-    } else {
+    findGroupById(id) {
         return this.dataStore.findGroupById(id);
-    }
-
     };
 
     countNotCompletedInGroup(groupId) {

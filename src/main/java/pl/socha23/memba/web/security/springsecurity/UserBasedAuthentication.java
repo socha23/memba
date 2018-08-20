@@ -3,17 +3,17 @@ package pl.socha23.memba.web.security.springsecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import pl.socha23.memba.business.api.model.User;
+import pl.socha23.memba.business.api.model.UserData;
 
 import java.util.Collection;
 import java.util.Collections;
 
 public class UserBasedAuthentication implements Authentication {
 
-    private User user;
+    private UserData user;
     private boolean authenticated = false;
 
-    public UserBasedAuthentication(User user) {
+    public UserBasedAuthentication(UserData user) {
         this.user = user;
     }
 
@@ -52,7 +52,7 @@ public class UserBasedAuthentication implements Authentication {
         return user.getId();
     }
 
-    public User getUser() {
+    public UserData getUser() {
         return user;
     }
 }

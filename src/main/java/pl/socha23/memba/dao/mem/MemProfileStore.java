@@ -1,42 +1,64 @@
 package pl.socha23.memba.dao.mem;
 
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import pl.socha23.memba.business.api.dao.ProfileStore;
-import pl.socha23.memba.business.api.dao.TodoStore;
-import pl.socha23.memba.business.api.model.BasicTodo;
-import pl.socha23.memba.business.api.model.Item;
-import pl.socha23.memba.business.api.model.Todo;
+import pl.socha23.memba.business.api.logic.CurrentUserProvider;
+import pl.socha23.memba.business.api.model.BasicUser;
 import pl.socha23.memba.business.api.model.User;
+import pl.socha23.memba.business.api.model.UserData;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Instant;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Component
-@Profile("mem")
+@org.springframework.context.annotation.Profile("mem")
 public class MemProfileStore implements ProfileStore {
 
     private Map<String, Instant> updateTimes = new HashMap<>();
-    private Map<String, User> profiles = new HashMap<>();
+    private Map<String, BasicUser> profiles = new HashMap<>();
 
-    @Override
-    public Mono<User> updateProfile(User user) {
-        profiles.put(user.getId(), user);
-        updateTimes.put(user.getId(), Instant.now());
-        return Mono.just(user);
+    public MemProfileStore(CurrentUserProvider currentUserProvider) {
+        profiles.put(currentUserProvider.getCurrentUserId(), BasicUser.from(currentUserProvider.currentUser()));
     }
 
     @Override
-    public Mono<User> findProfileById(String id) {
-        return profiles.containsKey(id) ? Mono.just(profiles.get(id)) : Mono.empty();
+    public Mono<? extends User> updateUserData(UserData user) {
+        profiles.put(user.getId(), BasicUser.from(user));
+        updateTimes.put(user.getId(), Instant.now());
+        return Mono.just(profiles.get(user.getId()));
+    }
+
+    @Override
+    public Mono<? extends User> findProfileById(String id) {
+        BasicUser p = profiles.get(id);
+        if (p == null) {
+            return Mono.empty();
+        } else {
+            return listAllUsers()
+                    .filter(u -> !u.getId().equals(id))
+                    .collectList()
+                    .map(users -> {
+                        p.setFriends(users);
+                        return p;
+                    });
+        }
     }
 
     @Override
     public Flux<? extends User> listAllUsers() {
         return Flux.fromIterable(profiles.values());
+    }
+
+    @Override
+    public Mono<? extends User> updateRootOrder(String id, List<String> todoOrder, List<String> groupOrder) {
+        BasicUser p = profiles.get(id);
+        p.setRootGroupOrder(groupOrder);
+        p.setRootTodoOrder(todoOrder);
+        return Mono.just(p);
     }
 
     public Instant getUpdateTime(String id) {

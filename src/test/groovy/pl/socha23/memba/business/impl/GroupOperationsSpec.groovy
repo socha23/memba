@@ -67,6 +67,17 @@ class GroupOperationsSpec extends Specification {
         changedGroup.todoOrder == ["1", "2", "3"]
     }
 
+    def "updating root with orders"() {
+        given:
+        def ops = new TestOps().groupOps
+
+        when:
+        def result = ops.updateGroup("root", new TestCreateUpdateGroup(groupOrder: ["a", "b", "c"], todoOrder: ["1", "2", "3"]).toMono()).block()
+
+        then:
+        result.groupOrder == ["a", "b", "c"]
+        result.todoOrder == ["1", "2", "3"]
+    }
 
     def "deleting a group"() {
         given:

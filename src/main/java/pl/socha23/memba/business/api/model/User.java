@@ -1,10 +1,11 @@
 package pl.socha23.memba.business.api.model;
 
-public interface User {
+import java.util.List;
 
-    String getId();
-    String getFirstName();
-    String getFullName();
-    String getPictureUrl();
+public interface User extends UserData {
 
+    List<String> getRootGroupOrder();
+    List<String> getRootTodoOrder();
+
+    List<? extends UserData> getFriends();
 }
