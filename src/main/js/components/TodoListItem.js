@@ -16,6 +16,7 @@ const TodoView = ({todo, onClick = () => {}, children}) => {
             <div style={{flexGrow: 1}} onClick={() => {onClick(todo)}}>
                 <h5 style={{
                     opacity: opacity,
+                    marginTop: 5,
                     marginBottom: 7,
                     fontWeight: 300,
                     color: (todo.color == null ? DEFAULT_COLOR : todo.color)
