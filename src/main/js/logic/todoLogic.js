@@ -6,6 +6,8 @@ import {ROOT_GROUP_ID} from "./constants";
 
 class TodoLogic {
 
+
+
     ROOT_GROUP_ID = ROOT_GROUP_ID;
 
     dataStore = new DataStore();
@@ -82,7 +84,14 @@ class TodoLogic {
     }
 
     findTodoById(id) { return this.dataStore.findTodoById(id)};
-    findGroupById(id) { return this.dataStore.findGroupById(id)};
+
+    findGroupById(id) { if (this.isRootId(id)) {
+        return {color: "#3A3F44", text: "root", groupId: "none"}
+    } else {
+        return this.dataStore.findGroupById(id);
+    }
+
+    };
 
     countNotCompletedInGroup(groupId) {
         return this.statistics.countNotCompletedInGroup(groupId);

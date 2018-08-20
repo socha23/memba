@@ -6,6 +6,7 @@ import {BottomButtonBar} from "../structural/PageBottomBar";
 import AddItemButton from '../AddItemButton'
 import TodoListPageViewStandardMode from "./todoListComponents/TodoListPageViewStandardMode";
 import GroupNavbar from "./todoListComponents/GroupNavbar";
+import ListIsEmpty from "../ListIsEmpty";
 
 class TodoListPage extends React.Component {
     state = {
@@ -58,7 +59,7 @@ const TodoListView = ({
     const todos = todoLogic.listTodos({groupId: groupId, showCompleted: showCompleted});
 
     if (groups.length === 0 && todos.length === 0) {
-        return <NothingHere/>
+        return <ListIsEmpty/>
     } else {
         return <TodoListPageViewStandardMode groups={groups} todos={todos}/>
     }
@@ -68,14 +69,4 @@ const TodoListView = ({
 const TodoListPageBottomToolbar = ({addEnabled, groupId}) => <BottomButtonBar>
     <AddItemButton groupId={groupId}/>
 </BottomButtonBar>;
-
-const NothingHere = () => <div style={{
-    display: "flex",
-    justifyContent: "center",
-    paddingTop: 100,
-    fontSize: 20
-}}>
-    List is empty
-</div>;
-
 

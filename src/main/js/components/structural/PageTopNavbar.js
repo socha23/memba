@@ -30,7 +30,7 @@ export const PageTitle = ({children}) => <span
         overflow: "hidden"
     }}>{children}</span>;
 
-export const TitleWithBackNavbar = ({title = "Memba", to = "/", query = {}, children}) => <PageTopNavbar>
+export const TitleWithBackNavbar = ({title = "Memba", to = "/", query = {}, children, color="#3A3F44"}) => <PageTopNavbar color={color}>
     <BackAndTitle title={title} to={to} query={query}/>
     {children}
 </PageTopNavbar>;

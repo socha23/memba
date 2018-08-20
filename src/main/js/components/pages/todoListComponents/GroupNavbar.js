@@ -31,9 +31,6 @@ const RootNavbar = ({showCompleted, onToggleShowCompleted}) => <div>
     </BrandedNavbar>
 </div>;
 
-
-
-
 class SizeChangingNavbar extends React.Component {
     static propTypes = {
         group: PropTypes.object.isRequired,
@@ -90,40 +87,49 @@ const BlockTitle = ({group}) => {
         }}>with: {sharingLogic.getUsersItemIsSharedWithDescFull(group)}</div>;
 
 
-    return <div id="blockTitle" className="container" style={{
+    return <div id="blockTitle" style={{
         backgroundColor: group.color,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        minHeight: BLOCK_TITLE_HEIGHT,
-        paddingTop: 20,
-        paddingBottom: 20,
-        color: "white",
-        fontSize: 36,
         position: "relative",
         zIndex: Z_BLOCK_TITLE,
         marginBottom: 1
     }}>
-        <span className={"bigTitle"}>{group.text}</span>
-        {shareInfo}
+        <div className="container"  style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            minHeight: BLOCK_TITLE_HEIGHT,
+            paddingTop: 20,
+            paddingBottom: 20,
+            color: "white",
+            fontSize: 36,
+        }}>
+            <span className={"bigTitle"}>{group.text}</span>
+            {shareInfo}
+        </div>
     </div>;
 };
 
-const SmallToolbar = ({color, children, className=""}) => <div className={"container " + className} style={{
+const SmallToolbar = ({color, children, className=""}) => <div className={className} style={{
     zIndex: Z_SMALL_TOOLBAR,
     position: "fixed",
     top: 0,
     right: 0,
     left: 0,
     padding: 0,
-    height: SMALL_TITLE_HEIGHT,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
     backgroundColor: color,
     borderBottom: "1px solid #444",
-    textShadow: "2px 2px 2px rgba(0, 0, 0, 0.5)",
-}}>{children}</div>;
+}}>
+    <div className={"container"} style={{
+        height: SMALL_TITLE_HEIGHT,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        textShadow: "2px 2px 2px rgba(0, 0, 0, 0.5)",
+    }}>
+    {children}
+    </div>
+
+</div>;
 
 
 const NavButtons = ({group, showCompleted, onToggleShowCompleted, children}) => <div className="container" style={{
@@ -162,6 +168,7 @@ const BackButton = withRouterWithQuery(({groupId, history, children}) => <div
 
 const RootRightButtons = ({showCompleted, onToggleShowCompleted}) => {
     return <div id="smallToolbar" className="btn-toolbar" style={{display: "flex", flexWrap: "nowrap"}}>
+        <ReorderGroupButton groupId={"root"}/>
         <ShowCompletedButton showCompleted={showCompleted} onToggleShowCompleted={onToggleShowCompleted}/>
     </div>
 };
@@ -169,6 +176,7 @@ const RootRightButtons = ({showCompleted, onToggleShowCompleted}) => {
 const GroupRightButtons = ({groupId, showCompleted, onToggleShowCompleted}) => {
     return <div id="smallToolbar" className="btn-toolbar" style={{display: "flex", flexWrap: "nowrap"}}>
         <EditGroupButton groupId={groupId}/>
+        <ReorderGroupButton groupId={groupId}/>
         <ShowCompletedButton showCompleted={showCompleted} onToggleShowCompleted={onToggleShowCompleted}/>
     </div>
 };
@@ -185,4 +193,8 @@ const EditGroupButton = withRouterWithQuery(({history, groupId}) => <ToolbarButt
     onClick={() => {history.push(encodeQuery("/group/" + groupId, {groupId: groupId}))}}
 />);
 
+const ReorderGroupButton = withRouterWithQuery(({history, groupId}) => <ToolbarButton
+    className="fas fa-sort"
+    onClick={() => {history.push(encodeQuery("/reorder/" + groupId))}}
+/>);
 

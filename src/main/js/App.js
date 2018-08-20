@@ -10,6 +10,7 @@ import AddTodoPage from './components/pages/AddTodoPage'
 import EditTodoPage from './components/pages/EditTodoPage'
 import AddGroupPage from './components/pages/AddGroupPage'
 import EditGroupPage from './components/pages/EditGroupPage'
+import ReorderPage from "./components/pages/ReorderPage";
 
 export default () => <div className="container" style={{padding: 0}}>
     <WithBottomBar>
@@ -21,6 +22,7 @@ export default () => <div className="container" style={{padding: 0}}>
                     <Route path="/todo/:todoId" component={EditTodoPage}/>
                     <Route path="/addGroup" component={AddGroupPage}/>
                     <Route path="/group/:groupId" component={EditGroupPage}/>
+                    <Route path="/reorder/:groupId" component={ReorderPage}/>
                 </Switch>
             </WaitForInitialDataToLoad>
         </SignInRequired>
