@@ -47,6 +47,12 @@ class TodoListPage extends React.Component {
     componentWillUnmount() {
         todoLogic.unsubscribe(this)
     }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.location.query.groupId !== prevProps.location.query.groupId) {
+            $(window).scrollTop(0);
+        }
+    }
 }
 
 export default withRouterWithQuery(TodoListPage);
