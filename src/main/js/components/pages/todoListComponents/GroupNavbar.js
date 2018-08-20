@@ -93,8 +93,7 @@ const BlockTitle = ({group}) => {
             fontSize: 36,
             position: "relative",
             zIndex: Z_BLOCK_TITLE,
-            borderBottom: "1px solid #444",
-
+            /* borderBottom: "1px solid #444",*/
         }}>
             <span>{group.text}</span>
             {shareInfo}
