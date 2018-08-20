@@ -58,11 +58,14 @@ class ReorderPage extends React.Component {
     }
 
     onSave() {
-        const groupOrder = this.state.groups.map(g => g.id);
-        const todoOrder = this.state.todos.map(t => t.id);
-        console.log("Saving changes:", groupOrder, todoOrder);
-        message("Changes saved");
-        this.props.history.push(encodeQuery("/", {groupId: this.getGroupId()}));
+        const group = todoLogic.findGroupById(this.getGroupId());
+        group.groupOrder = this.state.groups.map(g => g.id);
+        group.todoOrder = this.state.todos.map(t => t.id);
+        todoLogic.updateGroup(group.id, group)
+            .then(() => {
+                message("Changes saved");
+                this.props.history.push(encodeQuery("/", {groupId: this.getGroupId()}));
+            });
     }
 
     getGroupId() {

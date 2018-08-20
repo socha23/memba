@@ -1,9 +1,14 @@
 package pl.socha23.memba.business.api.model;
 
+import java.util.List;
+
 public class BasicGroup extends BasicItemInGroup implements Group {
 
     private String text;
     private String color;
+
+    private List<String> groupOrder;
+    private List<String> todoOrder;
     
     @Override
     public String getText() {
@@ -23,16 +28,38 @@ public class BasicGroup extends BasicItemInGroup implements Group {
         this.color = color;
     }
 
+    @Override
+    public List<String> getGroupOrder() {
+        return groupOrder;
+    }
+
+    public void setGroupOrder(List<String> groupOrder) {
+        this.groupOrder = groupOrder;
+    }
+
+    @Override
+    public List<String> getTodoOrder() {
+        return todoOrder;
+    }
+
+    public void setTodoOrder(List<String> todoOrder) {
+        this.todoOrder = todoOrder;
+    }
+
     public static BasicGroup copy(Group group) {
         return copy(group, new BasicGroup());
     }
 
     protected static <T extends BasicGroup, Q extends Group> T copy(Q from, T to) {
         BasicItemInGroup.copy(from, to);
+        to.setGroupOrder(from.getGroupOrder());
+        to.setTodoOrder(from.getTodoOrder());
         to.setText(from.getText());
         to.setColor(from.getColor());
         return to;
     }
+
+
 
 
 

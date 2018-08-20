@@ -1,3 +1,5 @@
+import {sort} from "./sorting";
+
 export default class DataStore {
 
     ROOT_GROUP_ID = "root";
@@ -16,17 +18,20 @@ export default class DataStore {
                   groupId = this.ROOT_GROUP_ID,
               }) {
         const completionFilter = t => (t.completed && showCompleted) || ((!t.completed) && showNotCompleted);
-        return this.todos
+        const todos = this.todos
             .filter(this._groupFilter(groupId))
             .filter(completionFilter);
+        return sort(todos, (this.findGroupById(groupId) || {}).todoOrder)
+
     }
 
     listGroups({
                   groupId = this.ROOT_GROUP_ID,
               }) {
 
-        return this.groups
+        const groups = this.groups
             .filter(this._groupFilter(groupId));
+        return sort(groups, (this.findGroupById(groupId) || {}).groupOrder)
     }
 
     _groupFilter(groupId) {

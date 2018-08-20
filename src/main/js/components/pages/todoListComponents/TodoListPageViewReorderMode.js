@@ -33,7 +33,7 @@ const TodoListPageViewReorderMode = ({
                 const first = (idx === 0);
                 const last = (idx === todos.length - 1);
                 return <TodoListItem key={t.id} todo={t}>
-                    <div>
+                    <div style={{display: "flex", flexWrap: "nowrap"}}>
                         {first ? <None/> :
                             <Icon className="fas fa-chevron-up"
                                   onClick={() => {onSwapTodos(idx, idx - 1)}}/>}

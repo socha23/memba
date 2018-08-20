@@ -10,13 +10,13 @@ import static pl.socha23.memba.FluxUtils.toList
 
 class ListItemsSpec extends Specification {
 
-    def "empty list"() {
+    def "root group always returned"() {
         given:
         def ops = new TestOps()
         def controller = new ItemsController(ops.todoOps, ops.groupOps)
 
         expect:
-        toList(controller.currentUserItems()).size() == 0
+        toList(controller.currentUserItems()).size() == 1
     }
 
     def "list items lists todos"() {
@@ -27,7 +27,7 @@ class ListItemsSpec extends Specification {
         def controller = new ItemsController(ops.todoOps, ops.groupOps)
 
         expect:
-        toList(controller.currentUserItems()).size() == 2
+        toList(controller.currentUserItems()).size() == 3 // because also root
     }
 
     def "list items lists groups"() {
@@ -38,7 +38,7 @@ class ListItemsSpec extends Specification {
         def controller = new ItemsController(ops.todoOps, ops.groupOps)
 
         expect:
-        toList(controller.currentUserItems()).size() == 2
+        toList(controller.currentUserItems()).size() == 3
     }
 
     def "list items lists both items and groups"() {
@@ -51,7 +51,7 @@ class ListItemsSpec extends Specification {
         def controller = new ItemsController(ops.todoOps, ops.groupOps)
 
         expect:
-        toList(controller.currentUserItems())*.text == ["g2", "g1", "t2", "t1"]
+        toList(controller.currentUserItems())*.text == ["ROOT", "g2", "g1", "t2", "t1"]
     }
 
     def "list items lists types"() {
@@ -63,6 +63,6 @@ class ListItemsSpec extends Specification {
         def controller = new ItemsController(ops.todoOps, ops.groupOps)
         expect:
 
-        toList(controller.currentUserItems())*.itemType == ["group", "todo"]
+        toList(controller.currentUserItems())*.itemType == ["group", "group", "todo"]
     }
 }

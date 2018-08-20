@@ -1,5 +1,6 @@
 package pl.socha23.memba.business.impl
 
+import pl.socha23.memba.business.api.model.BasicGroup
 import pl.socha23.memba.business.api.model.BasicTodo
 import pl.socha23.memba.business.api.model.Group
 import reactor.core.publisher.Mono
@@ -9,6 +10,17 @@ import static pl.socha23.memba.FluxUtils.toList
 
 class GroupOperationsSpec extends Specification {
 
+
+
+    def "root group is always added to returned groups"() {
+        given:
+        def ops = new TestOps()
+                .withGroup(new BasicGroup(id: "g1", groupId: "root", ownerIds: ["A", "B"]))
+
+        expect:
+        toList(ops.groupOps.listCurrentUserGroups())*.id.contains("root")
+    }
+    
     def "adding a group"() {
         given:
         def ops = new TestOps().groupOps
@@ -18,7 +30,7 @@ class GroupOperationsSpec extends Specification {
         ops.createGroup(TestCreateUpdateGroup.monoWithText("two")).block()
 
         then:
-        toList(ops.listCurrentUserGroups())*.text == ["two", "one"]
+        toList(ops.listCurrentUserGroups())*.text == ["ROOT", "two", "one"]
     }
 
     def "updating a group"() {
@@ -34,10 +46,27 @@ class GroupOperationsSpec extends Specification {
         ops.updateGroup(g.id, TestCreateUpdateGroup.monoWithText("modified")).block()
 
         then:
-        def changedGroup = toList(ops.listCurrentUserGroups())[0]
+        def changedGroup = toList(ops.listCurrentUserGroups()).find({it.id == g.id})
         changedGroup.text == "modified"
         changedGroup.color == "red"
     }
+
+    def "updating group with orders"() {
+        given:
+        def ops = new TestOps().groupOps
+
+        when:
+        Group g = ops.createGroup(new TestCreateUpdateGroup()
+                .toMono()
+        ).block()
+        ops.updateGroup(g.id, new TestCreateUpdateGroup(groupOrder: ["a", "b", "c"], todoOrder: ["1", "2", "3"]).toMono()).block()
+
+        then:
+        def changedGroup = toList(ops.listCurrentUserGroups()).find({it.id == g.id})
+        changedGroup.groupOrder == ["a", "b", "c"]
+        changedGroup.todoOrder == ["1", "2", "3"]
+    }
+
 
     def "deleting a group"() {
         given:
@@ -52,7 +81,7 @@ class GroupOperationsSpec extends Specification {
         ops.deleteGroup(g.id).block()
 
         then:
-        toList(ops.listCurrentUserGroups()).size() == 0
+        toList(ops.listCurrentUserGroups()).size() == 1 // we still have synthetic root group
     }
 
     def "deleting a group moves its children to supergroup"() {

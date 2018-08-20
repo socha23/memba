@@ -25,7 +25,7 @@ it("returns right completed / not completed todos", () => {
     expect(store.listTodos({}).map(i => i.id))
         .toEqual(["one"]);
     expect(store.listTodos({showCompleted: true}).map(i => i.id))
-        .toEqual(["one", "two"]);
+        .toEqual(["two", "one"]);
 });
 
 it("returns todos for a given group", () => {

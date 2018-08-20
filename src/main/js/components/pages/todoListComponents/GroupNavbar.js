@@ -65,11 +65,11 @@ class SizeChangingNavbar extends React.Component {
         $(window).scroll(() => {
             const pos = $(window).scrollTop();
             if (pos > BLOCK_TITLE_HEIGHT - 50) {
-                $(".smallTitle").fadeIn();
                 $(".bigTitle").fadeOut();
+                $(".smallTitle").fadeIn();
             } else {
-                $(".smallTitle").fadeOut();
                 $(".bigTitle").fadeIn();
+                $(".smallTitle").fadeOut();
             }
         });
     }

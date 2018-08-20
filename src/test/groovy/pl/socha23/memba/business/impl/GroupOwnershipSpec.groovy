@@ -5,7 +5,6 @@ import pl.socha23.memba.business.api.model.BasicTodo
 import spock.lang.Specification
 
 class GroupOwnershipSpec extends Specification {
-
     def "adding group to group copies group ownership"() {
         given:
         def ops = new TestOps()
@@ -93,5 +92,4 @@ class GroupOwnershipSpec extends Specification {
         ops.findTodoById("t2").ownerIds == ["changed"] as Set
 
     }
-
 }

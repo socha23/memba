@@ -5,10 +5,12 @@ import pl.socha23.memba.business.api.dao.GroupStore;
 import pl.socha23.memba.business.api.dao.TodoStore;
 import pl.socha23.memba.business.api.logic.CurrentUserProvider;
 import pl.socha23.memba.business.api.logic.GroupsOperations;
-import pl.socha23.memba.business.api.model.*;
+import pl.socha23.memba.business.api.model.BasicGroup;
+import pl.socha23.memba.business.api.model.CreateOrUpdateGroup;
+import pl.socha23.memba.business.api.model.Group;
+import pl.socha23.memba.business.api.model.Todo;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.util.function.Tuple2;
 
 import java.time.Instant;
 import java.util.Collections;
@@ -34,8 +36,22 @@ public class GroupsOperationsImpl extends AbstractItemInGroupOperationsImpl<Basi
     }
 
     @Override
-    public Flux<? extends Group> listCurrentUserGroups() {
-        return groupStore.listGroupsByOwnerId(currentUserProvider.getCurrentUserId());
+    public Flux<Group> listCurrentUserGroups() {
+        return Flux.<Group>empty()
+                .concatWith(Mono.just(syntheticRootGroup()))
+                .concatWith(groupStore
+                                .listGroupsByOwnerId(currentUserProvider.getCurrentUserId()));
+    }
+
+    private BasicGroup syntheticRootGroup() {
+        var result = new BasicGroup();
+        result.setId("root");
+        result.setGroupId("none");
+        result.setCreatedOn(Instant.now());
+        result.setColor("#3A3F44"); // dark gray
+        result.setText("ROOT");
+        result.setOwnerIds(Collections.singleton(currentUserProvider.getCurrentUserId()));
+        return result;
     }
 
     @Override
@@ -86,6 +102,14 @@ public class GroupsOperationsImpl extends AbstractItemInGroupOperationsImpl<Basi
 
         if (updateGroup.getOwnerIds() != null) {
             newGroup.setOwnerIds(updateGroup.getOwnerIds());
+        }
+
+        if (updateGroup.getGroupOrder() != null) {
+            newGroup.setGroupOrder(updateGroup.getGroupOrder());
+        }
+
+        if (updateGroup.getTodoOrder() != null) {
+            newGroup.setTodoOrder(updateGroup.getTodoOrder());
         }
 
         return newGroup;
