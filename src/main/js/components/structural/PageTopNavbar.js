@@ -7,7 +7,8 @@ export const PageTopNavbar = ({children}) => <div><nav className="navbar fixed-t
                                                       paddingTop: 1,
                                                       paddingRight: 2,
                                                       paddingBottom: 0,
-                                                      paddingLeft: 2
+                                                      paddingLeft: 2,
+                                                      borderBottom: "1px solid black",
                                                   }}>
     <div className="container" style={{flexWrap: "nowrap"}}>
         {children}
