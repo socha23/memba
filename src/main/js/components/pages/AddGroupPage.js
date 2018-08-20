@@ -1,5 +1,5 @@
 import React from 'react'
-import {withRouterWithQuery} from '../../routerUtils'
+import {encodeQuery, withRouterWithQuery} from '../../routerUtils'
 
 import todoLogic from '../../logic/todoLogic'
 import AbstractItemFormPage from './AbstractItemFormPage'
@@ -10,7 +10,7 @@ import {randomFrom} from "../../utils";
 
 import {currentUserId} from "../../currentUser";
 
-const AddGroupPage = ({location}) =>
+const AddGroupPage = ({history, location}) =>
     <AbstractItemFormPage
         formComponent={GroupForm}
         item={{
@@ -20,9 +20,11 @@ const AddGroupPage = ({location}) =>
             ownerIds: [currentUserId()],
         }}
         onSave={(item) => {
-            setTimeout(() => {
-                todoLogic.addGroup(item);
-            });
+            todoLogic
+                .addGroup(item)
+                .then(i => {
+                    history.push(encodeQuery("/", {groupId: i.id}))
+                });
         }}
         title="New list"
         saveButtonLabel="Add new list"

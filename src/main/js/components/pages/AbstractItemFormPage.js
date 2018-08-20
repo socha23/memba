@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {encodeQuery, withRouterWithQuery} from '../../routerUtils'
 
 import {TitleWithBackNavbar} from '../structural/PageTopNavbar'
 import PageBody from '../structural/PageBody'
@@ -60,11 +59,10 @@ class AbstractItemFormPage extends React.Component {
 
     onSubmit() {
         this.props.onSave(this.getItem());
-        this.props.history.push(encodeQuery("/", {groupId: this.getItem().groupId}));
     }
 }
 
-export default withRouterWithQuery(AbstractItemFormPage)
+export default AbstractItemFormPage
 
 const AbstractItemFormPageView = ({
                              FormComponent,

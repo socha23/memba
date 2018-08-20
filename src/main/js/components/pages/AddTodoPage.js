@@ -1,5 +1,5 @@
 import React from 'react'
-import {withRouterWithQuery} from '../../routerUtils'
+import {encodeQuery, withRouterWithQuery} from '../../routerUtils'
 
 import {currentUserId} from '../../currentUser'
 import todoLogic from '../../logic/todoLogic'
@@ -8,7 +8,7 @@ import TodoForm from '../TodoForm'
 
 import {DEFAULT_COLOR} from "../ColorPicker";
 
-const AddTodoPage = ({location}) =>
+const AddTodoPage = ({history, location}) =>
     <AbstractItemFormPage
         formComponent={TodoForm}
         item={{
@@ -18,6 +18,7 @@ const AddTodoPage = ({location}) =>
             ownerIds: [currentUserId()],
         }}
         onSave={(item) => {
+            history.push(encodeQuery("/", {groupId: item.groupId}));
             setTimeout(() => {
                 todoLogic.addTodo(item);
             });

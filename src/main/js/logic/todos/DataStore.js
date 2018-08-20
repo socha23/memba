@@ -49,24 +49,25 @@ export default class DataStore {
     };
 
     addTodo(todo) {
-        this.todos.unshift(this.fillItemDefaults(todo));
+        return this.todos.unshift(this.fillItemDefaults(todo));
     }
 
     addGroup(group) {
-        this.groups.unshift(this.fillItemDefaults(group));
+        return this.groups.unshift(this.fillItemDefaults(group));
     }
 
     updateTodo(todo) {
-        this._updateItem(todo, this.todos)
+        return this._updateItem(todo, this.todos)
     }
 
     updateGroup(group) {
-        this._updateItem(group, this.groups)
+        return this._updateItem(group, this.groups)
     }
 
     _updateItem(item, collection) {
         const idx = collection.findIndex(t => t.id === item.id);
         collection[idx] = this.fillItemDefaults(item);
+        return collection[idx]
     }
 
 

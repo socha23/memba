@@ -1,5 +1,5 @@
 import React from 'react'
-import {withRouterWithQuery} from '../../routerUtils'
+import {encodeQuery, withRouterWithQuery} from '../../routerUtils'
 
 import {message} from '../../toast'
 
@@ -20,7 +20,12 @@ const EditTodoPage = ({history, match}) => {
     return <AbstractItemFormPage
         formComponent={TodoForm}
         item={item}
-        onSave={(i) => {todoLogic.updateTodo(i.id, i).then(() => message("Changes saved"))}}
+        onSave={(i) => {
+            todoLogic.updateTodo(i.id, i).then(() => {
+                history.push(encodeQuery("/", {groupId: item.groupId}));
+                message("Changes saved");
+            });
+        }}
         title="Edit item"
         createMode={false}
         toolbarButtons={deleteButton}

@@ -47,8 +47,8 @@ class TodoLogic {
 
     addGroup(group) {
         return this.serverData.addGroup(group)
-            .then(g => this.dataStore.addGroup(g))
-            .then(() => this.subscriptions.callSubscribers());
+            .then(g => {this.dataStore.addGroup(g); return g})
+            .then(g => {this.subscriptions.callSubscribers(); return g});
     }
 
     setCompleted(todoId, completed) {
@@ -65,8 +65,8 @@ class TodoLogic {
 
     updateGroup(groupId, group) {
         return this.serverData.updateGroup(group)
-            .then(g => this.dataStore.updateGroup(g))
-            .then(() => this.subscriptions.callSubscribers())
+            .then(g => {this.dataStore.updateGroup(g); return g})
+            .then(g => {this.subscriptions.callSubscribers(); return g})
     }
 
     deleteTodo(todoId) {
