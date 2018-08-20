@@ -89,7 +89,11 @@ class TodoLogic {
     }
 
     isTopLevel(item) {
-        return (item.groupId  || ROOT_GROUP_ID) === ROOT_GROUP_ID;
+        return this.isRootId(item.groupId)
+    }
+
+    isRootId(groupId) {
+        return groupId == null || groupId === ROOT_GROUP_ID;
     }
 }
 

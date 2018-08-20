@@ -1,7 +1,7 @@
 import React from 'react'
 import {encodeQuery, withRouterWithQuery} from "../../routerUtils";
 
-export const PageTopNavbar = ({children}) => <div><nav className="navbar fixed-top navbar-expand-lg navbar-dark bg-primary"
+export const PageTopNavbar = ({children, color="#3A3F44"}) => <div><nav className="navbar fixed-top navbar-expand-lg navbar-dark"
                                                   style={{
                                                       border: "none",
                                                       paddingTop: 1,
@@ -9,6 +9,7 @@ export const PageTopNavbar = ({children}) => <div><nav className="navbar fixed-t
                                                       paddingBottom: 0,
                                                       paddingLeft: 2,
                                                       borderBottom: "1px solid black",
+                                                      backgroundColor: color,
                                                   }}>
     <div className="container" style={{flexWrap: "nowrap"}}>
         {children}
@@ -20,6 +21,9 @@ export const PageTopNavbar = ({children}) => <div><nav className="navbar fixed-t
 export const PageTitle = ({children}) => <span
     className="navbar-brand"
     style={{
+        color: "white",
+        paddingTop: 12,
+        paddingBottom: 12,
         paddingLeft: 8,
         borderRight: "none",
         textOverflow: "ellipsis",

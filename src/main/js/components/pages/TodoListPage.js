@@ -2,12 +2,9 @@ import React from 'react'
 
 import {withRouterWithQuery} from '../../routerUtils'
 import todoLogic from '../../logic/todoLogic'
-import {ROOT_GROUP_ID} from "../../logic/constants";
 import {BottomButtonBar} from "../structural/PageBottomBar";
 import AddItemButton from '../AddItemButton'
 import TodoListPageViewStandardMode from "./todoListComponents/TodoListPageViewStandardMode";
-import TodoListPageNavbar from './todoListComponents/TodoListPageNavbar'
-import TodoListPageViewReorderMode from "./todoListComponents/TodoListPageViewReorderMode";
 import GroupNavbar from "./todoListComponents/GroupNavbar";
 
 class TodoListPage extends React.Component {
@@ -17,37 +14,19 @@ class TodoListPage extends React.Component {
         reorderMode: false
     };
 
-    renderNavbar() {
-        if (this.getGroupId() === ROOT_GROUP_ID) {
-            return <TodoListPageNavbar
-                groupId={this.getGroupId()}
-                showCompleted={this.state.showCompleted}
-                onToggleShowCompleted={() => this.onToggleShowCompleted()}
-                reorderMode={this.state.reorderMode}
-                onToggleReorderMode={() => this.onToggleReorderMode()}
-            />
-        } else {
-            return <GroupNavbar
-                groupId={this.getGroupId()}
-                showCompleted={this.state.showCompleted}
-                onToggleShowCompleted={() => this.onToggleShowCompleted()}
-            />
-        }
-    }
-
     render() {
         return <div>
-            {
-                this.renderNavbar()
-            }
+            <GroupNavbar
+                            groupId={this.getGroupId()}
+                            showCompleted={this.state.showCompleted}
+                            onToggleShowCompleted={() => this.onToggleShowCompleted()}
+            />
             <TodoListView
-                reorderMode={this.state.reorderMode}
                 showCompleted={this.state.showCompleted}
                 groupId={this.getGroupId()}
             />
             <TodoListPageBottomToolbar
                 groupId={this.getGroupId()}
-                addEnabled={true}
             />
         </div>
     }
@@ -58,10 +37,6 @@ class TodoListPage extends React.Component {
 
     onToggleShowCompleted() {
         this.setState({showCompleted: !this.state.showCompleted})
-    }
-
-    onToggleReorderMode() {
-        this.setState({reorderMode: !this.state.reorderMode})
     }
 
     componentDidMount() {
@@ -77,7 +52,6 @@ export default withRouterWithQuery(TodoListPage);
 
 const TodoListView = ({
                           groupId = todoLogic.ROOT_GROUP_ID,
-                          reorderMode = false,
                           showCompleted = false,
                       }) => {
     const groups = todoLogic.listGroups({groupId: groupId});
@@ -85,15 +59,15 @@ const TodoListView = ({
 
     if (groups.length === 0 && todos.length === 0) {
         return <NothingHere/>
-    } else if (reorderMode) {
-        return <TodoListPageViewReorderMode groups={groups} todos={todos}/>
+    } else {
+        return <TodoListPageViewStandardMode groups={groups} todos={todos}/>
     }
-    return <TodoListPageViewStandardMode groups={groups} todos={todos}/>
+
 };
 
-const TodoListPageBottomToolbar = ({addEnabled, groupId}) => addEnabled ? <BottomButtonBar>
+const TodoListPageBottomToolbar = ({addEnabled, groupId}) => <BottomButtonBar>
     <AddItemButton groupId={groupId}/>
-</BottomButtonBar> : <span/>;
+</BottomButtonBar>;
 
 const NothingHere = () => <div style={{
     display: "flex",

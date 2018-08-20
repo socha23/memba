@@ -1,19 +1,19 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-
 import {encodeQuery, withRouterWithQuery} from "../../../routerUtils";
-
 import sharingLogic from '../../../logic/sharingLogic'
 import todoLogic from '../../../logic/todoLogic'
-
-import {ToolbarButton} from '../../structural/PageTopNavbar'
+import {ToolbarButton, BrandedNavbar} from '../../structural/PageTopNavbar'
 
 export default withRouterWithQuery((params) => {
+    if (todoLogic.isRootId(params.groupId)) {
+        return <RootNavbar {...params}/>
+    }
     const group = todoLogic.findGroupById(params.groupId);
     if (group == null) {
         params.history.push("/");
     } else {
-        return <GroupNavbar {...params} group={group}/>
+        return <SizeChangingNavbar {...params} group={group}/>
     }
 });
 
@@ -25,8 +25,16 @@ const Z_SMALL_TOOLBAR = 1;
 const BLOCK_TITLE_HEIGHT = 140;
 const SMALL_TITLE_HEIGHT = 50;
 
+const RootNavbar = ({showCompleted, onToggleShowCompleted}) => <div>
+    <BrandedNavbar>
+        <RootRightButtons showCompleted={showCompleted} onToggleShowCompleted={onToggleShowCompleted}/>
+    </BrandedNavbar>
+</div>;
 
-class GroupNavbar extends React.Component {
+
+
+
+class SizeChangingNavbar extends React.Component {
     static propTypes = {
         group: PropTypes.object.isRequired,
         showCompleted: PropTypes.bool,
@@ -39,7 +47,7 @@ class GroupNavbar extends React.Component {
             overflow: "hidden",
             textShadow: "2px 2px 2px rgba(0, 0, 0, 0.5)"
         }}>
-            <SmallToolbar group={this.props.group}/>
+            <SmallToolbar color={this.props.group.color}/>
             <NavButtons group={this.props.group} showCompleted={this.props.showCompleted}
                         onToggleShowCompleted={this.props.onToggleShowCompleted}>
                 <div style={{
@@ -72,7 +80,7 @@ class GroupNavbar extends React.Component {
 
 const BlockTitle = ({group}) => {
     const shareInfo = sharingLogic.getUsersItemIsSharedWith(group).length === 0 ?
-        <span/> : <div className="bigTitle" style = {{
+        <span/> : <div className="bigTitle" style={{
             maxWidth: 300,
             position: "absolute",
             bottom: 2,
@@ -83,34 +91,39 @@ const BlockTitle = ({group}) => {
 
 
     return <div id="blockTitle" className="container" style={{
-            backgroundColor: group.color,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            minHeight: BLOCK_TITLE_HEIGHT,
-            paddingTop: 20,
-            paddingBottom: 20,
-            color: "white",
-            fontSize: 36,
-            position: "relative",
-            zIndex: Z_BLOCK_TITLE,
-            marginBottom: 1
-        }}>
-            <span className={"bigTitle"}>{group.text}</span>
-            {shareInfo}
-        </div>;
+        backgroundColor: group.color,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        minHeight: BLOCK_TITLE_HEIGHT,
+        paddingTop: 20,
+        paddingBottom: 20,
+        color: "white",
+        fontSize: 36,
+        position: "relative",
+        zIndex: Z_BLOCK_TITLE,
+        marginBottom: 1
+    }}>
+        <span className={"bigTitle"}>{group.text}</span>
+        {shareInfo}
+    </div>;
 };
 
-const SmallToolbar = ({group}) => <div className="container" style={{
+const SmallToolbar = ({color, children, className=""}) => <div className={"container " + className} style={{
     zIndex: Z_SMALL_TOOLBAR,
     position: "fixed",
     top: 0,
     right: 0,
     left: 0,
+    padding: 0,
     height: SMALL_TITLE_HEIGHT,
-    backgroundColor: group.color,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: color,
     borderBottom: "1px solid #444",
-}}/>;
+    textShadow: "2px 2px 2px rgba(0, 0, 0, 0.5)",
+}}>{children}</div>;
 
 
 const NavButtons = ({group, showCompleted, onToggleShowCompleted, children}) => <div className="container" style={{
@@ -120,17 +133,17 @@ const NavButtons = ({group, showCompleted, onToggleShowCompleted, children}) => 
     right: 0,
     left: 0,
     padding: 0,
-    display: "flex",
     height: SMALL_TITLE_HEIGHT,
+    display: "flex",
     alignItems: "center",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
 }}>
-    <BackButton group={group}> {children}</BackButton>
-    <Toolbar group={group} showCompleted={showCompleted} onToggleShowCompleted={onToggleShowCompleted}/>
+    <BackButton groupId={group.groupId}> {children}</BackButton>
+    <GroupRightButtons groupId={group.id} showCompleted={showCompleted} onToggleShowCompleted={onToggleShowCompleted}/>
 </div>;
 
 
-const BackButton = withRouterWithQuery(({group, history, children}) => <div
+const BackButton = withRouterWithQuery(({groupId, history, children}) => <div
     style={{
         cursor: "pointer",
         minWidth: 50,
@@ -138,7 +151,7 @@ const BackButton = withRouterWithQuery(({group, history, children}) => <div
         alignItems: "center",
         flexWrap: "nowrap",
         overflow: "hidden"
-    }} onClick={() => {history.push(encodeQuery('/', {groupId: group.groupId}))}}>
+    }} onClick={() => {history.push(encodeQuery('/', {groupId: groupId}))}}>
     <ToolbarButton
         className="fas fa-backward"
         style={{zIndex: Z_TOOLBAR_BUTTONS}}
@@ -147,23 +160,29 @@ const BackButton = withRouterWithQuery(({group, history, children}) => <div
 </div>);
 
 
-const Toolbar = withRouterWithQuery(({history, group, showCompleted, onToggleShowCompleted}) => {
-    const showCompletedButton = <ToolbarButton
-        className="far fa-check-square"
-        style={{zIndex: Z_TOOLBAR_BUTTONS}}
-        active={showCompleted}
-        onClick={() => onToggleShowCompleted()}
-    />;
-
-    const editGroupButton = <ToolbarButton
-        className="fas fa-cog"
-        onClick={() => {history.push(encodeQuery("/group/" + group.id, {groupId: group.id}))}}
-    />;
-
+const RootRightButtons = ({showCompleted, onToggleShowCompleted}) => {
     return <div id="smallToolbar" className="btn-toolbar" style={{display: "flex", flexWrap: "nowrap"}}>
-        {editGroupButton}
-        {showCompletedButton}
+        <ShowCompletedButton showCompleted={showCompleted} onToggleShowCompleted={onToggleShowCompleted}/>
     </div>
-});
+};
+
+const GroupRightButtons = ({groupId, showCompleted, onToggleShowCompleted}) => {
+    return <div id="smallToolbar" className="btn-toolbar" style={{display: "flex", flexWrap: "nowrap"}}>
+        <EditGroupButton groupId={groupId}/>
+        <ShowCompletedButton showCompleted={showCompleted} onToggleShowCompleted={onToggleShowCompleted}/>
+    </div>
+};
+
+const ShowCompletedButton = ({showCompleted, onToggleShowCompleted}) => <ToolbarButton
+    className="far fa-check-square"
+    style={{zIndex: Z_TOOLBAR_BUTTONS}}
+    active={showCompleted}
+    onClick={() => onToggleShowCompleted()}
+/>;
+
+const EditGroupButton = withRouterWithQuery(({history, groupId}) => <ToolbarButton
+    className="fas fa-cog"
+    onClick={() => {history.push(encodeQuery("/group/" + groupId, {groupId: groupId}))}}
+/>);
 
 
