@@ -1,19 +1,12 @@
 package pl.socha23.memba.business.api.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class BasicUser implements User {
+public class BasicUserProfile implements UserProfile {
 
-    private UserData me;
-    private List<? extends UserData> friends = new ArrayList<>();
+    private User me;
     private List<String> rootGroupOrder;
     private List<String> rootTodoOrder;
-
-    @Override
-    public List<? extends UserData> getFriends() {
-        return friends;
-    }
 
     @Override
     public String getId() {
@@ -44,9 +37,6 @@ public class BasicUser implements User {
     public List<String> getRootTodoOrder() {
         return rootTodoOrder;
     }
-    public void setFriends(List<? extends User> friends) {
-        this.friends = friends;
-    }
 
     public void setRootGroupOrder(List<String> rootGroupOrder) {
         this.rootGroupOrder = rootGroupOrder;
@@ -56,8 +46,8 @@ public class BasicUser implements User {
         this.rootTodoOrder = rootTodoOrder;
     }
 
-    public static BasicUser from(UserData user) {
-        var result = new BasicUser();
+    public static BasicUserProfile from(User user) {
+        var result = new BasicUserProfile();
         result.me = user;
         return result;
     }

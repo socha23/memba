@@ -3,13 +3,13 @@ package pl.socha23.memba.web.security.springsecurity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import pl.socha23.memba.business.api.logic.CurrentUserProvider;
-import pl.socha23.memba.business.api.model.UserData;
+import pl.socha23.memba.business.api.model.User;
 
 @Component
 public class SpringSecurityCurrentUserProvider implements CurrentUserProvider {
 
     @Override
-    public UserData currentUser() {
+    public User currentUser() {
         var auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth instanceof UserBasedAuthentication) {
             return ((UserBasedAuthentication)auth).getUser();

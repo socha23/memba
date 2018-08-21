@@ -47,7 +47,7 @@ public class GroupsOperationsImpl extends AbstractItemInGroupOperationsImpl<Basi
 
     private Mono<BasicGroup> syntheticRootGroup() {
         return profileOperations
-                .getCurrentUser()
+                .getCurrentUserProfile()
                 .map(p -> {
                     var result = new BasicGroup();
                     result.setId(ItemInGroup.ROOT_ID);

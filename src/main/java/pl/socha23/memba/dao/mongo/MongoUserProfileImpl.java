@@ -1,13 +1,13 @@
 package pl.socha23.memba.dao.mongo;
 
 import org.springframework.data.mongodb.core.mapping.Document;
+import pl.socha23.memba.business.api.model.UserProfile;
 import pl.socha23.memba.business.api.model.User;
-import pl.socha23.memba.business.api.model.UserData;
 
 import java.util.List;
 
 @Document(collection = "users")
-public class MongoUserImpl implements User {
+public class MongoUserProfileImpl implements UserProfile {
     private String id;
     private String firstName;
     private String fullName;
@@ -15,8 +15,6 @@ public class MongoUserImpl implements User {
 
     private List<String> rootGroupOrder;
     private List<String> rootTodoOrder;
-
-    private List<? extends UserData> friends;
 
     @Override
     public String getId() {
@@ -70,30 +68,21 @@ public class MongoUserImpl implements User {
         this.rootTodoOrder = rootTodoOrder;
     }
 
-    @Override
-    public List<? extends UserData> getFriends() {
-        return friends;
-    }
-
-    public void setFriends(List<? extends UserData> friends) {
-        this.friends = friends;
-    }
-
-    public static MongoUserImpl from(UserData user) {
-        var result = new MongoUserImpl();
+    public static MongoUserProfileImpl from(User user) {
+        var result = new MongoUserProfileImpl();
         result.setId(user.getId());
         result.updateUserData(user);
         return result;
     }
     
-    MongoUserImpl updateUserData(UserData user) {
+    MongoUserProfileImpl updateUserData(User user) {
         setFirstName(user.getFirstName());
         setFullName(user.getFullName());
         setPictureUrl(user.getPictureUrl());
         return this;
     }
 
-    MongoUserImpl setRootOrder(List<String> todoOrder, List<String> groupOrder) {
+    MongoUserProfileImpl setRootOrder(List<String> todoOrder, List<String> groupOrder) {
         setRootTodoOrder(todoOrder);
         setRootGroupOrder(groupOrder);
         return this;

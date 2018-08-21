@@ -1,8 +1,8 @@
 package pl.socha23.memba.business.impl
 
-import pl.socha23.memba.business.api.model.UserData
+import pl.socha23.memba.business.api.model.User
 
-class TestUser implements UserData {
+class TestUser implements User {
 
     String id;
     String firstName;

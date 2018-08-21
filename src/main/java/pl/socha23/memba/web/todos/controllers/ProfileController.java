@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.socha23.memba.business.api.logic.ProfileOperations;
-import pl.socha23.memba.business.api.model.User;
+import pl.socha23.memba.business.api.model.UserProfileWithFriends;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -18,8 +18,8 @@ public class ProfileController {
     }
 
     @GetMapping("/api/profile")
-    public Mono<? extends User> getProfile() {
-        return profileOperations.getCurrentUser();
+    public Mono<? extends UserProfileWithFriends> getProfile() {
+        return profileOperations.getCurrentUserProfile();
     }
 
 

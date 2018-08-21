@@ -2,9 +2,8 @@ package pl.socha23.memba.dao.mongo;
 
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import pl.socha23.memba.business.api.dao.ProfileStore;
-import pl.socha23.memba.business.api.model.BasicUser;
+import pl.socha23.memba.business.api.model.UserProfile;
 import pl.socha23.memba.business.api.model.User;
-import pl.socha23.memba.business.api.model.UserData;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -14,41 +13,32 @@ class MongoProfileStore implements ProfileStore {
 
     private ReactiveMongoTemplate template;
 
-    public MongoProfileStore(ReactiveMongoTemplate mongoTemplate) {
+    MongoProfileStore(ReactiveMongoTemplate mongoTemplate) {
         this.template = mongoTemplate;
     }
 
     @Override
-    public Mono<User> updateUserData(UserData user) {
-        return template.findById(user.getId(), MongoUserImpl.class)
-                .defaultIfEmpty(MongoUserImpl.from(user))
+    public Mono<UserProfile> updateUserData(User user) {
+        return template.findById(user.getId(), MongoUserProfileImpl.class)
+                .defaultIfEmpty(MongoUserProfileImpl.from(user))
                 .map(u -> u.updateUserData(user))
                 .compose(template::save);
 
     }
 
     @Override
-    public Mono<? extends User> findProfileById(String id) {
-        return template
-                .findById(id, MongoUserImpl.class)
-                .flatMap(p ->
-                    listAllUsers()
-                            .filter(u -> !u.getId().equals(id))
-                            .collectList()
-                            .map(friends -> {
-                                p.setFriends(friends);
-                                return p;
-                            }));
+    public Mono<? extends UserProfile> findProfileById(String id) {
+        return template.findById(id, MongoUserProfileImpl.class);
     }
 
     @Override
-    public Flux<? extends UserData> listAllUsers() {
-        return template.findAll(MongoUserImpl.class);
+    public Flux<? extends User> listAllUsers() {
+        return template.findAll(MongoUserProfileImpl.class);
     }
 
     @Override
-    public Mono<? extends User> updateRootOrder(String id, List<String> todoOrder, List<String> groupOrder) {
-        return template.findById(id, MongoUserImpl.class)
+    public Mono<? extends UserProfile> updateRootOrder(String id, List<String> todoOrder, List<String> groupOrder) {
+        return template.findById(id, MongoUserProfileImpl.class)
                 .map(u -> u.setRootOrder(todoOrder, groupOrder))
                 .compose(template::save);
     }

@@ -1,8 +1,8 @@
 package pl.socha23.memba.dao.cache;
 
 import pl.socha23.memba.business.api.dao.ProfileStore;
+import pl.socha23.memba.business.api.model.UserProfile;
 import pl.socha23.memba.business.api.model.User;
-import pl.socha23.memba.business.api.model.UserData;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -13,7 +13,7 @@ import java.util.Objects;
 
 public class CachingProfileStore implements ProfileStore {
     
-    private Map<String, User> cachedProfiles = new HashMap<>();
+    private Map<String, UserProfile> cachedProfiles = new HashMap<>();
     private ProfileStore store;
 
     public CachingProfileStore(ProfileStore store) {
@@ -21,7 +21,7 @@ public class CachingProfileStore implements ProfileStore {
     }
 
     @Override
-    public Mono<? extends User> updateUserData(UserData user) {
+    public Mono<? extends UserProfile> updateUserData(User user) {
         if (needsToUpdate(user)) {
             return store
                     .updateUserData(user)
@@ -31,12 +31,12 @@ public class CachingProfileStore implements ProfileStore {
         }
     }
 
-    private User putInCache(User profile) {
+    private UserProfile putInCache(UserProfile profile) {
         cachedProfiles.put(profile.getId(), profile);
         return profile;
     }
 
-    private boolean needsToUpdate(UserData user) {
+    private boolean needsToUpdate(User user) {
         if (!cachedProfiles.containsKey(user.getId())) {
             return true;
         }
@@ -49,18 +49,18 @@ public class CachingProfileStore implements ProfileStore {
     }
 
     @Override
-    public Mono<? extends User> findProfileById(String id) {
+    public Mono<? extends UserProfile> findProfileById(String id) {
         return store.findProfileById(id);
     }
 
     @Override
-    public Flux<? extends UserData> listAllUsers() {
+    public Flux<? extends User> listAllUsers() {
         return store
                 .listAllUsers();
     }
 
     @Override
-    public Mono<? extends User> updateRootOrder(String id, List<String> todoOrder, List<String> groupOrder) {
+    public Mono<? extends UserProfile> updateRootOrder(String id, List<String> todoOrder, List<String> groupOrder) {
         return store.updateRootOrder(id, todoOrder, groupOrder)
                 .map(this::putInCache);
     }
