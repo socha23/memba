@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import {encodeQuery, withRouterWithQuery} from "../routerUtils";
-import Modal from 'react-bootstrap4-modal'
 
+import Modal from './Modal'
 import todoLogic from '../logic/todoLogic'
 import ButtonIcon from './ButtonIcon'
 
@@ -64,9 +64,7 @@ class AddItemButton extends React.Component {
         </div>
         <AddModal
             visible={this.state.modalShown}
-            onClickBackdrop={() => {
-                this.onCancel()
-            }}
+            onHide={() => {this.onCancel()}}
             onAddTodo={() => this.onAddTodo()}
             onAddGroup={() => this.onAddGroup()}
         />
@@ -74,8 +72,8 @@ class AddItemButton extends React.Component {
     }
 }
 
-const AddModal = ({visible, onClickBackdrop, onAddTodo, onAddGroup}) =>
-    <Modal visible={visible} dialogClassName="modal-dialog-centered" onClickBackdrop={onClickBackdrop}>
+const AddModal = ({visible, onHide, onAddTodo, onAddGroup}) =>
+    <Modal visible={visible} dialogClassName="modal-dialog-centered" onHide={onHide}>
         <div className="modal-body">
             <button className="btn btn-block btn-lg btn-secondary" onClick={onAddTodo}>
                 Add new item

@@ -50,7 +50,7 @@ export const StatusBar = ({children}) => WithBottomBar.renderStatus(
 export const BottomButtonBar = ({children}) => WithBottomBar.renderBottomNavbar(
     <nav
         className="navbar navbar-expand-lg"
-        style={{padding: 2, border: "none", backgroundColor: "#272B30"}}
+        style={{padding: 0, paddingTop: 1, border: "none", backgroundColor: "#272B30"}}
     >
         <div className="container">
             {children}
