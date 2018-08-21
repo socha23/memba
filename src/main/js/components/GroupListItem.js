@@ -26,6 +26,7 @@ const GroupView = ({group, onClick = () => {}, children}) => {
                 color: "black",
                 position: "relative",
                 zIndex: Z_INDEX_ELEMS,
+                textShadow: "2px 2px 2px rgba(0, 0, 0, 0.2)"
             }}>
                 {todoLogic.isTopLevel(group) ? <SharedWith group={group}/> : <span/>}
                 <div
