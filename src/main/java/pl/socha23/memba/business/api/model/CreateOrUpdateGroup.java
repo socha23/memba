@@ -6,6 +6,7 @@ public interface CreateOrUpdateGroup extends CreateOrUpdateItemInGroup{
 
     String getText();
     String getColor();
+    String getBackground();
     List<String> getGroupOrder();
     List<String> getTodoOrder();
 }

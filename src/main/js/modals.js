@@ -9,8 +9,8 @@ export function pushModal(modal) {
 }
 
 
-export function popModal(modal) {
-    _modals.pop(modal)
+export function popModal() {
+    _modals.pop()
 }
 
 export function onBackPressed() {

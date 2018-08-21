@@ -8,6 +8,7 @@ public class CreateOrUpdateGroupRequest extends AbstractCreateOrUpdateItemInGrou
 
     private String text = null;
     private String color = null;
+    private String background = null;
 
     private List<String> groupOrder;
     private List<String> todoOrder;
@@ -46,5 +47,14 @@ public class CreateOrUpdateGroupRequest extends AbstractCreateOrUpdateItemInGrou
 
     public void setGroupOrder(List<String> groupOrder) {
         this.groupOrder = groupOrder;
+    }
+
+    @Override
+    public String getBackground() {
+        return background;
+    }
+
+    public void setBackground(String background) {
+        this.background = background;
     }
 }

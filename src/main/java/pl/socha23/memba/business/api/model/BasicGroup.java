@@ -6,6 +6,7 @@ public class BasicGroup extends BasicItemInGroup implements Group {
 
     private String text;
     private String color;
+    private String background;
 
     private List<String> groupOrder;
     private List<String> todoOrder;
@@ -46,6 +47,15 @@ public class BasicGroup extends BasicItemInGroup implements Group {
         this.todoOrder = todoOrder;
     }
 
+    @Override
+    public String getBackground() {
+        return background;
+    }
+
+    public void setBackground(String background) {
+        this.background = background;
+    }
+
     public static BasicGroup copy(Group group) {
         return copy(group, new BasicGroup());
     }
@@ -56,6 +66,7 @@ public class BasicGroup extends BasicItemInGroup implements Group {
         to.setTodoOrder(from.getTodoOrder());
         to.setText(from.getText());
         to.setColor(from.getColor());
+        to.setBackground(from.getBackground());
         return to;
     }
 

@@ -2,11 +2,13 @@ import React from 'react'
 import ColorPicker from './ColorPicker'
 import GroupSelectFormSection from "./GroupSelectFormSection";
 import SharingFormSection from "./SharingFormSection";
+import BackgroundSelectFormSection from "./BackgroundSelectFormSection";
 
 
 const GroupForm = ({item, onChangeFields, createMode}) => <div>
     <GroupInput value={item.text} onChangeValue={v => onChangeFields({text: v})} autofocus={createMode}/>
     <ColorPicker value={item.color} onChangeValue={v => onChangeFields({color: v})}/>
+    <BackgroundSelectFormSection value={item.background} onChangeValue={v => onChangeFields({background: v})}/>
     <GroupSelectFormSection
             value={item.groupId}
             onChangeValue={v => onChangeFields({groupId: v})}

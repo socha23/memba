@@ -76,7 +76,9 @@ public class GroupsOperationsImpl extends AbstractItemInGroupOperationsImpl<Basi
         group.setGroupId(create.getGroupId());
         group.setText(create.getText());
         group.setColor(create.getColor());
+        group.setBackground(create.getBackground());
         group.setCreatedOn(Instant.now());
+
         return group;
     }
 
@@ -132,6 +134,10 @@ public class GroupsOperationsImpl extends AbstractItemInGroupOperationsImpl<Basi
 
         if (updateGroup.getTodoOrder() != null) {
             newGroup.setTodoOrder(updateGroup.getTodoOrder());
+        }
+
+        if (updateGroup.getBackground() != null) {
+            newGroup.setBackground(updateGroup.getBackground().equals("none") ? null : updateGroup.getBackground());
         }
 
         return newGroup;

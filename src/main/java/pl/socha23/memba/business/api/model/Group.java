@@ -9,6 +9,7 @@ public interface Group extends ItemInGroup {
      * Color in CSS format, for example "red" or "#d244641"
      */
     String getColor();
+    String getBackground();
 
     List<String> getGroupOrder();
     List<String> getTodoOrder();

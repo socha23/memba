@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import {encodeQuery, withRouterWithQuery} from "../routerUtils";
 
+import {popModal} from '../modals'
 import Modal from './Modal'
 import todoLogic from '../logic/todoLogic'
 import ButtonIcon from './ButtonIcon'
@@ -28,12 +29,12 @@ class AddItemButton extends React.Component {
     }
 
     onAddTodo() {
-        this.hideModal();
+        popModal();
         this.props.history.push(encodeQuery("/addTodo", {groupId: this.props.groupId}))
     }
 
     onAddGroup() {
-        this.hideModal();
+        popModal();
         this.props.history.push(encodeQuery("/addGroup", {groupId: this.props.groupId}))
     }
 
