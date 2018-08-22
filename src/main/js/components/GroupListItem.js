@@ -27,10 +27,9 @@ const GroupView = ({group, onClick = () => {}, children}) => {
                 position: "relative",
                 zIndex: Z_INDEX_ELEMS,
             }}>
-                {todoLogic.isTopLevel(group) ? <SharedWith group={group}/> : <span/>}
-                <div
-                    style={{flexGrow: 1, textAlign: "center"}}
+                <div style={{display: "flex"}}
                     onClick={() => {onClick(group)}}>
+                    {todoLogic.isTopLevel(group) ? <SharedWith group={group}/> : <span/>}
                     <span style={{
                         fontSize: 26,
                         fontWeight: 500,

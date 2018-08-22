@@ -12,6 +12,7 @@ const backgrounds = [
     {name:"Pills", value:"pills.jpg"},
     {name:"Gifts", value:"gifts.jpg"},
     {name:"Bills", value:"bills.jpg"},
+    {name:"Books", value:"books.jpg"},
     {name:"Parcels", value:"parcels.jpg"},
     {name:"Cogs", value:"cogs.jpg"},
 ];
