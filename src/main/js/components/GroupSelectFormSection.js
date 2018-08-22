@@ -25,17 +25,12 @@ class GroupSelectFormSection extends React.Component {
 
         const allGroups = groupTreeAsListWithIdent(todoLogic.listGroups({groupId: ""}));
         allGroups.unshift(rootGroup);
-        
+
         return <div>
-            <FormSectionContainer>
-                <span>
-                    List: {this.groupPath(currentGroup)}
-                </span>
-                <button className="btn btn-primary" onClick={() => {
-                                this.setState({modalShown: true})
-                            }}>
-                    Move
-                </button>
+            <FormSectionContainer onClick={() => {
+                this.setState({modalShown: true})
+            }}>
+                List: {this.groupPath(currentGroup)}
             </FormSectionContainer>
             <Modal
                 visible={this.state.modalShown}
@@ -57,31 +52,31 @@ class GroupSelectFormSection extends React.Component {
                                         this.onSelect(g.id)
                                     }}
                                     style={{
-                                        border: g.id === this.props.value ? "2px solid white": "2px solid transparent",
+                                        border: g.id === this.props.value ? "2px solid white" : "2px solid transparent",
                                         borderRadius: 4,
                                         marginLeft: g.ident * 30,
                                         cursor: "pointer",
                                         marginTop: -2,
                                         marginBottom: -2,
                                     }}>
-                                        <div style={{
-                                            minHeight: 45,
-                                            display: "flex",
-                                            justifyContent: "space-around",
-                                            backgroundColor: g.color,
-                                            color: g.color === "black" ? "white" :"black",
-                                            alignItems: "center",
-                                            margin: 2,
-                                        }}>
-                                            <h4>{g.text}</h4>
-                                        </div>
+                                    <div style={{
+                                        minHeight: 45,
+                                        display: "flex",
+                                        justifyContent: "space-around",
+                                        backgroundColor: g.color,
+                                        color: g.color === "black" ? "white" : "black",
+                                        alignItems: "center",
+                                        margin: 2,
+                                    }}>
+                                        <h4>{g.text}</h4>
+                                    </div>
                                 </div>
                             </div>
                         )
                     }
                 </div>
             </Modal>
-            </div>;
+        </div>;
     }
 
     groupPath(group) {
@@ -89,8 +84,8 @@ class GroupSelectFormSection extends React.Component {
             return group.text
         } else {
             return this.groupPath(todoLogic.findGroupById(group.groupId))
-                    + " > "
-                    + group.text
+                + " > "
+                + group.text
         }
     }
 

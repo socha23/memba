@@ -4,6 +4,7 @@ export default ({children, style, onClick=()=>{}}) => <div onClick={onClick} sty
     borderTop: "1px solid #888",
     padding: 6,
     fontSize: 16,
+    minHeight: 50,
     display: "flex",
     alignItems: "center",
     flexWrap: "nowrap",

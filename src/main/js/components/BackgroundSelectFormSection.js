@@ -35,15 +35,10 @@ class BackgroundSelectFormSection extends React.Component {
 
     render() {
         return <div>
-            <FormSectionContainer>
-                <span>
-                    Background: {this.backgroundName(this.getValue())}
-                </span>
-                <button className="btn btn-primary" onClick={() => {
-                                this.setState({modalShown: true})
-                            }}>
-                    Choose
-                </button>
+            <FormSectionContainer onClick={() => {
+                this.setState({modalShown: true})
+            }}>
+                Background: {this.backgroundName(this.getValue())}
             </FormSectionContainer>
 
             <Modal
@@ -60,28 +55,28 @@ class BackgroundSelectFormSection extends React.Component {
                                 <div
                                     onClick={() => {this.onSelect(g.value)}}
                                     style={{
-                                        border: g.value === this.getValue() ? "2px solid white": "2px solid transparent",
+                                        border: g.value === this.getValue() ? "2px solid white" : "2px solid transparent",
                                         borderRadius: 4,
                                         cursor: "pointer",
                                         marginTop: -2,
                                         marginBottom: -2,
                                     }}>
-                                        <div style={{
-                                            minHeight: 60,
-                                            margin: 2,
-                                            backgroundRepeat: "no-repeat",
-                                            backgroundPosition: "center bottom",
-                                            backgroundSize: "cover",
-                                            backgroundColor: "black",
-                                            backgroundImage: g.value === backgroundNoneValue ? "none" : "url('backgrounds/" + g.value + "')",
-                                        }}/>
+                                    <div style={{
+                                        minHeight: 60,
+                                        margin: 2,
+                                        backgroundRepeat: "no-repeat",
+                                        backgroundPosition: "center bottom",
+                                        backgroundSize: "cover",
+                                        backgroundColor: "black",
+                                        backgroundImage: g.value === backgroundNoneValue ? "none" : "url('backgrounds/" + g.value + "')",
+                                    }}/>
                                 </div>
                             </div>
                         )
                     }
                 </div>
             </Modal>
-            </div>;
+        </div>;
     }
 
     onCancel() {
