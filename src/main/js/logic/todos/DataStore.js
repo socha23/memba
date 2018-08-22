@@ -4,7 +4,8 @@ export default class DataStore {
 
     ROOT_GROUP_ID = "root";
 
-    todos = [];
+    completedTodos = [];
+    notCompletedTodos = [];
     groups = [];
     itemsNotLoaded = true;
 
@@ -17,12 +18,15 @@ export default class DataStore {
                   showCompleted = false,
                   groupId = this.ROOT_GROUP_ID,
               }) {
-        const completionFilter = t => (t.completed && showCompleted) || ((!t.completed) && showNotCompleted);
-        const todos = this.todos
-            .filter(this._groupFilter(groupId))
-            .filter(completionFilter);
-        return sort(todos, (this.findGroupById(groupId) || {}).todoOrder)
-
+        const groupFilter = this._groupFilter(groupId);
+        let unsorted = [];
+        if (showCompleted) {
+            unsorted = unsorted.concat(this.completedTodos.filter(groupFilter))
+        }
+        if (showNotCompleted) {
+            unsorted = unsorted.concat(this.notCompletedTodos.filter(groupFilter))
+        }
+        return sort(unsorted, (this.findGroupById(groupId) || {}).todoOrder)
     }
 
     listGroups({
@@ -41,12 +45,10 @@ export default class DataStore {
 
     receiveItems(items) {
         this.itemsNotLoaded = false;
-        this.todos = items
-            .filter(t => t.itemType === "todo")
-            .map(this.fillItemDefaults);
-        this.groups = items
-            .filter(t => t.itemType === "group")
-            .map(this.fillItemDefaults);
+
+        this.groups = items.groups ? items.groups.map(this.fillItemDefaults) : this.groups;
+        this.completedTodos = items.completedTodos ? items.completedTodos.map(this.fillItemDefaults) : this.completedTodos;
+        this.notCompletedTodos = items.notCompletedTodos ? items.notCompletedTodos.map(this.fillItemDefaults) : this.notCompletedTodos;
     }
 
     fillItemDefaults = (item) => {
@@ -54,7 +56,12 @@ export default class DataStore {
     };
 
     addTodo(todo) {
-        return this.todos.unshift(this.fillItemDefaults(todo));
+        const item = this.fillItemDefaults(todo);
+        if (item.completed) {
+            return this.completedTodos.unshift(item);
+        } else {
+            return this.notCompletedTodos.unshift(item);
+        }
     }
 
     addGroup(group) {
@@ -62,23 +69,25 @@ export default class DataStore {
     }
 
     updateTodo(todo) {
-        return this._updateItem(todo, this.todos)
+        this.deleteTodo(todo.id);
+        return this.addTodo(todo);
     }
 
     updateGroup(group) {
-        return this._updateItem(group, this.groups)
-    }
-
-    _updateItem(item, collection) {
-        const idx = collection.findIndex(t => t.id === item.id);
-        collection[idx] = this.fillItemDefaults(item);
-        return collection[idx]
+        const idx = this.groups.findIndex(t => t.id === group.id);
+        this.groups[idx] = this.fillItemDefaults(group);
+        return this.groups[idx]
     }
 
 
     deleteTodo(todoId) {
-        const idx = this.todos.findIndex(t => t.id === todoId);
-        this.todos.splice(idx, 1);
+        this._deleteTodoFrom(this.completedTodos, todoId);
+        this._deleteTodoFrom(this.notCompletedTodos, todoId);
+    }
+
+    _deleteTodoFrom(collection, id) {
+        const idx = collection.findIndex(t => t.id === id);
+        collection.splice(idx, 1);
     }
 
     deleteGroup(idToRemove) {
@@ -86,7 +95,7 @@ export default class DataStore {
         const groupToRemove = this.groups[idx];
         this.groups.splice(idx, 1);
 
-        [this.todos, this.groups].forEach(collection =>
+        [this.completedTodos, this.notCompletedTodos, this.groups].forEach(collection =>
             collection
                 .filter(i => i.groupId === idToRemove)
                 .forEach(i => {i.groupId = groupToRemove.groupId})
@@ -94,7 +103,7 @@ export default class DataStore {
     }
 
     findTodoById(id) {
-        return this.todos.find(t => t.id === id)
+        return this.notCompletedTodos.find(t => t.id === id) || this.completedTodos.find(t => t.id === id)
     }
 
     findGroupById(id) {

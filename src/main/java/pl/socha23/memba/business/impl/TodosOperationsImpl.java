@@ -49,7 +49,7 @@ public class TodosOperationsImpl extends AbstractItemInGroupOperationsImpl<Basic
         todo.setOwnerIds(create.getOwnerIds() != null ? create.getOwnerIds() : Collections.singleton(currentUserProvider.getCurrentUserId()));
         todo.setGroupId(create.getGroupId());
         todo.setText(create.getText());
-        todo.setCompleted(false);
+        todo.setCompleted(create.isCompleted() == null ? false : create.isCompleted());
         todo.setColor(create.getColor());
         todo.setCreatedOn(Instant.now());
         return todo;

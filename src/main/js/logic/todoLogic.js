@@ -18,7 +18,7 @@ class TodoLogic {
 
     onReceiveServerData(data) {
         this.dataStore.receiveItems(data);
-        this.statistics = new Statistics(this.dataStore.todos, this.dataStore.groups);
+        this.statistics = new Statistics(this.dataStore.notCompletedTodos, this.dataStore.groups);
         this.subscriptions.callSubscribers();
     }
 
@@ -54,7 +54,9 @@ class TodoLogic {
     }
 
     setCompleted(todoId, completed) {
-        this.dataStore.findTodoById(todoId).completed = completed;
+        const newTodo = {...this.dataStore.findTodoById(todoId)};
+        newTodo.completed = completed;
+        this.dataStore.updateTodo(newTodo);
         this.serverData.setCompleted(todoId, completed);
         this.subscriptions.callSubscribers();
     }

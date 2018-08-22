@@ -5,7 +5,7 @@ it("returns empty list", () => {
     const store = new DataStore();
 
     // when:
-    store.receiveItems([]);
+    store.receiveItems({});
 
     // then:
     expect(store.listTodos({})).toEqual([])
@@ -16,10 +16,14 @@ it("returns right completed / not completed todos", () => {
     const store = new DataStore();
 
     // when:
-    store.receiveItems([
-        {itemType: "todo", id: "one", completed: false},
-        {itemType: "todo", id: "two", completed: true}
-    ]);
+    store.receiveItems({
+        completedTodos: [
+            {id: "two", completed: true}
+            ],
+        notCompletedTodos: [
+            {id: "one", completed: false},
+            ]
+    });
 
     // then:
     expect(store.listTodos({}).map(i => i.id))
@@ -33,10 +37,12 @@ it("returns todos for a given group", () => {
     const store = new DataStore();
 
     // when:
-    store.receiveItems([
-        {itemType: "todo", id: "one", completed: false, groupId: "A"},
-        {itemType: "todo", id: "two", completed: false, groupId: "B"}
-    ]);
+    store.receiveItems({
+        notCompletedTodos: [
+            {id: "one", completed: false, groupId: "A"},
+            {id: "two", completed: false, groupId: "B"},
+        ]
+    });
 
     // then:
     expect(store.listTodos({groupId: "A"}).map(i => i.id))
@@ -48,10 +54,12 @@ it("group is root when not declared", () => {
     const store = new DataStore();
 
     // when:
-    store.receiveItems([
-        {itemType: "todo", id: "one", completed: false},
-        {itemType: "todo", id: "two", completed: false, groupId: "B"}
-    ]);
+    store.receiveItems({
+        notCompletedTodos: [
+            {id: "one", completed: false},
+            {id: "two", completed: false, groupId: "B"}
+        ]
+    });
 
     // then:
     expect(store.listTodos({groupId: store.ROOT_GROUP_ID}).map(i => i.id))
@@ -63,10 +71,12 @@ it("returns root by default ", () => {
     const store = new DataStore();
 
     // when:
-    store.receiveItems([
-        {itemType: "todo", id: "one", completed: false, groupId: store.ROOT_GROUP_ID},
-        {itemType: "todo", id: "two", completed: false, groupId: "B"}
-    ]);
+    store.receiveItems({
+        notCompletedTodos: [
+            {id: "one", completed: false, groupId: store.ROOT_GROUP_ID},
+            {id: "two", completed: false, groupId: "B"},
+        ]
+    });
 
     // then:
     expect(store.listTodos({}).map(i => i.id))

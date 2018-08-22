@@ -6,8 +6,6 @@ import pl.socha23.memba.web.todos.model.CreateOrUpdateGroupRequest
 import pl.socha23.memba.web.todos.model.CreateOrUpdateTodoRequest
 import spock.lang.Specification
 
-import static pl.socha23.memba.FluxUtils.toList
-
 class ListItemsSpec extends Specification {
 
     def "root group always returned"() {
@@ -16,7 +14,7 @@ class ListItemsSpec extends Specification {
         def controller = new ItemsController(ops.todoOps, ops.groupOps)
 
         expect:
-        toList(controller.currentUserItems()).size() == 1
+        controller.currentUserItems().block().groups.size() == 1
     }
 
     def "list items lists todos"() {
@@ -27,7 +25,7 @@ class ListItemsSpec extends Specification {
         def controller = new ItemsController(ops.todoOps, ops.groupOps)
 
         expect:
-        toList(controller.currentUserItems()).size() == 3 // because also root
+        controller.currentUserItems().block().notCompletedTodos.size() == 2
     }
 
     def "list items lists groups"() {
@@ -38,7 +36,7 @@ class ListItemsSpec extends Specification {
         def controller = new ItemsController(ops.todoOps, ops.groupOps)
 
         expect:
-        toList(controller.currentUserItems()).size() == 3
+        controller.currentUserItems().block().groups.size() == 3
     }
 
     def "list items lists both items and groups"() {
@@ -51,18 +49,23 @@ class ListItemsSpec extends Specification {
         def controller = new ItemsController(ops.todoOps, ops.groupOps)
 
         expect:
-        toList(controller.currentUserItems())*.text == ["ROOT", "g2", "g1", "t2", "t1"]
+        controller.currentUserItems().block().groups*.text == ["ROOT", "g2", "g1"]
+        controller.currentUserItems().block().notCompletedTodos*.text == ["t2", "t1"]
     }
 
-    def "list items lists types"() {
+    def "can ask only for not completed"() {
         given:
         def ops = new TestOps()
-                .createTodo(new CreateOrUpdateTodoRequest(text: "g1"))
-                .createGroup(new CreateOrUpdateGroupRequest(text: "g1"))
-
+                .createTodo(new CreateOrUpdateTodoRequest(text: "t1"))
+                .createTodo(new CreateOrUpdateTodoRequest(text: "t2", completed: true))
         def controller = new ItemsController(ops.todoOps, ops.groupOps)
-        expect:
 
-        toList(controller.currentUserItems())*.itemType == ["group", "group", "todo"]
+        when:
+        def result = controller.currentUserItems(false).block()
+
+        then:
+        result.completedTodos == null
+        result.notCompletedTodos.size() == 1
     }
+
 }

@@ -1,12 +1,14 @@
 import {jsonGet, jsonPost, jsonPut, restDelete} from '../apiHelper'
 
 const REFRESH_ITEMS_EVERY_MS = 60 * 1000;
+const FETCH_COMPLETED_EVERY = 10;
 
 export default class ServerData {
 
     reloadIntervalHandler = null;
     onReceiveItems = null;
     lastFetchOn = 0;
+    fetchCompletedIn = 0;
 
     constructor(onReceiveItems) {
         this.onReceiveItems = onReceiveItems;
@@ -23,14 +25,21 @@ export default class ServerData {
         clearInterval(this.reloadIntervalHandler);
     }
 
-    _reload() {
-        this._fetchItems();
+    _reload(forceFetchCompleted = false) {
+        this._fetchItems(forceFetchCompleted);
     }
 
-    _fetchItems() {
+    _fetchItems(forceFetchCompleted) {
+        const fetchCompleted = forceFetchCompleted || (this.fetchCompletedIn === 0);
+        if (fetchCompleted) {
+            this.fetchCompletedIn = FETCH_COMPLETED_EVERY;
+        }
+        this.fetchCompletedIn--;
+
         const fetchTime = Date.now();
         this.lastFetchOn = fetchTime;
-        jsonGet("/items")
+        
+        jsonGet(fetchCompleted ? "/items?completed=true" : "/items")
             .then(r => {
                 if (this.lastFetchOn === fetchTime) {
                     this._receiveItems(r)
