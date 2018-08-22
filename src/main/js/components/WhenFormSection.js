@@ -32,7 +32,7 @@ class WhenFormSection extends React.Component {
     render() {
         return <div>
             <FormSectionContainer onClick={() => {
-                this.setState({modalShown: true, currentValue: this.props.value || ""})
+                this.setState({modalShown: true, currentValue: this.isoToInput(this.props.value)})
             }}>
                 When: {this.describeValue()}
             </FormSectionContainer>
@@ -67,13 +67,18 @@ class WhenFormSection extends React.Component {
     }
 
     onSave() {
-        let value = null;
-        if (this.state.currentValue !== "") {
-            value = moment(this.state.currentValue).toISOString()
-        }
         this.setState({modalShown: false});
-        this.props.onChangeValue(value);
+        this.props.onChangeValue(this.inputToIso(this.state.currentValue));
     }
+
+    inputToIso(val) {
+        return val && moment(val).toISOString()
+    }
+
+    isoToInput(val) {
+        return val && moment(val).format(moment.HTML5_FMT.DATETIME_LOCAL)
+    }
+
 }
 
 export default WhenFormSection
