@@ -5,6 +5,8 @@ server:
 
 memba:
   security:
+    admin:
+      password: admin
     google:
       client_id: "502079153987-8e460ao67b3jj62u94o362sgukfrjf6q.apps.googleusercontent.com"
 
@@ -17,3 +19,9 @@ spring:
       port: 27017
       database: memba
       password: ""
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
