@@ -46,11 +46,7 @@ public class TodosOperationsImpl extends AbstractItemInGroupOperationsImpl<Basic
 
     private BasicTodo createTodoObject(CreateOrUpdateTodo create) {
         var todo = new BasicTodo();
-        todo.setOwnerIds(create.getOwnerIds() != null ? create.getOwnerIds() : Collections.singleton(currentUserProvider.getCurrentUserId()));
-        todo.setGroupId(create.getGroupId());
-        todo.setText(create.getText());
-        todo.setCompleted(create.isCompleted() == null ? false : create.isCompleted());
-        todo.setColor(create.getColor());
+        setFields(todo, create);
         todo.setCreatedOn(Instant.now());
         return todo;
     }
@@ -69,28 +65,17 @@ public class TodosOperationsImpl extends AbstractItemInGroupOperationsImpl<Basic
 
     private BasicTodo updateFields(Todo todo, CreateOrUpdateTodo updateTodo) {
         var newTodo = BasicTodo.copy(todo);
-
-        if (updateTodo.getOwnerIds() != null) {
-            newTodo.setOwnerIds(updateTodo.getOwnerIds());
-        }
-
-        if (updateTodo.getGroupId() != null) {
-            newTodo.setGroupId(updateTodo.getGroupId());
-        }
-
-        if (updateTodo.isCompleted() != null) {
-            newTodo.setCompleted(updateTodo.isCompleted());
-        }
-
-        if (updateTodo.getText() != null) {
-            newTodo.setText(updateTodo.getText());
-        }
-
-        if (updateTodo.getColor() != null) {
-            newTodo.setColor(updateTodo.getColor());
-        }
-
+        setFields(newTodo, updateTodo);
         return newTodo;
+    }
+
+    private void setFields(BasicTodo todo, CreateOrUpdateTodo command) {
+        todo.setOwnerIds(command.getOwnerIds() != null ? command.getOwnerIds() : Collections.singleton(currentUserProvider.getCurrentUserId()));
+        todo.setGroupId(command.getGroupId());
+        todo.setText(command.getText());
+        todo.setCompleted(command.isCompleted());
+        todo.setColor(command.getColor());
+        todo.setWhen(command.getWhen());
     }
 
     @Override

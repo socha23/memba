@@ -57,7 +57,7 @@ class TodoLogic {
         const newTodo = {...this.dataStore.findTodoById(todoId)};
         newTodo.completed = completed;
         this.dataStore.updateTodo(newTodo);
-        this.serverData.setCompleted(todoId, completed);
+        this.serverData.updateTodo(newTodo);
         this.subscriptions.callSubscribers();
     }
 

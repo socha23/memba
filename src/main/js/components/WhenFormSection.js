@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import Modal, {ModalHeader} from "./Modal";
 import FormSectionContainer from './FormSectionContainer'
 import ButtonIcon from "./ButtonIcon";
+import moment from 'moment'
 
 class WhenFormSection extends React.Component {
     static propTypes = {
@@ -19,13 +20,21 @@ class WhenFormSection extends React.Component {
         modalShown: false,
         currentValue: "",
     };
+
+    describeValue() {
+        if (this.props.value == null || this.props.value === "") {
+            return " (not set)"
+        } else {
+            return moment(this.props.value).format("YYYY.MM.DD HH:mm")
+        }
+    }
     
     render() {
         return <div>
             <FormSectionContainer onClick={() => {
                 this.setState({modalShown: true, currentValue: this.props.value || ""})
             }}>
-                When: (not set)
+                When: {this.describeValue()}
             </FormSectionContainer>
             <Modal
                 visible={this.state.modalShown}
@@ -37,6 +46,7 @@ class WhenFormSection extends React.Component {
 
                 <div className="modal-body">
                     <input
+                        placeholder="Enter date and time"
                         className="form-control form-control-lg"
                         type={"datetime-local"}
                         value={this.state.currentValue} onChange={e => {this.setState({currentValue: e.target.value})}}/>
@@ -56,8 +66,11 @@ class WhenFormSection extends React.Component {
         this.setState({modalShown: false});
     }
 
-    onSave(value) {
-        console.log(this.s);
+    onSave() {
+        let value = null;
+        if (this.state.currentValue !== "") {
+            value = moment(this.state.currentValue).toISOString()
+        }
         this.setState({modalShown: false});
         this.props.onChangeValue(value);
     }

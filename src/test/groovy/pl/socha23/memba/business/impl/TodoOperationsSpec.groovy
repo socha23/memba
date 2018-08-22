@@ -26,7 +26,6 @@ class TodoOperationsSpec extends Specification {
         when:
         Todo t = ops.createTodo(new TestCreateUpdateTodo()
                 .withText("original")
-                .withColor("red")
                 .toMono()
         ).block()
         ops.updateTodo(t.id, TestCreateUpdateTodo.monoWithText("modified")).block()
@@ -34,7 +33,6 @@ class TodoOperationsSpec extends Specification {
         then:
         def changedTodo = toList(ops.listCurrentUserTodos())[0]
         changedTodo.text == "modified"
-        changedTodo.color == "red"
     }
 
     def "deleting a todo"() {

@@ -43,7 +43,7 @@ class GroupOwnershipSpec extends Specification {
 
         when:
         ops.groupOps
-                .updateGroup("g2", new TestCreateUpdateGroup(groupId: "root").toMono()).block()
+                .updateGroup("g2", new TestCreateUpdateGroup(groupId: "root", ownerIds: ["A", "B"]).toMono()).block()
 
         then:
         ops.findGroupById("g2").ownerIds == ["A", "B"] as Set

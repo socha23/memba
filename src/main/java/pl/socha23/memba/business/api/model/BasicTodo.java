@@ -1,10 +1,13 @@
 package pl.socha23.memba.business.api.model;
 
+import java.time.Instant;
+
 public class BasicTodo extends BasicItemInGroup implements Todo {
 
     private String text;
     private boolean completed;
     private String color;
+    private Instant when;
 
 
     @Override
@@ -33,6 +36,16 @@ public class BasicTodo extends BasicItemInGroup implements Todo {
         this.color = color;
     }
 
+    @Override
+    public Instant getWhen() {
+        return when;
+    }
+
+    public void setWhen(Instant when) {
+        this.when = when;
+    }
+
+
     public static BasicTodo copy(Todo todo) {
         return copy(todo, new BasicTodo());
     }
@@ -42,6 +55,7 @@ public class BasicTodo extends BasicItemInGroup implements Todo {
         to.setText(from.getText());
         to.setCompleted(from.isCompleted());
         to.setColor(from.getColor());
+        to.setWhen(from.getWhen());
         return to;
     }
 

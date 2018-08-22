@@ -40,7 +40,6 @@ class GroupOperationsSpec extends Specification {
         when:
         Group g = ops.createGroup(new TestCreateUpdateGroup()
                 .withText("original")
-                .withColor("red")
                 .toMono()
         ).block()
         ops.updateGroup(g.id, TestCreateUpdateGroup.monoWithText("modified")).block()
@@ -48,7 +47,6 @@ class GroupOperationsSpec extends Specification {
         then:
         def changedGroup = toList(ops.listCurrentUserGroups()).find({it.id == g.id})
         changedGroup.text == "modified"
-        changedGroup.color == "red"
     }
 
     def "updating group with orders"() {

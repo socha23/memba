@@ -43,7 +43,7 @@ class TodoOwnershipSpec extends Specification {
 
         when:
         ops.todoOps
-            .updateTodo("t1", new TestCreateUpdateTodo(groupId: "root").toMono()).block()
+            .updateTodo("t1", new TestCreateUpdateTodo(groupId: "root", ownerIds: ["A", "B"]).toMono()).block()
 
         then:
         ops.findTodoById("t1").ownerIds == ["A", "B"] as Set

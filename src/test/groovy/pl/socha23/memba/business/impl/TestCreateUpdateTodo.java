@@ -6,10 +6,10 @@ import reactor.core.publisher.Mono;
 
 public class TestCreateUpdateTodo extends CreateOrUpdateTodoRequest implements CreateOrUpdateTodo {
 
-    private Boolean completed;
+    private boolean completed;
 
     @Override
-    public Boolean isCompleted() {
+    public boolean isCompleted() {
         return completed;
     }
 

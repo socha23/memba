@@ -72,13 +72,8 @@ public class GroupsOperationsImpl extends AbstractItemInGroupOperationsImpl<Basi
 
     private BasicGroup createGroupObject(CreateOrUpdateGroup create) {
         var group = new BasicGroup();
-        group.setOwnerIds(create.getOwnerIds() != null ? create.getOwnerIds() : Collections.singleton(currentUserProvider.getCurrentUserId()));
-        group.setGroupId(create.getGroupId());
-        group.setText(create.getText());
-        group.setColor(create.getColor());
-        group.setBackground(create.getBackground());
+        setFields(group, create);
         group.setCreatedOn(Instant.now());
-
         return group;
     }
 
@@ -111,36 +106,18 @@ public class GroupsOperationsImpl extends AbstractItemInGroupOperationsImpl<Basi
 
     private BasicGroup updateFields(Group group, CreateOrUpdateGroup updateGroup) {
         var newGroup = BasicGroup.copy(group);
-
-        if (updateGroup.getGroupId() != null) {
-            newGroup.setGroupId(updateGroup.getGroupId());
-        }
-
-        if (updateGroup.getText() != null) {
-            newGroup.setText(updateGroup.getText());
-        }
-
-        if (updateGroup.getColor() != null) {
-            newGroup.setColor(updateGroup.getColor());
-        }
-
-        if (updateGroup.getOwnerIds() != null) {
-            newGroup.setOwnerIds(updateGroup.getOwnerIds());
-        }
-
-        if (updateGroup.getGroupOrder() != null) {
-            newGroup.setGroupOrder(updateGroup.getGroupOrder());
-        }
-
-        if (updateGroup.getTodoOrder() != null) {
-            newGroup.setTodoOrder(updateGroup.getTodoOrder());
-        }
-
-        if (updateGroup.getBackground() != null) {
-            newGroup.setBackground(updateGroup.getBackground().equals("none") ? null : updateGroup.getBackground());
-        }
-
+        setFields(newGroup, updateGroup);
         return newGroup;
+    }
+
+    private void setFields(BasicGroup group, CreateOrUpdateGroup command) {
+        group.setOwnerIds(command.getOwnerIds() != null ? command.getOwnerIds() : Collections.singleton(currentUserProvider.getCurrentUserId()));
+        group.setGroupId(command.getGroupId());
+        group.setText(command.getText());
+        group.setColor(command.getColor());
+        group.setBackground(command.getBackground());
+        group.setGroupOrder(command.getGroupOrder());
+        group.setTodoOrder(command.getTodoOrder());
     }
 
     @Override

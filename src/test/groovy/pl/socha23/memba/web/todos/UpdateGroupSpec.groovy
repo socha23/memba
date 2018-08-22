@@ -11,7 +11,7 @@ class UpdateGroupSpec extends Specification {
     def "update a group"() {
         given:
         def ops = new TestOps()
-        Group g = ops.groupOps.createGroup(new TestCreateUpdateGroup(text: "original", color: "red").toMono()).block()
+        Group g = ops.groupOps.createGroup(new TestCreateUpdateGroup(text: "original").toMono()).block()
         def controller = new GroupsController(ops.groupOps)
 
         when:
@@ -20,6 +20,5 @@ class UpdateGroupSpec extends Specification {
         then:
         def updated = ops.listGroups()[0]
         updated.text == "changed"
-        updated.color == "red"
     }
 }
