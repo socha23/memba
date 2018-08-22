@@ -34,7 +34,7 @@ class MongoGroupStore implements GroupStore<MongoGroupImpl> {
 
     @Override
     public Flux<MongoGroupImpl> listGroupsByOwnerId(String userId) {
-        return repository.findByOwnerIdsContainingOrderByCreatedOnDesc(userId);
+        return repository.findByOwnerIdsContaining(userId);
     }
 
     @Override
