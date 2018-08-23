@@ -42,7 +42,8 @@ export const ToolbarButton = ({className = "", onClick = () => {}, active = fals
        style={{
            fontSize: 20,
            padding: 10,
-           paddingRight: 8,
+           paddingRight: 10,
+           paddingLeft: 20,
            cursor: "pointer",
            color: active ? "#62c462" : "white",
            ...style

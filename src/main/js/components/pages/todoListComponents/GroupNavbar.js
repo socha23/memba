@@ -108,7 +108,7 @@ const BlockTitle = ({group}) => {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            paddingTop: 20,
+            paddingTop: 30,
             paddingBottom: 20,
             color: "white",
             fontSize: 36,
