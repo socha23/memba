@@ -3,7 +3,7 @@ import React from 'react'
 import todoLogic from '../../logic/todoLogic'
 import {BottomButtonBar} from "../structural/PageBottomBar";
 import ButtonIcon from '../ButtonIcon'
-import {TitleWithBackNavbar} from "../structural/PageTopNavbar";
+import {IconAndTitle, PageTopNavbar, TitleWithBackNavbar} from "../structural/PageTopNavbar";
 import ListIsEmpty from "../ListIsEmpty";
 import TodoListPageViewReorderMode from "./todoListComponents/TodoListPageViewReorderMode";
 import {encodeQuery, withRouterWithQuery} from "../../routerUtils";
@@ -20,11 +20,11 @@ class ReorderPage extends React.Component {
         const group = todoLogic.findGroupById(this.getGroupId());
 
         return <div>
-            <TitleWithBackNavbar
-                    query={{groupId: this.getGroupId()}}
-                    title={"Reorder"}
-                    color={group.color}
-                />
+            <PageTopNavbar color={group.color}>
+                <IconAndTitle title={"Reorder"} onClick={() => {this.onSave()}} iconClass={"fas fa-backward"}/>
+            </PageTopNavbar>
+
+
             {(this.state.groups.length === 0 && this.state.todos.length === 0) ? <ListIsEmpty/> :
                 <TodoListPageViewReorderMode
                     todos={this.state.todos}
