@@ -30,6 +30,7 @@ public class ProfileOperationsImpl implements ProfileOperations {
 
         var friends = profileStore
                 .listAllUsers()
+                .filter(u -> !u.getId().equals(currentUserProvider.getCurrentUserId()))
                 .collectList();
         var profile = profileStore.findProfileById(id);
 

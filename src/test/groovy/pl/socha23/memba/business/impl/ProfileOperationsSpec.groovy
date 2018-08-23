@@ -55,7 +55,7 @@ class ProfileOperationsSpec extends Specification {
         ops.profileOps.updateProfile(new TestUser(id: "b", firstName: "b")).block()
 
         expect:
-        ops.profileOps.currentUserProfile.block().friends[0].id == "b"
+        ops.profileOps.currentUserProfile.block().friends.find{it.id == TestUserProvider.USER_ID} == null
     }
 
 }
