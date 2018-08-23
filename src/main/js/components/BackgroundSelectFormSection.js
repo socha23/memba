@@ -44,7 +44,7 @@ class BackgroundSelectFormSection extends React.Component {
             <Modal
                 visible={this.state.modalShown}
                 dialogClassName="modal-dialog-centered"
-                onHide={() => {this.onCancel()}}>
+                onCancel={() => {this.onCancel()}}>
 
                 <ModalHeader title="Choose background" onCancel={() => {this.onCancel()}}/>
 

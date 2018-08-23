@@ -69,7 +69,7 @@ class SharingFormSection extends React.Component {
                 }
             </FormSectionContainer>
 
-            <Modal visible={this.state.modalShown} onHide={() => {this.onSave()}}>
+            <Modal visible={this.state.modalShown} onCancel={() => {this.onSave()}}>
                 <ModalHeader
                     title={"Share '" + this.props.item.text + "' with..."}
                     onCancel={() => {this.onCancel()}}

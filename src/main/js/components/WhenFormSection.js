@@ -32,14 +32,14 @@ class WhenFormSection extends React.Component {
     render() {
         return <div>
             <FormSectionContainer onClick={() => {
-                this.setState({modalShown: true, currentValue: this.isoToInput(this.props.value)})
+                this.setState({modalShown: true, currentValue: this.isoToInput(this.props.value) || ""})
             }}>
                 When: {this.describeValue()}
             </FormSectionContainer>
             <Modal
                 visible={this.state.modalShown}
                 dialogClassName="modal-dialog-centered"
-                onHide={() => {
+                onCancel={() => {
                     this.onCancel()
                 }}>
                 <ModalHeader title="Choose when" onCancel={() => {this.onCancel()}}/>

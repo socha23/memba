@@ -23,6 +23,9 @@ const AddTodoPage = ({history, location}) =>
                 todoLogic.addTodo(item);
             });
         }}
+        onBack={() => {
+            history.push(encodeQuery("/", {groupId: location.query.groupId}));
+        }}
         title="New item"
         createMode={true}
     />;

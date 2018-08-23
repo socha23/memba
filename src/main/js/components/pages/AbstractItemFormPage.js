@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import {TitleWithBackNavbar} from '../structural/PageTopNavbar'
+import {IconAndTitle, PageTopNavbar} from '../structural/PageTopNavbar'
 import PageBody from '../structural/PageBody'
 import {BottomButtonBar} from '../structural/PageBottomBar'
 
@@ -15,6 +15,7 @@ class AbstractItemFormPage extends React.Component {
         title: PropTypes.string,
         saveButtonLabel: PropTypes.string,
         onSave: PropTypes.func.isRequired,
+        onBack: PropTypes.func.isRequired,
         createMode: PropTypes.bool.isRequired,
         toolbarButtons: PropTypes.element
     };
@@ -24,37 +25,59 @@ class AbstractItemFormPage extends React.Component {
         toolbarButtons: <span/>
     };
 
-    state = {...this.props.item};
+    state = {
+        item: this.props.item,
+        modified: false
+    };
 
     render() {
-        return <AbstractItemFormPageView
-            FormComponent={this.props.formComponent}
-            title={this.props.title}
-            buttonClass={this.isSubmitEnabled() ? "btn-success" : "btn-primary"}
-            buttonContents={this.isSubmitEnabled() ? <span>
-                                <ButtonIcon className={"fas fa-check"}/>
-                                {this.getSaveButtonLabel()}
-                            </span>
-                            : "Enter description first"}
-            item={this.getItem()}
-            onChangeFields={values => {this.setState(values)}}
-            submitEnabled={this.isSubmitEnabled()}
-            onSubmit={() => {this.onSubmit()}}
-            createMode={this.props.createMode}
-            toolbarButtons={this.props.toolbarButtons}
-        />;
+        return <div>
+            <AbstractItemFormPageView
+                        FormComponent={this.props.formComponent}
+                        title={this.props.title}
+                        buttonClass={this.isSaveEnabled() ? "btn-success" : "btn-primary"}
+                        buttonContents={this.isSaveEnabled() ? <span>
+                                            <ButtonIcon className={"fas fa-check"}/>
+                                            {this.getSaveButtonLabel()}
+                                        </span>
+                                        : "Enter description first"}
+                        item={this.getItem()}
+                        onChangeFields={fields => {this.onChangeFields(fields)}}
+                        submitEnabled={this.isSaveEnabled()}
+                        onSubmit={() => {this.onSubmit()}}
+                        onBack={() => {this.onBack()}}
+                        createMode={this.props.createMode}
+                        toolbarButtons={this.props.toolbarButtons}
+                    />
+        </div>;
     }
 
     getSaveButtonLabel() {
         return this.props.saveButtonLabel || (this.props.createMode ? "Add new item" : "Save changes")
     }
 
-    isSubmitEnabled() {
-        return this.state.text.trim() !== "";
+
+    isSaveEnabled() {
+        return this.state.item.text.trim() !== "";
     }
 
     getItem() {
-        return {...this.state}
+        return this.state.item
+    }
+
+    onBack() {
+        if (this.isSaveEnabled() && this.state.modified) {
+            this.onSubmit();
+        } else {
+            this.props.onBack();
+        }
+
+    }
+
+
+    onChangeFields(values) {
+        const newItem ={...this.state.item, ...values};
+        this.setState({item: newItem, modified: true})
     }
 
     onSubmit() {
@@ -70,11 +93,12 @@ const AbstractItemFormPageView = ({
                              item, onChangeFields,
                              submitEnabled, onSubmit,
                              toolbarButtons,
-                             createMode
+                             createMode, onBack
                          }) => <div>
-    <TitleWithBackNavbar to="/" query={{groupId: item.groupId}} title={title}>
+    <PageTopNavbar>
+        <IconAndTitle title={title} onClick={onBack} iconClass={"fas fa-backward"}/>
         {toolbarButtons}
-    </TitleWithBackNavbar>
+    </PageTopNavbar>
 
     <PageBody>
         <div className="container" style={{padding: 2}}>

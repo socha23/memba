@@ -7,7 +7,7 @@ import {pushModal, popModal} from '../modals'
 class MyModal extends React.Component {
     static propTypes = {
         visible: PropTypes.bool.isRequired,
-        onHide: PropTypes.func.isRequired,
+        onCancel: PropTypes.func.isRequired,
     };
 
     render() {
@@ -21,7 +21,7 @@ class MyModal extends React.Component {
     }
 
     hide() {
-        this.props.onHide();
+        this.props.onCancel();
     }
 
     isShown() {

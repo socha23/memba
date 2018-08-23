@@ -26,6 +26,10 @@ const AddGroupPage = ({history, location}) =>
                     history.push(encodeQuery("/", {groupId: i.id}))
                 });
         }}
+        onBack={() => {
+            history.push(encodeQuery("/", {groupId: location.query.groupId}))
+        }}
+
         title="New list"
         saveButtonLabel="Add new list"
         createMode={true}

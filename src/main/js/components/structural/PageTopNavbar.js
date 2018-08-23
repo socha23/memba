@@ -76,6 +76,14 @@ export const MembaIconAndTitle = ({title = "Memba"}) => <div
     <PageTitle>{title}</PageTitle>
 </div>;
 
+export const IconAndTitle = ({title = "Memba", iconClass = "", onClick = () => {}}) => <div
+    style={LEFT_STYLE}
+    onClick={onClick}
+>
+    <ToolbarButton className={iconClass} style={{paddingRight: 5, paddingLeft: 10}}/>
+    <PageTitle>{title}</PageTitle>
+</div>;
+
 
 export const BrandedNavbar = ({title = "Memba", children}) => <PageTopNavbar>
     <MembaIconAndTitle title={title}/>

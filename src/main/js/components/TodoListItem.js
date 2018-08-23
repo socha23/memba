@@ -12,6 +12,7 @@ const TodoView = ({todo, onClick = () => {}, children}) => {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            cursor: "pointer",
         }}>
             <div style={{flexGrow: 1}} onClick={() => {onClick(todo)}}>
                 <h5 style={{

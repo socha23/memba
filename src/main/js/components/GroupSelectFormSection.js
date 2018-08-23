@@ -35,7 +35,7 @@ class GroupSelectFormSection extends React.Component {
             <Modal
                 visible={this.state.modalShown}
                 dialogClassName="modal-dialog-centered"
-                onHide={() => {
+                onCancel={() => {
                     this.onCancel()
                 }}>
                 <ModalHeader title="Move to list" onCancel={() => {this.onCancel()}}/>

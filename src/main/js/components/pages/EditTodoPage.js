@@ -26,6 +26,9 @@ const EditTodoPage = ({history, match}) => {
                 message("Changes saved");
             });
         }}
+        onBack={() => {
+            history.push(encodeQuery("/", {groupId: item.groupId}));
+        }}
         title="Edit item"
         createMode={false}
         toolbarButtons={deleteButton}

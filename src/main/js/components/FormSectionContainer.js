@@ -9,6 +9,7 @@ export default ({children, style, onClick=()=>{}}) => <div onClick={onClick} sty
     alignItems: "center",
     flexWrap: "nowrap",
     justifyContent: "space-between",
+    cursor: "pointer",
     ...style
 }}>
     {children}

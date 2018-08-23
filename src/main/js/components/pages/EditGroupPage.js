@@ -31,6 +31,9 @@ const EditGroupPage = ({history, match}) => {
                     history.push(encodeQuery("/", {groupId: i.id}));
                     message("Changes saved");
                 })}}
+        onBack={() => {
+            history.push(encodeQuery("/", {groupId: item.id}));
+        }}
         title="Edit list"
         createMode={false}
         toolbarButtons={deleteButton}

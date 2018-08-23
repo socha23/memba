@@ -74,7 +74,7 @@ class AddItemButton extends React.Component {
 }
 
 const AddModal = ({visible, onHide, onAddTodo, onAddGroup}) =>
-    <Modal visible={visible} dialogClassName="modal-dialog-centered" onHide={onHide}>
+    <Modal visible={visible} dialogClassName="modal-dialog-centered" onCancel={onHide}>
         <div className="modal-body">
             <button className="btn btn-block btn-lg btn-secondary" onClick={onAddTodo}>
                 Add new item
