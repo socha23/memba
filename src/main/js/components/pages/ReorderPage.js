@@ -3,11 +3,12 @@ import React from 'react'
 import todoLogic from '../../logic/todoLogic'
 import {BottomButtonBar} from "../structural/PageBottomBar";
 import ButtonIcon from '../ButtonIcon'
-import {IconAndTitle, PageTopNavbar, TitleWithBackNavbar} from "../structural/PageTopNavbar";
+import {IconAndTitle} from "../structural/PageTopNavbar";
 import ListIsEmpty from "../ListIsEmpty";
 import TodoListPageViewReorderMode from "./todoListComponents/TodoListPageViewReorderMode";
 import {encodeQuery, withRouterWithQuery} from "../../routerUtils";
 import {message} from "../../toast"
+import {SizeChangingNavbar} from "./todoListComponents/GroupNavbar";
 
 class ReorderPage extends React.Component {
     state = {
@@ -20,10 +21,7 @@ class ReorderPage extends React.Component {
         const group = todoLogic.findGroupById(this.getGroupId());
 
         return <div>
-            <PageTopNavbar color={group.color}>
-                <IconAndTitle title={"Reorder"} onClick={() => {this.onSave()}} iconClass={"fas fa-backward"}/>
-            </PageTopNavbar>
-
+            <ReorderModeNavbar group={group} onSave={() => {this.onSave()}} />
 
             {(this.state.groups.length === 0 && this.state.todos.length === 0) ? <ListIsEmpty/> :
                 <TodoListPageViewReorderMode
@@ -35,7 +33,7 @@ class ReorderPage extends React.Component {
                 />
             }
             <BottomButtonBar>
-                <button className={"btn btn-lg btn-block btn-success"} onClick={() => this.onSave()}>
+                <button className={"btn btn-lg btn-block btn-success"} style={{height: 55}} onClick={() => this.onSave()}>
                     <ButtonIcon className={"fas fa-check"}/>
                     Save changes
                 </button>
@@ -81,4 +79,14 @@ class ReorderPage extends React.Component {
 }
 
 export default withRouterWithQuery(ReorderPage);
+
+const ReorderModeNavbar = withRouterWithQuery(({history, group, onSave}) => {
+    if (todoLogic.isRootId(group.id)) {
+        return <IconAndTitle title={"Reorder"} onClick={() => {onSave()}} iconClass={"fas fa-backward"}/>
+    } else {
+        return <SizeChangingNavbar group={group} onBack={() => {onSave()}}/>
+    }
+});
+
+
 

@@ -2,21 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {encodeQuery, withRouterWithQuery} from "../../../routerUtils";
 import sharingLogic from '../../../logic/sharingLogic'
-import todoLogic from '../../../logic/todoLogic'
 import {ToolbarButton, BrandedNavbar} from '../../structural/PageTopNavbar'
 import GroupBackground from '../../GroupBackground'
-
-export default withRouterWithQuery((params) => {
-    if (todoLogic.isRootId(params.groupId)) {
-        return <RootNavbar {...params}/>
-    }
-    const group = todoLogic.findGroupById(params.groupId);
-    if (group == null) {
-        params.history.push("/");
-    } else {
-        return <SizeChangingNavbar {...params} group={group}/>
-    }
-});
 
 const Z_TOOLBAR_BUTTONS = 6;
 const Z_BLOCK_TITLE_CONTENT = 5;
@@ -26,17 +13,17 @@ const Z_SMALL_TOOLBAR = 3;
 const BLOCK_TITLE_HEIGHT = 140;
 const SMALL_TITLE_HEIGHT = 50;
 
-const RootNavbar = ({showCompleted, onToggleShowCompleted}) => <div>
+export const RootNavbar = ({children}) => <div>
     <BrandedNavbar>
-        <RootRightButtons showCompleted={showCompleted} onToggleShowCompleted={onToggleShowCompleted}/>
+        {children}
     </BrandedNavbar>
 </div>;
 
-class SizeChangingNavbar extends React.Component {
+export class SizeChangingNavbar extends React.Component {
     static propTypes = {
+        title: PropTypes.string,
         group: PropTypes.object.isRequired,
-        showCompleted: PropTypes.bool,
-        onToggleShowCompleted: PropTypes.func.isRequired
+        onBack: PropTypes.func,
     };
 
     render() {
@@ -46,16 +33,8 @@ class SizeChangingNavbar extends React.Component {
             textShadow: "2px 2px 2px rgba(0, 0, 0, 0.5)"
         }}>
             <SmallToolbar color={this.props.group.color} background={this.props.group.background}/>
-            <NavButtons group={this.props.group} showCompleted={this.props.showCompleted}
-                        onToggleShowCompleted={this.props.onToggleShowCompleted}>
-                <div style={{
-                    color: "white",
-                    fontSize: 20,
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                    display: "none"
-                }} className="smallTitle">{this.props.group.text}</div>
+            <NavButtons title={this.props.title || this.props.group.text} group={this.props.group} onBack={this.props.onBack}>
+                {this.props.children}
             </NavButtons>
             <BlockTitle group={this.props.group}/>
         </div>
@@ -71,11 +50,11 @@ class SizeChangingNavbar extends React.Component {
             const pos = $(window).scrollTop();
             if (pos > blockTitleElem.height() - SMALL_TITLE_HEIGHT) {
                 blockTitleElem.css("opacity", 0);
-                bigTitleElem.fadeOut();
+                bigTitleElem.animate({"opacity": 0}, {duration: 100, queue: false});
                 smallTitleElem.fadeIn();
             } else {
                 blockTitleElem.css("opacity", 1);
-                bigTitleElem.fadeIn();
+                bigTitleElem.animate({"opacity": 1}, {duration: 100, queue: false});
                 smallTitleElem.fadeOut();
             }
         });
@@ -133,7 +112,7 @@ const SmallToolbar = ({color, background, children, className=""}) => <div class
 </div>;
 
 
-const NavButtons = ({group, showCompleted, onToggleShowCompleted, children}) => <div className="container" style={{
+const NavButtons = ({title, group, children, onBack}) => <div className="container" style={{
     zIndex: Z_TOOLBAR_BUTTONS,
     position: "fixed",
     top: 0,
@@ -145,12 +124,20 @@ const NavButtons = ({group, showCompleted, onToggleShowCompleted, children}) => 
     alignItems: "center",
     justifyContent: "space-between",
 }}>
-    <BackButton groupId={group.groupId}> {children}</BackButton>
-    <GroupRightButtons groupId={group.id} showCompleted={showCompleted} onToggleShowCompleted={onToggleShowCompleted}/>
+    <BackButton groupId={group.groupId} onClick={onBack}>
+        <div style={{
+            color: "white",
+            fontSize: 20,
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+            display: "none"
+        }} className="smallTitle">{title}</div>
+    </BackButton>
+    {children}
 </div>;
 
-
-const BackButton = withRouterWithQuery(({groupId, history, children}) => <div
+const BackButton = withRouterWithQuery(({groupId, history, children, onClick}) => <div
     style={{
         cursor: "pointer",
         minWidth: 50,
@@ -158,44 +145,10 @@ const BackButton = withRouterWithQuery(({groupId, history, children}) => <div
         alignItems: "center",
         flexWrap: "nowrap",
         overflow: "hidden"
-    }} onClick={() => {history.push(encodeQuery('/', {groupId: groupId}))}}>
+    }} onClick={() => {if (onClick) {onClick()} else {history.push(encodeQuery('/', {groupId: groupId}))}}}>
     <ToolbarButton
         className="fas fa-backward"
         style={{zIndex: Z_TOOLBAR_BUTTONS}}
     />
     {children}
 </div>);
-
-
-const RootRightButtons = ({showCompleted, onToggleShowCompleted}) => {
-    return <div id="smallToolbar" className="btn-toolbar" style={{display: "flex", flexWrap: "nowrap"}}>
-        <ReorderGroupButton groupId={"root"}/>
-        <ShowCompletedButton showCompleted={showCompleted} onToggleShowCompleted={onToggleShowCompleted}/>
-    </div>
-};
-
-const GroupRightButtons = ({groupId, showCompleted, onToggleShowCompleted}) => {
-    return <div id="smallToolbar" className="btn-toolbar" style={{display: "flex", flexWrap: "nowrap"}}>
-        <EditGroupButton groupId={groupId}/>
-        <ReorderGroupButton groupId={groupId}/>
-        <ShowCompletedButton showCompleted={showCompleted} onToggleShowCompleted={onToggleShowCompleted}/>
-    </div>
-};
-
-const ShowCompletedButton = ({showCompleted, onToggleShowCompleted}) => <ToolbarButton
-    className="far fa-check-square"
-    style={{zIndex: Z_TOOLBAR_BUTTONS}}
-    active={showCompleted}
-    onClick={() => onToggleShowCompleted()}
-/>;
-
-const EditGroupButton = withRouterWithQuery(({history, groupId}) => <ToolbarButton
-    className="fas fa-cog"
-    onClick={() => {history.push(encodeQuery("/group/" + groupId, {groupId: groupId}))}}
-/>);
-
-const ReorderGroupButton = withRouterWithQuery(({history, groupId}) => <ToolbarButton
-    className="fas fa-sort"
-    onClick={() => {history.push(encodeQuery("/reorder/" + groupId))}}
-/>);
-
