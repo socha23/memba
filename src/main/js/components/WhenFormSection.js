@@ -21,6 +21,16 @@ class WhenFormSection extends React.Component {
         currentValue: "",
     };
 
+    constructor(params) {
+        super(params);
+        this.state = {
+            modalShown: false,
+            dateFieldValue: extractDateFromValue(params.value),
+            timeFieldValue: extractTimeFromValue(params.value),
+        }
+
+    }
+
     describeValue() {
         if (this.props.value == null || this.props.value === "") {
             return " (not set)"
@@ -32,7 +42,7 @@ class WhenFormSection extends React.Component {
     render() {
         return <div>
             <FormSectionContainer onClick={() => {
-                this.setState({modalShown: true, currentValue: this.isoToInput(this.props.value) || ""})
+                this.setState({modalShown: true})
             }}>
                 When: {this.describeValue()}
             </FormSectionContainer>
@@ -45,11 +55,24 @@ class WhenFormSection extends React.Component {
                 <ModalHeader title="Choose when" onCancel={() => {this.onCancel()}}/>
 
                 <div className="modal-body">
-                    <input
-                        placeholder="Enter date and time"
-                        className="form-control form-control-lg"
-                        type={"datetime-local"}
-                        value={this.state.currentValue} onChange={e => {this.setState({currentValue: e.target.value})}}/>
+                    <div className="form-group">
+                        <label>Date</label>
+                        <input
+                            placeholder="Enter date"
+                            className="form-control form-control-lg"
+                            type="date"
+                            value={this.state.dateFieldValue} onChange={e => {this.onChangeDate(e.target.value)}}/>
+
+                    </div>
+                    <div className="form-group">
+                        <label>Time</label>
+                        <input
+                            placeholder="Enter time"
+                            className="form-control form-control-lg"
+                            type="text"
+                            value={this.state.timeFieldValue} onChange={e => {this.onChangeTime(e.target.value)}}/>
+
+                    </div>
                 </div>
                 <div className="modal-footer">
                     <button className="btn btn-primary btn-block btn-lg" onClick={() => this.onSave()}>
@@ -66,19 +89,52 @@ class WhenFormSection extends React.Component {
         this.setState({modalShown: false});
     }
 
+    onChangeDate(dateV) {
+        this.setState({dateFieldValue: dateV});
+    }
+
+    onChangeTime(timeV) {
+        this.setState({timeFieldValue: timeV});
+    }
+
     onSave() {
         this.setState({modalShown: false});
-        this.props.onChangeValue(this.inputToIso(this.state.currentValue));
+        const value = parseDateTime(this.state.dateFieldValue, this.state.timeFieldValue);
+        this.props.onChangeValue(value ? value.toISOString() : null);
     }
-
-    inputToIso(val) {
-        return val && moment(val).toISOString()
-    }
-
-    isoToInput(val) {
-        return val && moment(val).format(moment.HTML5_FMT.DATETIME_LOCAL)
-    }
-
 }
 
 export default WhenFormSection
+
+function extractDateFromValue(isoDate) {
+    const m = moment(isoDate);
+    return isoDate != null && m.isValid() ? m.format("YYYY-MM-DD") : ""
+}
+
+function extractTimeFromValue(isoDate) {
+    const m = moment(isoDate);
+    return isoDate != null && m.isValid() ? m.format("HH:mm") : ""
+}
+
+export function parseDateTime(dateS, timeS) {
+    function normalizeTime(s) {
+        switch (s.length) {
+            case 1:
+                s = "0" + s + ":00";
+                break;
+            case 2:
+                s = s + ":00";
+                break;
+            case 3:
+                s = "0" + s.substring(0, 1) + ":" + s.substring(1, 3);
+                break;
+            case 4:
+                s = s.substring(0, 2) + ":" + s.substring(2, 4);
+        }
+        return s;
+    }
+
+    const m = moment(dateS + "T" + normalizeTime(timeS));
+    return m.isValid() ? m : null;
+}
+

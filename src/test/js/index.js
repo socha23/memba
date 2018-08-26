@@ -7,3 +7,10 @@ Enzyme.configure({
     adapter: new EnzymeAdapter(),
     testURL: 'http://localhost'
 });
+
+
+const moment = require.requireActual('moment-timezone');
+  jest.doMock('moment', () => {
+    moment.tz.setDefault('UTC');
+    return moment;
+  });
