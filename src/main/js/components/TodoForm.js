@@ -17,8 +17,6 @@ const TodoForm = ({item, onChangeFields, createMode}) => <div>
                 disabledId={item.id}
             />
 
-    <Calendar/>
-
 </div>;
 
 export default TodoForm;

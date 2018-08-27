@@ -1,22 +1,66 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import moment from 'moment'
 
 class Calendar extends React.Component {
 
-    state = {
-        value: moment()
+    static propTypes = {
+        value: PropTypes.object,
+        onChangeValue: PropTypes.func
     };
 
-    render() {
-        const value = moment(this.state.value);
-        return <CalendarGrid
-                    value={this.state.value}
-                    onClickDay={d => {this.setState({value: d})}}
-                    month={getMonth(value)}/>
+    static defaultProps = {
+        value: moment(),
+        onChangeValue: () => {}
+    };
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            displayedMonth: moment().startOf("month")
+        };
     }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.value !== this.props.value) {
+            this.setState({displayedMonth: (this.props.value || moment()).clone().startOf("month")})
+        }
+
+    }
+
+    render() {
+        let value = this.props.value || moment();
+        return <CalendarGrid
+                    value={value}
+                    onClickDay={d => {this.onClickDay(d)}}
+                    month={getMonth(this.state.displayedMonth)}
+                    onClickPrevMonth={() => {this.onPrevMonth()}}
+                    onClickNextMonth={() => {this.onNextMonth()}}
+        />
+    }
+
+    onClickDay(day) {
+        this.props.onChangeValue(day);
+    }
+
+    onPrevMonth() {
+        this.setState({displayedMonth: this.state.displayedMonth.clone().subtract(1, "month")});
+    }
+
+    onNextMonth() {
+        this.setState({displayedMonth: this.state.displayedMonth.clone().add(1, "month")});
+    }
+
 }
 
-const CalendarGrid = ({month, value, onClickDay =() => {}}) => <div
+const CalendarGrid = ({
+                          month,
+                          value,
+                          onClickDay =() => {},
+                          onClickPrevMonth =() => {},
+                          onClickNextMonth =() => {},
+
+                      }) => <div
     style={{
         minWidth: 300,
         maxWidth: 600,
@@ -26,25 +70,37 @@ const CalendarGrid = ({month, value, onClickDay =() => {}}) => <div
         alignItems: "center"
     }}
 >
-    <div>
-        {value.format("MMMM YYYY")}
+    <div style={ROW_STYLE}>
+        <i className={"fas fa-caret-left"}
+           style={{color: "white", marginLeft: 5, fontSize: 30, paddingRight: 40}}
+               onClick={onClickPrevMonth}/>
+        <span>{month.month.format("MMMM YYYY")}</span>
+        <i className={"fas fa-caret-right"}
+           style={{color: "white", marginRight: 5, fontSize: 30, paddingLeft: 40}}
+           onClick={onClickNextMonth}/>
     </div>
 
 
     <div style={ROW_STYLE}>
         {
-            month[0].days.map(d => <DayName key={d.key} day={d.day}/>)
+            month.weeks[0].days.map(d => <DayName key={d.key} day={d.day}/>)
         }
     </div>
     {
-        month.map(w =>
+        month.weeks.map(w =>
             <div
                 key={w.key}
                 style={ROW_STYLE}
             >
             {
                 w.days.map(d =>
-                    <Day key={d.key} day={d.day} value={value} onClick={() => {onClickDay(d.day)}}/>
+                    <Day
+                        key={d.key}
+                        day={d.day}
+                        value={value}
+                        onClick={() => {onClickDay(d.day)}}
+                        month={month.month}
+                    />
                 )
             }
             </div>
@@ -68,7 +124,7 @@ const CELL_STYLE = {
     justifyContent: "space-around",
 };
 
-const Day = ({day, value, onClick}) => <div
+const Day = ({day, month, value, onClick}) => <div
     style={{
         ...CELL_STYLE,
         cursor: "pointer"
@@ -76,7 +132,7 @@ const Day = ({day, value, onClick}) => <div
     onClick={() => {onClick()}}
 >
     <div style={dayContainerStyle(day, value)}>
-        <span style={dayLettersStyle(day)}>{day.format("D")}</span>
+        <span style={dayLettersStyle(day, month)}>{day.format("D")}</span>
     </div>
 </div>;
 
@@ -102,14 +158,14 @@ function dayContainerStyle(day, value) {
     return style;
 }
 
-function dayLettersStyle(day) {
+function dayLettersStyle(day, month) {
     const style = {color: "white"};
 
     if (day.isoWeekday() === 6 || day.isoWeekday() === 7) {
         style.color = "red"
     }
     
-    if (!day.isSame(moment(), "month")) {
+    if (!day.isSame(month, "month")) {
           style.color = "#888"
     }
 
@@ -137,7 +193,7 @@ function getMonth(value) {
         weeks.push({key: currentWeek.toISOString(), days: days, week: currentWeek.clone()});
         currentWeek.add(1, "week");
     }
-    return weeks;
+    return {month: value, weeks: weeks};
 }
 
 
