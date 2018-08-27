@@ -3,6 +3,7 @@ import ColorPicker from './ColorPicker'
 import GroupSelectFormSection from './GroupSelectFormSection'
 import TodoCompletedFormSection from "./TodoCompletedFormSection";
 import WhenFormSection from "./WhenFormSection";
+import Calendar from "./Calendar";
 
 const TodoForm = ({item, onChangeFields, createMode}) => <div>
     <TodoTextInput value={item.text} onChangeValue={v => onChangeFields({text: v})} autofocus={createMode}/>
@@ -15,6 +16,9 @@ const TodoForm = ({item, onChangeFields, createMode}) => <div>
                 onChangeValue={v => onChangeFields({groupId: v})}
                 disabledId={item.id}
             />
+
+    <Calendar/>
+
 </div>;
 
 export default TodoForm;
