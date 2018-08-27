@@ -83,6 +83,10 @@ class AbstractItemFormPage extends React.Component {
     onSubmit() {
         this.props.onSave(this.getItem());
     }
+
+    componentDidMount() {
+        $(window).scrollTop(0);
+    }
 }
 
 export default AbstractItemFormPage

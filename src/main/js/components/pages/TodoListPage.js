@@ -43,6 +43,7 @@ class TodoListPage extends React.Component {
 
     componentDidMount() {
         todoLogic.subscribe(this, () => {this.setState({generation: this.state.generation + 1})})
+        $(window).scrollTop(0);
     }
 
     componentWillUnmount() {
