@@ -3,28 +3,36 @@ import PropTypes from 'prop-types'
 
 const ANIMATION_FRAME_MS = 10;
 
-const MOMENTUM_DECAY_PER_MS = 0.01;
+const VELOCITY_DECAY_PER_MS_SQUARED = 0.002;
 
-const MAX_MOMENTUM = 0.2;
+const MAX_VELOCITY = 2;
+const DELTA_POS_CUTOFF = 0.1;
 
 class DrumPicker extends React.Component {
 
     static propTypes = {
         values: PropTypes.array.isRequired,
-        lineHeight: PropTypes.number,
-        linesBeforeAndAfter: PropTypes.number,
+        onChangeValue: PropTypes.func,
+        rowHeight: PropTypes.number,
+        rowsBeforeAndAfter: PropTypes.number,
+        endsJoined: PropTypes.bool,
     };
 
     static defaultProps = {
-        lineHeight: 30,
-        linesBeforeAndAfter: 2,
+        onChangeValue: () => {},
+        rowHeight: 30,
+        rowsBeforeAndAfter: 2,
+        endsJoined: false,
     };
 
     constructor(props) {
         super(props);
+
+        const valueIdx = props.value ? props.values.indexOf(props.value) : 0;
         this.state = {
-            tumblerTop: 0,
+            tumblerTop: this.valueIdxToTumblerTop(valueIdx),
         };
+
 
         this.lastPanPos = 0;
         this.lastPanTime = 0;
@@ -34,29 +42,40 @@ class DrumPicker extends React.Component {
 
         this.animationHandle = null;
         this.lastAnimationTime = 0;
-        this.momentum = 0;
+        this.velocity = 0;
     }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.value != prevProps.value) {
+            this.moveToValue(this.props.value);
+        }
+
+
+    }
+    
 
     render() {
         return <div style={{
             position: "relative",
-            height: (this.props.linesBeforeAndAfter * 2 + 1) * this.props.lineHeight,
+            height: (this.props.rowsBeforeAndAfter * 2 + 1) * this.props.rowHeight,
             width: 50,
             backgroundColor: "green",
-            overflow: "hidden"
-        }}>
+            overflow: "hidden",
+
+        }}
+                    ref={this.setupEvents}
+        >
             <div style={{
                 position: "absolute",
-                top: this.props.linesBeforeAndAfter * this.props.lineHeight,
+                top: this.props.rowsBeforeAndAfter * this.props.rowHeight,
                 width: "100%",
-                height: this.props.lineHeight,
+                height: this.props.rowHeight,
                 border: "2px solid white",
                 borderRadius: 4
             }}/>
             <Tumbler
-                elemRef={this.setupTumblerElem}
                 values={this.props.values}
-                lineHeight={this.props.lineHeight}
+                lineHeight={this.props.rowHeight}
                 style={{
                     top: this.state.tumblerTop
                 }}
@@ -64,7 +83,7 @@ class DrumPicker extends React.Component {
         </div>
     }
 
-    setupTumblerElem = e => {
+    setupEvents = e => {
         $(e).hammer({})
             .bind("panstart", this.onPanStart)
             .bind("panmove", this.onPanMove)
@@ -94,29 +113,29 @@ class DrumPicker extends React.Component {
     };
 
     setTumblerTop = value => {
+
+        if (!this.props.endsJoined) {
+            value = Math.min(value, this.props.rowsBeforeAndAfter * this.props.rowHeight);
+            value = Math.max(value, -1 * (this.props.values.length - this.props.rowsBeforeAndAfter - 1)* this.props.rowHeight);
+        }
+        
         this.setState({
             tumblerTop: value
         });
-        this.updateValue(value);
     };
 
-    onPanEnd = e => {
-        const dT = new Date().getTime() - this.lastPanTime;
-        if (dT < 50) {
-            this.setMomentum(this.panSpeed);
-        } else {
-            this.moveStopped();
+    onPanEnd = () => {
+        let velocity = this.panSpeed;
+        if (velocity < -MAX_VELOCITY) {
+            velocity = -MAX_VELOCITY;
+        } else if (velocity > MAX_VELOCITY) {
+            velocity = MAX_VELOCITY;
         }
-
+        this.setVelocity(velocity);
     };
 
-    setMomentum = momentum => {
-        if (momentum < -MAX_MOMENTUM) {
-            momentum = -MAX_MOMENTUM;
-        } else if (momentum > MAX_MOMENTUM) {
-            momentum = MAX_MOMENTUM;
-        }
-        this.momentum = momentum;
+    setVelocity = velocity => {
+        this.velocity = velocity;
         if (this.animationHandle == null) {
             this.animationHandle = setInterval(this.animate, ANIMATION_FRAME_MS);
             this.lastAnimationTime = new Date().getTime();
@@ -127,41 +146,85 @@ class DrumPicker extends React.Component {
         const time = new Date().getTime();
         const dT = time - this.lastAnimationTime;
         if (dT > 0) {
-            const dPos = this.momentum * dT;
-            this.setTumblerTop(this.state.tumblerTop + dT * dPos);
-            this.momentum = this.decayedMomentum(this.momentum, dT);
+            const sign = this.velocity >= 0 ? 1 : -1;
+            const absVel = Math.abs(this.velocity);
+
+            const absDeltaPos = absVel * dT - (VELOCITY_DECAY_PER_MS_SQUARED * dT * dT) / 2;
+
+            if (absDeltaPos > DELTA_POS_CUTOFF) {
+                this.setTumblerTop(this.state.tumblerTop + absDeltaPos * sign);
+                this.velocity = sign * (Math.max(0, absVel - dT * VELOCITY_DECAY_PER_MS_SQUARED))
+            } else {
+                this.velocity = 0;
+            }
+
         }
         this.lastAnimationTime = time;
 
-        if (this.momentum === 0) {
-            this.stopMomentum();
+        if (this.velocity === 0) {
             this.moveStopped();
         }
     };
 
+
     moveStopped = () => {
-        
+        if (this.correctionNeeded()) {
+            this.applyCorrection();
+        } else {
+            this.stopAnimation();
+            const currentVal = this.props.values[this.tumblerTopToValueIdx(this.state.tumblerTop)];
+            if (currentVal !== this.props.value) {
+                this.props.onChangeValue(currentVal);
+            }
+        }
     };
 
-    decayedMomentum = (v, t) => {
-        return v * Math.pow(1 - MOMENTUM_DECAY_PER_MS, t);
+    correctionNeeded = () => {
+        return Math.abs(this.state.tumblerTop - this.correctedTumblerTopPx()) > DELTA_POS_CUTOFF;
     };
 
-    stopMomentum = () => {
+    correctedTumblerTopPx = () => {
+        return this.valueIdxToTumblerTop(this.currentTumblerIdx());
+
+    };
+
+    currentTumblerIdx = () => {
+        return this.tumblerTopToValueIdx(this.state.tumblerTop);
+    };
+
+    applyCorrection = () => {
+        this.moveToIdx(this.currentTumblerIdx());
+    };
+
+    moveToValue = (value) => {
+        const idx = this.props.values.indexOf(value);
+        this.moveToIdx(idx);
+    };
+
+    moveToIdx = (idx) => {
+        const pxPos = (this.props.rowsBeforeAndAfter - idx) * this.props.rowHeight;
+        const deltaS = pxPos - this.state.tumblerTop;
+        const sign = deltaS >= 0 ? 1 : -1;
+
+        const absV =  Math.sqrt(2 * VELOCITY_DECAY_PER_MS_SQUARED * Math.abs(deltaS));
+        this.setVelocity(sign * absV);
+    };
+
+    stopAnimation = () => {
         if (this.animationHandle) {
             clearInterval(this.animationHandle);
             this.animationHandle = null;
         }
-        this.momentum = 0;
-    };
-
-    updateValue = tumblerTop => {
     };
 
     tumblerTopToValueIdx = tumblerTop => {
-        const val = -1 * (tumblerTop - this.props.linesBeforeAndAfter * this.props.lineHeight - this.props.lineHeight / 2);
-        return Math.floor(val / this.props.lineHeight);
-    }
+        const val = -1 * (tumblerTop - this.props.rowsBeforeAndAfter * this.props.rowHeight - this.props.rowHeight / 2);
+        return Math.floor(val / this.props.rowHeight);
+    };
+
+    valueIdxToTumblerTop = valueIdx => {
+        return (this.props.rowsBeforeAndAfter - valueIdx) * this.props.rowHeight;
+    };
 
 
 
