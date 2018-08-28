@@ -15,14 +15,14 @@ class DrumPicker extends React.Component {
         onChangeValue: PropTypes.func,
         rowHeight: PropTypes.number,
         rowsBeforeAndAfter: PropTypes.number,
-        endsJoined: PropTypes.bool,
+        cycleValues: PropTypes.bool,
     };
 
     static defaultProps = {
         onChangeValue: () => {},
-        rowHeight: 30,
+        rowHeight: 40,
         rowsBeforeAndAfter: 2,
-        endsJoined: false,
+        cycleValues: false,
     };
 
     constructor(props) {
@@ -58,24 +58,41 @@ class DrumPicker extends React.Component {
         return <div style={{
             position: "relative",
             height: (this.props.rowsBeforeAndAfter * 2 + 1) * this.props.rowHeight,
-            width: 50,
-            backgroundColor: "green",
+            width: 60,
             overflow: "hidden",
 
         }}
                     ref={this.setupEvents}
         >
+            <div className="drumPickerTopMask"
+                style={{
+                position: "absolute",
+                top: 0,
+                width: "100%",
+                height: this.props.rowsBeforeAndAfter * this.props.rowHeight,
+                zIndex: 2
+            }}/>
+
+            <div className="drumPickerBottomMask"
+                style={{
+                position: "absolute",
+                top: (this.props.rowsBeforeAndAfter + 1) * this.props.rowHeight,
+                width: "100%",
+                height: this.props.rowsBeforeAndAfter * this.props.rowHeight,
+                zIndex: 2
+            }}/>
             <div style={{
                 position: "absolute",
                 top: this.props.rowsBeforeAndAfter * this.props.rowHeight,
                 width: "100%",
                 height: this.props.rowHeight,
-                border: "2px solid white",
-                borderRadius: 4
+                borderTop: "2px solid white",
+                borderBottom: "2px solid white",
             }}/>
             <Tumbler
                 values={this.props.values}
                 lineHeight={this.props.rowHeight}
+                cycleValues={this.props.cycleValues}
                 style={{
                     top: this.state.tumblerTop
                 }}
@@ -114,15 +131,26 @@ class DrumPicker extends React.Component {
 
     setTumblerTop = value => {
 
-        if (!this.props.endsJoined) {
+        if (!this.props.cycleValues) {
             value = Math.min(value, this.props.rowsBeforeAndAfter * this.props.rowHeight);
             value = Math.max(value, -1 * (this.props.values.length - this.props.rowsBeforeAndAfter - 1)* this.props.rowHeight);
+        } else {
+
+            const z = this.props.values.length * this.props.rowHeight;
+            const trashingMargin = 3 * this.props.rowHeight;
+            if (value > -z + trashingMargin) {
+                value -= z;
+            } else if (value < -2 * z + trashingMargin) {
+                value += z;
+            }
         }
         
         this.setState({
             tumblerTop: value
         });
     };
+
+
 
     onPanEnd = () => {
         let velocity = this.panSpeed;
@@ -202,7 +230,8 @@ class DrumPicker extends React.Component {
     };
 
     moveToIdx = (idx) => {
-        const pxPos = (this.props.rowsBeforeAndAfter - idx) * this.props.rowHeight;
+        const additionalRows = this.props.cycleValues ? this.props.values.length : 0;
+        const pxPos = (this.props.rowsBeforeAndAfter - additionalRows - idx) * this.props.rowHeight;
         const deltaS = pxPos - this.state.tumblerTop;
         const sign = deltaS >= 0 ? 1 : -1;
 
@@ -218,37 +247,59 @@ class DrumPicker extends React.Component {
     };
 
     tumblerTopToValueIdx = tumblerTop => {
+        const additionalRows = this.props.cycleValues ? this.props.values.length : 0;
+        tumblerTop += additionalRows * this.props.rowHeight;
         const val = -1 * (tumblerTop - this.props.rowsBeforeAndAfter * this.props.rowHeight - this.props.rowHeight / 2);
-        return Math.floor(val / this.props.rowHeight);
+        const result = Math.floor(val / this.props.rowHeight);
+        return result;
+
     };
 
     valueIdxToTumblerTop = valueIdx => {
-        return (this.props.rowsBeforeAndAfter - valueIdx) * this.props.rowHeight;
+        const additionalRows = this.props.cycleValues ? this.props.values.length : 0;
+        const result = (this.props.rowsBeforeAndAfter - additionalRows - valueIdx) * this.props.rowHeight;
+        return result;
+
     };
 
 
 
 }
 
-const Tumbler = ({values, elemRef, style, lineHeight}) => <div
-    ref={elemRef}
-    style={{
-        width: "100%",
-        fontSize: 20,
-        position: "absolute",
-        ...style
-    }}>
-    {
-        values.map(v => <div
-            key={v}
-            style={{
-                cursor: "pointer",
-                height: lineHeight,
-            }}
-
-        >{v}</div>)
+const Tumbler = ({values, elemRef, style, lineHeight, cycleValues}) => {
+    let rows = [];
+    if (cycleValues) {
+        rows = rows.concat(values.map(v => ({key: "bef-" + v, value: v})))
     }
-</div>;
+    rows = rows.concat(values.map(v => ({key: v, value: v})));
+    if (cycleValues) {
+        rows = rows.concat(values.map(v => ({key: "aft-" + v, value: v})))
+    }
+
+
+    return <div
+        ref={elemRef}
+        style={{
+            width: "100%",
+            fontSize: 30,
+            position: "absolute",
+            ...style
+        }}>
+        {
+            rows.map(v => <div
+                key={v.key}
+                style={{
+                    display: "flex",
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                    cursor: "pointer",
+                    height: lineHeight,
+                }}
+
+            >{v.value}</div>)
+        }
+    </div>
+};
 
 
 export default DrumPicker

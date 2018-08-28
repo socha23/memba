@@ -45,3 +45,11 @@ a:hover {
     height: 0;
     transition: height 300ms, opacity 100ms;
 }
+
+.drumPickerTopMask {
+    background: linear-gradient(to bottom, rgba(39,43,48,0.65),rgba(39,43,48,0));
+}
+
+.drumPickerBottomMask {
+    background: linear-gradient(to top, rgba(39,43,48,0.65),rgba(39,43,48,0));
+}
