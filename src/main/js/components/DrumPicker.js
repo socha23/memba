@@ -19,6 +19,7 @@ class DrumPicker extends React.Component {
         cycleValues: PropTypes.bool,
         showMark: PropTypes.bool,
         itemStyle: PropTypes.object,
+        width: PropTypes.number,
     };
 
     static defaultProps = {
@@ -29,6 +30,7 @@ class DrumPicker extends React.Component {
         cycleValues: false,
         showMark: true,
         itemStyle: {},
+        width: 30,
     };
 
     constructor(props) {
@@ -64,7 +66,7 @@ class DrumPicker extends React.Component {
             position: "relative",
             height: (this.props.rowsBeforeAndAfter * 2 + 1) * this.props.rowHeight,
             overflow: "hidden",
-            minWidth: 50,
+            width: this.props.width,
         }}
                     ref={this.setupEvents}
         >
@@ -108,12 +110,16 @@ class DrumPicker extends React.Component {
     }
 
     setupEvents = e => {
+
         $(e).hammer({})
             .bind("panstart", this.onPanStart)
             .bind("panmove", this.onPanMove)
             .bind("panend", this.onPanEnd)
         ;
-        $(e).data("hammer").get("pan").set({direction: Hammer.DIRECTION_VERTICAL, threshold: 0});
+        if ($(e).data("hammer")) {
+            $(e).data("hammer").get("pan").set({direction: Hammer.DIRECTION_VERTICAL, threshold: 0});
+        }
+
     };
 
     onPanStart = e => {

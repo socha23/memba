@@ -14,8 +14,11 @@ for (let i = 0; i < 60; i++) {
 }
 
 
-const ROW_HEIGHT = 40;
+const ROW_HEIGHT = 38;
 const MARGIN_ROWS = 2;
+
+const DRUM_WIDTH = 38;
+
 
 class TimePicker extends React.Component {
 
@@ -47,23 +50,35 @@ class TimePicker extends React.Component {
                 display: "flex",
                 alignItems: "center"
             }}>
-                <DrumPicker values={HOURS} value={this.props.value.substr(0, 2)}
+                <DrumPicker
+                            width={DRUM_WIDTH}
+                            rowHeight={ROW_HEIGHT}
+                            values={HOURS} value={this.props.value.substr(0, 2)}
                             showMark={false} cycleValues={true}
                             onChangeValue={v => {this.props.onChangeValue(v + this.props.value.substr(2, 3))}}
                             itemStyle={{
-                                paddingLeft: 10,
+                                fontSize: 24,
+                                color: "white",
+                                justifyContent: "flex-end",
+                                paddingRight: 6,
                             }}
                 />
                 <div style={{
-                    fontSize: 30,
+                    fontSize: 24,
                     position: "relative",
                     top: -2,
                 }}>:</div>
-                <DrumPicker values={MINUTES} value={this.props.value.substr(3, 2)}
+                <DrumPicker
+                            width={DRUM_WIDTH}
+                            rowHeight={ROW_HEIGHT}
+                            values={MINUTES} value={this.props.value.substr(3, 2)}
                             showMark={false} cycleValues={true}
                             onChangeValue={v => {this.props.onChangeValue(this.props.value.substr(0, 3) + v)}}
                             itemStyle={{
-                                paddingRight: 10,
+                                fontSize: 24,
+                                color: "white",
+                                justifyContent: "flex-start",
+                                paddingLeft: 5,
                             }}
 
                 />

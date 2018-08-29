@@ -6,12 +6,14 @@ class Calendar extends React.Component {
 
     static propTypes = {
         value: PropTypes.object,
-        onChangeValue: PropTypes.func
+        onChangeValue: PropTypes.func,
+        style: PropTypes.object,
     };
 
     static defaultProps = {
         value: moment(),
-        onChangeValue: () => {}
+        onChangeValue: () => {},
+        style: {},
     };
 
     constructor(props) {
@@ -36,6 +38,7 @@ class Calendar extends React.Component {
                     month={getMonth(this.state.displayedMonth)}
                     onClickPrevMonth={() => {this.onPrevMonth()}}
                     onClickNextMonth={() => {this.onNextMonth()}}
+                    style={this.props.style}
         />
     }
 
@@ -59,6 +62,7 @@ const CalendarGrid = ({
                           onClickDay =() => {},
                           onClickPrevMonth =() => {},
                           onClickNextMonth =() => {},
+                          style = {},
 
                       }) => <div
     style={{
@@ -67,7 +71,8 @@ const CalendarGrid = ({
         fontSize: 20,
         display: "flex",
         flexDirection: "column",
-        alignItems: "center"
+        alignItems: "center",
+        ...style
     }}
 >
     <div style={ROW_STYLE}>
@@ -117,7 +122,7 @@ const ROW_STYLE = {
 };
 
 const CELL_STYLE = {
-    height: 35,
+    height: 30,
     width: 40,
     display: "flex",
     alignItems: "center",
@@ -144,7 +149,8 @@ function dayContainerStyle(day, value) {
     const style = {
         width: 40,
         borderRadius: 20,
-        padding: 3,
+        paddingLeft: 3,
+        paddingRight: 3,
         textAlign: "center"
     };
 
