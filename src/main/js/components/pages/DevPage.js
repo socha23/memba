@@ -2,13 +2,12 @@ import React from 'react'
 
 import {BrandedNavbar} from '../structural/PageTopNavbar'
 import PageBody from '../structural/PageBody'
-import DrumPicker from '../DrumPicker'
+import TimePicker from "../TimePicker";
 
 class DevPage extends React.Component {
 
     state = {
-        value: "00",
-        value2: "00"
+        value: "00:00",
     };
 
     render() {
@@ -25,17 +24,16 @@ class DevPage extends React.Component {
 
         return <div style={{display: "flex", justifyContent: "space-between"}}>
             <div style={{display: "flex"}}>
-                <DrumPicker values={hours} value={this.state.value} onChangeValue={this.onChangeValue} cycleValues={true}/>
-                <DrumPicker values={minutes} value={this.state.value2} onChangeValue={this.onChangeValue2} cycleValues={true}/>
+                <TimePicker value={this.state.value} onChangeValue={this.onChangeValue}/>
             </div>
             <div>
                 <div>
-                    <h1>{this.state.value}:{this.state.value2}</h1>
+                    <h1>{this.state.value}</h1>
 
-                    <button className="btn btn-primary btn-block" onClick={() => {this.setState({value: "00", value2: "15"})}}>00:15</button>
-                    <button className="btn btn-primary btn-block" onClick={() => {this.setState({value: "08", value2: "50"})}}>08:50</button>
-                    <button className="btn btn-primary btn-block" onClick={() => {this.setState({value: "16", value2: "00"})}}>16:00</button>
-                    <button className="btn btn-primary btn-block" onClick={() => {this.setState({value: "23", value2: "30"})}}>23:30</button>
+                    <button className="btn btn-primary btn-block" onClick={() => {this.setState({value: "00:15"})}}>00:15</button>
+                    <button className="btn btn-primary btn-block" onClick={() => {this.setState({value: "08:50"})}}>08:50</button>
+                    <button className="btn btn-primary btn-block" onClick={() => {this.setState({value: "16:00"})}}>16:00</button>
+                    <button className="btn btn-primary btn-block" onClick={() => {this.setState({value: "23:30"})}}>23:30</button>
                 </div>
             </div>
         </div>;
@@ -43,10 +41,6 @@ class DevPage extends React.Component {
 
     onChangeValue = v => {
         this.setState({value: v});
-    };
-
-    onChangeValue2 = v => {
-        this.setState({value2: v});
     };
 }
 

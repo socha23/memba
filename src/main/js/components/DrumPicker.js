@@ -17,6 +17,8 @@ class DrumPicker extends React.Component {
         rowHeight: PropTypes.number,
         rowsBeforeAndAfter: PropTypes.number,
         cycleValues: PropTypes.bool,
+        showMark: PropTypes.bool,
+        itemStyle: PropTypes.object,
     };
 
     static defaultProps = {
@@ -25,6 +27,8 @@ class DrumPicker extends React.Component {
         rowHeight: 40,
         rowsBeforeAndAfter: 2,
         cycleValues: false,
+        showMark: true,
+        itemStyle: {},
     };
 
     constructor(props) {
@@ -59,9 +63,8 @@ class DrumPicker extends React.Component {
         return <div style={{
             position: "relative",
             height: (this.props.rowsBeforeAndAfter * 2 + 1) * this.props.rowHeight,
-            width: 60,
             overflow: "hidden",
-
+            minWidth: 50,
         }}
                     ref={this.setupEvents}
         >
@@ -84,14 +87,14 @@ class DrumPicker extends React.Component {
                      zIndex: 2,
                      cursor: "pointer",
                  }}/>
-            <div style={{
+            {this.props.showMark ? <div style={{
                 position: "absolute",
                 top: this.props.rowsBeforeAndAfter * this.props.rowHeight,
                 width: "100%",
                 height: this.props.rowHeight,
                 borderTop: "2px solid white",
                 borderBottom: "2px solid white",
-            }}/>
+            }}/> : <div/>}
             <Tumbler
                 values={this.props.values}
                 lineHeight={this.props.rowHeight}
@@ -99,6 +102,7 @@ class DrumPicker extends React.Component {
                 style={{
                     top: this.state.tumblerTop
                 }}
+                itemStyle={this.props.itemStyle}
             />
         </div>
     }
@@ -306,7 +310,7 @@ class DrumPicker extends React.Component {
 
 }
 
-const Tumbler = ({values, elemRef, style, lineHeight, cycleValues}) => {
+const Tumbler = ({values, elemRef, style, lineHeight, cycleValues, itemStyle}) => {
     let rows = [];
     if (cycleValues) {
         rows = rows.concat(values.map(v => ({key: "bef-" + v, value: v})))
@@ -334,6 +338,7 @@ const Tumbler = ({values, elemRef, style, lineHeight, cycleValues}) => {
                     alignItems: "center",
                     cursor: "pointer",
                     height: lineHeight,
+                    ...itemStyle
                 }}
 
             >{v.value}</div>)
