@@ -161,7 +161,11 @@ function dayContainerStyle(day, value) {
 function dayLettersStyle(day, month) {
     const style = {color: "white"};
 
-    if (day.isoWeekday() === 6 || day.isoWeekday() === 7) {
+    if (day.isoWeekday() === 6) {
+        style.color = "#aaa"
+    }
+
+    if (day.isoWeekday() === 7) {
         style.color = "red"
     }
     

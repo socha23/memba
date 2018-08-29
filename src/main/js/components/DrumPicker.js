@@ -71,7 +71,8 @@ class DrumPicker extends React.Component {
                      top: 0,
                      width: "100%",
                      height: this.props.rowsBeforeAndAfter * this.props.rowHeight,
-                     zIndex: 2
+                     zIndex: 2,
+                     cursor: "pointer",
                  }}/>
 
             <div className="drumPickerBottomMask"
@@ -80,7 +81,8 @@ class DrumPicker extends React.Component {
                      top: (this.props.rowsBeforeAndAfter + 1) * this.props.rowHeight,
                      width: "100%",
                      height: this.props.rowsBeforeAndAfter * this.props.rowHeight,
-                     zIndex: 2
+                     zIndex: 2,
+                     cursor: "pointer",
                  }}/>
             <div style={{
                 position: "absolute",
