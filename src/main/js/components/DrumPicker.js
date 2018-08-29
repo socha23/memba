@@ -7,6 +7,7 @@ const VELOCITY_DECAY_PER_MS_SQUARED = 0.002;
 
 const MAX_VELOCITY = 2;
 const DELTA_POS_CUTOFF = 0.1;
+const CORRECTION_NEEDED_DISTANCE = 2;
 
 class DrumPicker extends React.Component {
 
@@ -19,7 +20,8 @@ class DrumPicker extends React.Component {
     };
 
     static defaultProps = {
-        onChangeValue: () => {},
+        onChangeValue: () => {
+        },
         rowHeight: 40,
         rowsBeforeAndAfter: 2,
         cycleValues: false,
@@ -32,6 +34,7 @@ class DrumPicker extends React.Component {
         this.state = {
             tumblerTop: this.valueIdxToTumblerTop(valueIdx),
         };
+        this.tumblerTop = this.valueIdxToTumblerTop(valueIdx);
 
 
         this.lastPanPos = 0;
@@ -45,14 +48,12 @@ class DrumPicker extends React.Component {
         this.velocity = 0;
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.props.value != prevProps.value) {
+    componentDidUpdate(prevProps) {
+        if (this.props.value !== prevProps.value) {
             this.moveToValue(this.props.value);
         }
-
-
     }
-    
+
 
     render() {
         return <div style={{
@@ -65,22 +66,22 @@ class DrumPicker extends React.Component {
                     ref={this.setupEvents}
         >
             <div className="drumPickerTopMask"
-                style={{
-                position: "absolute",
-                top: 0,
-                width: "100%",
-                height: this.props.rowsBeforeAndAfter * this.props.rowHeight,
-                zIndex: 2
-            }}/>
+                 style={{
+                     position: "absolute",
+                     top: 0,
+                     width: "100%",
+                     height: this.props.rowsBeforeAndAfter * this.props.rowHeight,
+                     zIndex: 2
+                 }}/>
 
             <div className="drumPickerBottomMask"
-                style={{
-                position: "absolute",
-                top: (this.props.rowsBeforeAndAfter + 1) * this.props.rowHeight,
-                width: "100%",
-                height: this.props.rowsBeforeAndAfter * this.props.rowHeight,
-                zIndex: 2
-            }}/>
+                 style={{
+                     position: "absolute",
+                     top: (this.props.rowsBeforeAndAfter + 1) * this.props.rowHeight,
+                     width: "100%",
+                     height: this.props.rowsBeforeAndAfter * this.props.rowHeight,
+                     zIndex: 2
+                 }}/>
             <div style={{
                 position: "absolute",
                 top: this.props.rowsBeforeAndAfter * this.props.rowHeight,
@@ -111,7 +112,7 @@ class DrumPicker extends React.Component {
 
     onPanStart = e => {
         this.panStart = e.gesture.center.y;
-        this.tumblerTopBeforePan = this.state.tumblerTop;
+        this.tumblerTopBeforePan = this.tumblerTop;
     };
 
     onPanMove = e => {
@@ -124,32 +125,39 @@ class DrumPicker extends React.Component {
             const dT = currentTime - this.lastPanTime;
             this.panSpeed = (currentPanPos - this.lastPanPos) / (dT);
         }
-        
+
         this.lastPanPos = currentPanPos;
         this.lastPanTime = currentTime;
+    };
+
+    correctPosForCycle = (pos) => {
+        if (!this.props.cycleValues) {
+            return pos;
+        }
+
+        const z = this.props.values.length * this.props.rowHeight;
+        if (pos > -z) {
+            return pos - z;
+        } else if (pos < -2 * z) {
+            return pos + z;
+        } else {
+            return pos;
+        }
     };
 
     setTumblerTop = value => {
 
         if (!this.props.cycleValues) {
             value = Math.min(value, this.props.rowsBeforeAndAfter * this.props.rowHeight);
-            value = Math.max(value, -1 * (this.props.values.length - this.props.rowsBeforeAndAfter - 1)* this.props.rowHeight);
+            value = Math.max(value, -1 * (this.props.values.length - this.props.rowsBeforeAndAfter - 1) * this.props.rowHeight);
         } else {
-
-            const z = this.props.values.length * this.props.rowHeight;
-            const trashingMargin = 3 * this.props.rowHeight;
-            if (value > -z + trashingMargin) {
-                value -= z;
-            } else if (value < -2 * z + trashingMargin) {
-                value += z;
-            }
+            value = this.correctPosForCycle(value);
         }
-        
+        this.tumblerTop = value;
         this.setState({
             tumblerTop: value
         });
     };
-
 
 
     onPanEnd = () => {
@@ -180,7 +188,7 @@ class DrumPicker extends React.Component {
             const absDeltaPos = absVel * dT - (VELOCITY_DECAY_PER_MS_SQUARED * dT * dT) / 2;
 
             if (absDeltaPos > DELTA_POS_CUTOFF) {
-                this.setTumblerTop(this.state.tumblerTop + absDeltaPos * sign);
+                this.setTumblerTop(this.tumblerTop + absDeltaPos * sign);
                 this.velocity = sign * (Math.max(0, absVel - dT * VELOCITY_DECAY_PER_MS_SQUARED))
             } else {
                 this.velocity = 0;
@@ -200,7 +208,8 @@ class DrumPicker extends React.Component {
             this.applyCorrection();
         } else {
             this.stopAnimation();
-            const currentVal = this.props.values[this.tumblerTopToValueIdx(this.state.tumblerTop)];
+            const myPos = this.tumblerTop;
+            const currentVal = this.props.values[this.tumblerTopToValueIdx(myPos)];
             if (currentVal !== this.props.value) {
                 this.props.onChangeValue(currentVal);
             }
@@ -208,35 +217,22 @@ class DrumPicker extends React.Component {
     };
 
     correctionNeeded = () => {
-        return Math.abs(this.state.tumblerTop - this.correctedTumblerTopPx()) > DELTA_POS_CUTOFF;
+        return Math.abs(this.tumblerTop - this.correctedTumblerTopPx()) > CORRECTION_NEEDED_DISTANCE;
     };
 
     correctedTumblerTopPx = () => {
-        const pos = this.state.tumblerTop;
         let proposedPos = this.valueIdxToTumblerTop(this.currentTumblerIdx());
-
-        const z = this.props.values.length * this.props.rowHeight;
-        console.log("z", z);
-        let delta = proposedPos - pos;
-
-        if (Math.abs(delta) > (delta + z)) {
-            console.log("delta reduction");
-            delta += z
-        }
-
-        console.log("correcting", pos, "to", pos + delta, "delta", delta);
-        return pos + delta;
-
+        proposedPos = this.closestTumblerTopMatchingPos(proposedPos);
+        return proposedPos;
     };
 
     currentTumblerIdx = () => {
-        return this.tumblerTopToValueIdx(this.state.tumblerTop);
+        return this.tumblerTopToValueIdx(this.tumblerTop);
     };
 
     applyCorrection = () => {
-        console.log("applying correction from ", this.state.tumblerTop, "to", this.correctedTumblerTopPx());
-        this.moveToPx(this.correctedTumblerTopPx());
-        //this.moveToIdx(this.currentTumblerIdx());
+        let to = this.correctedTumblerTopPx();
+        this.moveToPx(to);
     };
 
     moveToValue = (value) => {
@@ -246,15 +242,37 @@ class DrumPicker extends React.Component {
 
     moveToIdx = (idx) => {
         const additionalRows = this.props.cycleValues ? this.props.values.length : 0;
-        const pxPos = (this.props.rowsBeforeAndAfter - additionalRows - idx) * this.props.rowHeight;
+        let pxPos = (this.props.rowsBeforeAndAfter - additionalRows - idx) * this.props.rowHeight;
+        pxPos = this.closestTumblerTopMatchingPos(pxPos);
         this.moveToPx(pxPos)
     };
 
+    closestTumblerTopMatchingPos(pos) {
+        if (!this.props.cycleValues) {
+            return pos;
+        }
+        const z = this.props.rowHeight * this.props.values.length;
+
+        const current = this.tumblerTop;
+
+        const candidateA = pos - z;
+        const candidateB = pos + z;
+
+        if (Math.abs(candidateA - current) < Math.abs(pos - current)) {
+            return candidateA;
+        } else if (Math.abs(candidateB - current) < Math.abs(pos - current)) {
+            return candidateB;
+        } else {
+            return pos;
+        }
+
+    }
+
     moveToPx = (pxPos) => {
-        const deltaS = pxPos - this.state.tumblerTop;
+        const deltaS = pxPos - this.tumblerTop;
         const sign = deltaS >= 0 ? 1 : -1;
 
-        const absV =  Math.sqrt(2 * VELOCITY_DECAY_PER_MS_SQUARED * Math.abs(deltaS));
+        const absV = Math.sqrt(2 * VELOCITY_DECAY_PER_MS_SQUARED * Math.abs(deltaS));
         this.setVelocity(sign * absV);
     };
 
@@ -277,10 +295,10 @@ class DrumPicker extends React.Component {
 
     valueIdxToTumblerTop = valueIdx => {
         const additionalRows = this.props.cycleValues ? this.props.values.length : 0;
-        const result = (this.props.rowsBeforeAndAfter - additionalRows - valueIdx) * this.props.rowHeight;
-        return result;
+        return (this.props.rowsBeforeAndAfter - additionalRows - valueIdx) * this.props.rowHeight;
 
     };
+
 
 
 
