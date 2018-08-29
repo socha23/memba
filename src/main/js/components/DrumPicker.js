@@ -250,8 +250,9 @@ class DrumPicker extends React.Component {
         const additionalRows = this.props.cycleValues ? this.props.values.length : 0;
         tumblerTop += additionalRows * this.props.rowHeight;
         const val = -1 * (tumblerTop - this.props.rowsBeforeAndAfter * this.props.rowHeight - this.props.rowHeight / 2);
+
         const result = Math.floor(val / this.props.rowHeight);
-        return result;
+        return (result + this.props.values.length) % this.props.values.length;
 
     };
 
