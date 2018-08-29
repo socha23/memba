@@ -212,7 +212,20 @@ class DrumPicker extends React.Component {
     };
 
     correctedTumblerTopPx = () => {
-        return this.valueIdxToTumblerTop(this.currentTumblerIdx());
+        const pos = this.state.tumblerTop;
+        let proposedPos = this.valueIdxToTumblerTop(this.currentTumblerIdx());
+
+        const z = this.props.values.length * this.props.rowHeight;
+        console.log("z", z);
+        let delta = proposedPos - pos;
+
+        if (Math.abs(delta) > (delta + z)) {
+            console.log("delta reduction");
+            delta += z
+        }
+
+        console.log("correcting", pos, "to", pos + delta, "delta", delta);
+        return pos + delta;
 
     };
 
@@ -221,7 +234,9 @@ class DrumPicker extends React.Component {
     };
 
     applyCorrection = () => {
-        this.moveToIdx(this.currentTumblerIdx());
+        console.log("applying correction from ", this.state.tumblerTop, "to", this.correctedTumblerTopPx());
+        this.moveToPx(this.correctedTumblerTopPx());
+        //this.moveToIdx(this.currentTumblerIdx());
     };
 
     moveToValue = (value) => {
@@ -232,6 +247,10 @@ class DrumPicker extends React.Component {
     moveToIdx = (idx) => {
         const additionalRows = this.props.cycleValues ? this.props.values.length : 0;
         const pxPos = (this.props.rowsBeforeAndAfter - additionalRows - idx) * this.props.rowHeight;
+        this.moveToPx(pxPos)
+    };
+
+    moveToPx = (pxPos) => {
         const deltaS = pxPos - this.state.tumblerTop;
         const sign = deltaS >= 0 ? 1 : -1;
 
