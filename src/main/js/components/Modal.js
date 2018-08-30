@@ -12,7 +12,7 @@ class MyModal extends React.Component {
 
     render() {
         return <Modal
-            dialogClassName={this.props.dialogClassName}
+            dialogClassName={"modal-dialog-centered " + this.props.dialogClassName}
             visible={this.props.visible}
             onClickBackdrop={() => {this.hide()}}
         >

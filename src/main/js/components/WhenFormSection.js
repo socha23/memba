@@ -37,18 +37,11 @@ class WhenFormSection extends React.Component {
         <FormSectionContainer onClick={() => {this.showModal()}}>
                         When: {this.describeValue()}
         </FormSectionContainer>
-        <MyModal dialogClassName="modal-dialog-centered" visible={this.state.modalShown} onCancel={() => {this.hideModal()}}>
+        <MyModal visible={this.state.modalShown} onCancel={() => {this.hideModal()}}>
             <div className="modal-body" style={{padding: 0}}>
                 {this.currentValue() ?
 
                     <div>
-                        <Calendar
-                            value={this.currentValue().startOf("day")}
-                            onChangeValue={d => {this.onChangeDate(d)}}
-                            style={{
-                                marginBottom: 10
-                            }}
-                        />
                         <div style={{
                             borderTop: "1px solid #666",
                             paddingTop: 10,
