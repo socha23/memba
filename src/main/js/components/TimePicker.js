@@ -14,10 +14,11 @@ for (let i = 0; i < 60; i++) {
 }
 
 
-const ROW_HEIGHT = 38;
+const ROW_HEIGHT = 42;
 const MARGIN_ROWS = 2;
 
-const DRUM_WIDTH = 38;
+const DRUM_WIDTH = 48;
+const FONT_SIZE = 32;
 
 
 class TimePicker extends React.Component {
@@ -57,14 +58,14 @@ class TimePicker extends React.Component {
                             showMark={false} cycleValues={true}
                             onChangeValue={v => {this.props.onChangeValue(v + this.props.value.substr(2, 3))}}
                             itemStyle={{
-                                fontSize: 24,
+                                fontSize: FONT_SIZE,
                                 color: "white",
                                 justifyContent: "flex-end",
                                 paddingRight: 6,
                             }}
                 />
                 <div style={{
-                    fontSize: 24,
+                    fontSize: FONT_SIZE,
                     position: "relative",
                     top: -2,
                 }}>:</div>
@@ -75,7 +76,7 @@ class TimePicker extends React.Component {
                             showMark={false} cycleValues={true}
                             onChangeValue={v => {this.props.onChangeValue(this.props.value.substr(0, 3) + v)}}
                             itemStyle={{
-                                fontSize: 24,
+                                fontSize: 30,
                                 color: "white",
                                 justifyContent: "flex-start",
                                 paddingLeft: 5,

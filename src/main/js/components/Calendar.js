@@ -70,6 +70,7 @@ const CalendarGrid = ({
         maxWidth: 600,
         fontSize: 20,
         display: "flex",
+        position: "relative",
         flexDirection: "column",
         alignItems: "center",
         ...style
@@ -122,10 +123,11 @@ const ROW_STYLE = {
 };
 
 const CELL_STYLE = {
-    height: 30,
+    height: 34,
     width: 40,
     display: "flex",
     alignItems: "center",
+
     justifyContent: "space-around",
 };
 
@@ -148,18 +150,22 @@ const DayName = ({day}) => <div style={{...CELL_STYLE}}>
 function dayContainerStyle(day, value) {
     const style = {
         width: 40,
+        height: 40,
         borderRadius: 20,
         paddingLeft: 3,
         paddingRight: 3,
-        textAlign: "center"
+        alignItems: "center",
+        justifyContent: "space-around",
+        display: "flex"
     };
 
     if (value && day.isSame(value, "day")) {
         style.border = "3px solid red";
+        style.zIndex = 2;
     }
 
     if (day.isSame(moment(), "day")) {
-        style.backgroundColor = "rgb(91, 192, 222)"
+        style.backgroundColor = "#666"
     }
     return style;
 }
@@ -177,6 +183,10 @@ function dayLettersStyle(day, month) {
     
     if (!day.isSame(month, "month")) {
           style.color = "#888"
+    }
+
+    if (day.isBefore(moment().startOf("day"))) {
+        style.opacity = 0.4
     }
 
     return style;
