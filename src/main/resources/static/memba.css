@@ -61,3 +61,8 @@ a:hover {
 .modal-content .drumPickerBottomMask {
     background: linear-gradient(to top, rgba(50,56,62,1),rgba(50,56,62,0));
 }
+
+.modal-dialog .modal-dialog-centered {
+    min-height: 100% !important;
+}
+
