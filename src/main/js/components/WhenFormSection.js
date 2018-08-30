@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import FormSectionContainer from './FormSectionContainer'
 import moment from 'moment'
 import Calendar from "./Calendar";
-import MyModal from "./Modal";
+import Modal from "./Modal";
 import ButtonIcon from "./ButtonIcon";
 import TimePicker from "./TimePicker";
 
@@ -37,7 +37,7 @@ class WhenFormSection extends React.Component {
         <FormSectionContainer onClick={() => {this.showModal()}}>
                         When: {this.describeValue()}
         </FormSectionContainer>
-        <MyModal visible={this.state.modalShown} onCancel={() => {this.hideModal()}}>
+        <Modal visible={this.state.modalShown} onCancel={() => {this.hideModal()}}>
             <div className="modal-body" style={{padding: 0}}>
                 {this.currentValue() ?
 
@@ -88,7 +88,7 @@ class WhenFormSection extends React.Component {
                 </div>
 
             </div>
-        </MyModal>
+        </Modal>
 
         </div>;
     }
@@ -100,7 +100,6 @@ class WhenFormSection extends React.Component {
             value = this.defaultValue();
             this.props.onChangeValue(value.toISOString());
         }
-        console.log(value);
         this.setState({
             modalShown: true,
         });

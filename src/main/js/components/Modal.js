@@ -10,6 +10,13 @@ class MyModal extends React.Component {
         onCancel: PropTypes.func.isRequired,
     };
 
+    constructor(props) {
+        super(props);
+        if (props.visible) {
+            pushModal(this);
+        }
+    }
+
     render() {
         return <Modal
             dialogClassName={this.props.dialogClassName}
@@ -28,12 +35,13 @@ class MyModal extends React.Component {
         return this.props.visible;
     }
 
-    componentDidMount() {
-        pushModal(this);
-    }
-
-    componentWillUnmount() {
-        popModal(this);
+    componentDidUpdate(prevProps) {
+        if (this.props.visible && !prevProps.visible) {
+            pushModal(this);
+        }
+        if (!this.props.visible && prevProps.visible) {
+            popModal(this);
+        }
     }
 
 }
