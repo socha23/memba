@@ -38,7 +38,7 @@ class TodoTextInput extends React.Component {
                       ref={r => {
                           this.input = r
                       }}
-                      rows={4}
+                      rows={5}
                       className="form-control form-control-lg"
                       style={{paddingTop: 3, paddingRight: 5, paddingBottom: 3, paddingLeft: 5}}
                       value={this.props.value}
