@@ -3,11 +3,15 @@ import ColorPicker from './ColorPicker'
 import GroupSelectFormSection from './GroupSelectFormSection'
 import TodoCompletedFormSection from "./TodoCompletedFormSection";
 import WhenFormSection from "./WhenFormSection";
-import Calendar from "./Calendar";
 
-const TodoForm = ({item, onChangeFields, createMode}) => <div>
-    <TodoTextInput value={item.text} onChangeValue={v => onChangeFields({text: v})} autofocus={createMode}/>
-    <ColorPicker value={item.color} onChangeValue={v => onChangeFields({color: v})}/>
+const TodoForm = ({item, onChangeFields, createMode, onSubmit}) => <div>
+    <TodoTextInput
+        value={item.text}
+        onChangeValue={v => onChangeFields({text: v})}
+        autofocus={createMode}
+        onEnterPressed={createMode ? onSubmit : () => {}}
+    />
+    {/*<ColorPicker value={item.color} onChangeValue={v => onChangeFields({color: v})}/>*/}
     <WhenFormSection value={item.when} onChangeValue={v => onChangeFields({when: v})}/>
     <TodoCompletedFormSection value={item.completed} onChangeValue={v => onChangeFields({completed: v})}/>
     
@@ -34,14 +38,18 @@ class TodoTextInput extends React.Component {
                       ref={r => {
                           this.input = r
                       }}
-                      rows={5}
+                      rows={3}
                       className="form-control form-control-lg"
                       style={{paddingTop: 3, paddingRight: 5, paddingBottom: 3, paddingLeft: 5}}
                       value={this.props.value}
                       onChange={(e) => {
                           this.props.onChangeValue(e.target.value)
                       }}
-
+                      onKeyDown={(e) => {
+                          if (e.keyCode == 13 && e.shiftKey == false) {
+                              this.props.onEnterPressed();
+                          }
+                      }}
                       placeholder="Description..."
 
             />

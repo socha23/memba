@@ -120,7 +120,7 @@ const AbstractItemFormPageView = ({
 
     <PageBody>
         <div className="container" style={{padding: 2}}>
-             <FormComponent item={item} onChangeFields={onChangeFields} createMode={createMode}/>
+             <FormComponent item={item} onChangeFields={onChangeFields} onSubmit={onSubmit} createMode={createMode}/>
         </div>
     </PageBody>
 
