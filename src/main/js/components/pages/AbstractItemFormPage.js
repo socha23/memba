@@ -2,10 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import {IconAndTitle, PageTopNavbar} from '../structural/PageTopNavbar'
+import {SizeChangingNavbar} from './todoListComponents/GroupNavbar'
 import PageBody from '../structural/PageBody'
 import {BottomButtonBar} from '../structural/PageBottomBar'
 
 import ButtonIcon from '../ButtonIcon'
+
+
 
 class AbstractItemFormPage extends React.Component {
 
@@ -17,12 +20,14 @@ class AbstractItemFormPage extends React.Component {
         onSave: PropTypes.func.isRequired,
         onBack: PropTypes.func.isRequired,
         createMode: PropTypes.bool.isRequired,
-        toolbarButtons: PropTypes.element
+        toolbarButtons: PropTypes.element,
+        groupNavbar: PropTypes.bool,
     };
 
     static defaultProps = {
         title: "Enter details",
-        toolbarButtons: <span/>
+        toolbarButtons: <span/>,
+        groupNavbar: false,
     };
 
     state = {
@@ -48,6 +53,7 @@ class AbstractItemFormPage extends React.Component {
                         onBack={() => {this.onBack()}}
                         createMode={this.props.createMode}
                         toolbarButtons={this.props.toolbarButtons}
+                        groupNavbar={this.props.groupNavbar}
                     />
         </div>;
     }
@@ -97,12 +103,20 @@ const AbstractItemFormPageView = ({
                              item, onChangeFields,
                              submitEnabled, onSubmit,
                              toolbarButtons,
-                             createMode, onBack
+                             createMode, onBack,
+                             groupNavbar
                          }) => <div>
-    <PageTopNavbar>
-        <IconAndTitle title={title} onClick={onBack} iconClass={"fas fa-backward"}/>
-        {toolbarButtons}
-    </PageTopNavbar>
+
+    {groupNavbar ?
+        <SizeChangingNavbar group={item} onBack={onBack}>
+            {toolbarButtons}
+        </SizeChangingNavbar>
+    :
+        <PageTopNavbar>
+            <IconAndTitle title={title} onClick={onBack} iconClass={"fas fa-backward"}/>
+            {toolbarButtons}
+        </PageTopNavbar>
+    }
 
     <PageBody>
         <div className="container" style={{padding: 2}}>

@@ -36,6 +36,7 @@ const EditGroupPage = ({history, match}) => {
         }}
         title="Edit list"
         createMode={false}
+        groupNavbar={true}
         toolbarButtons={deleteButton}
     />
 };

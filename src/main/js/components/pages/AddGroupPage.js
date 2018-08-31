@@ -33,6 +33,7 @@ const AddGroupPage = ({history, location}) =>
         title="New list"
         saveButtonLabel="Add new list"
         createMode={true}
+        groupNavbar={true}
     />;
 
 export default withRouterWithQuery(AddGroupPage)
