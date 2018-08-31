@@ -12,10 +12,13 @@ class WhenFormSection extends React.Component {
     static propTypes = {
         value: PropTypes.string,
         onChangeValue: PropTypes.func,
+        style: PropTypes.object,
     };
 
     static defaultProps = {
-        onChangeValue: () => {}
+        onChangeValue: () => {},
+        style: {},
+
     };
 
     state = {
@@ -34,7 +37,7 @@ class WhenFormSection extends React.Component {
 
 
         return <div>
-        <FormSectionContainer onClick={() => {this.showModal()}}>
+        <FormSectionContainer style={this.props.style} onClick={() => {this.showModal()}}>
                         When: {this.describeValue()}
         </FormSectionContainer>
         <Modal visible={this.state.modalShown} onCancel={() => {this.hideModal()}}>

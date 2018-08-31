@@ -12,7 +12,7 @@ const TodoForm = ({item, onChangeFields, createMode, onSubmit}) => <div>
         onEnterPressed={createMode ? onSubmit : () => {}}
     />
     {/*<ColorPicker value={item.color} onChangeValue={v => onChangeFields({color: v})}/>*/}
-    <WhenFormSection value={item.when} onChangeValue={v => onChangeFields({when: v})}/>
+    <WhenFormSection value={item.when} onChangeValue={v => onChangeFields({when: v})} style={{borderTop: "none"}}/>
     <TodoCompletedFormSection value={item.completed} onChangeValue={v => onChangeFields({completed: v})}/>
     
     <GroupSelectFormSection
@@ -38,7 +38,7 @@ class TodoTextInput extends React.Component {
                       ref={r => {
                           this.input = r
                       }}
-                      rows={3}
+                      rows={4}
                       className="form-control form-control-lg"
                       style={{paddingTop: 3, paddingRight: 5, paddingBottom: 3, paddingLeft: 5}}
                       value={this.props.value}
