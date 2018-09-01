@@ -33,6 +33,52 @@ class WhenFormSection extends React.Component {
         }
     }
 
+    renderDayLink = (day, children) => {
+        return <a style={{
+                cursor: "pointer",
+                color: day.isSame(this.currentValue(), "day") ? "white" : "#888"
+            }}
+               onClick={() => {this.onChangeDate(day)}}
+               >
+                {children}
+            </a>
+    };
+
+    renderTimeLink = (time, children) => {
+        return <a style={{
+                cursor: "pointer",
+                color: this.currentValue().format("HH:mm") === time ? "white" : "#888"
+            }}
+                  key={time}
+                  onClick={() => {this.onChangeTime(time)}}
+               >
+                {children}
+            </a>
+    };
+
+    renderFridayLink = () => {
+        const today = moment();
+        let description = "Friday";
+        let day = moment().isoWeekday(5);
+        if (today.isoWeekday() === 4 || today.isoWeekday() === 5) {
+            day.add(1, "week");
+            description = "Next Friday";
+        } else if (today.isoWeekday() === 6 || today.isoWeekday() === 7) {
+            day.add(1, "week");
+        }
+        return this.renderDayLink(day, <span>{description}</span>);
+    };
+
+    renderMondayLink = () => {
+        const today = moment();
+        let description = "Monday";
+        let day = moment().isoWeekday(1).add(1, "week");
+        if (today.isoWeekday() === 1) {
+            description = "Next Monday";
+        }
+        return this.renderDayLink(day, <span>{description}</span>);
+    };
+
     render() {
 
 
@@ -61,15 +107,33 @@ class WhenFormSection extends React.Component {
                             alignItems: "top",
                             justifyContent: "space-between",
                         }}>
-                            <div/>
+                            <div style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "space-between",
+                                fontSize: 16,
+                            }}>
+                                {this.renderDayLink(moment(), <span>Today</span>)}
+                                {this.renderDayLink(moment().add(1, "day"), <span>Tomorrow</span>)}
+                                {this.renderFridayLink()}
+                                {this.renderMondayLink()}
+                            </div>
                             <TimePicker
                                 value={this.currentValue().format("HH:mm")}
                                 onChangeValue={this.onChangeTime}
                             />
-                            <div></div>
-                            <div style={{position: "absolute", right: 10, bottom: 1}} onClick={() => {this.onClear()}}>
-                                <i className={"fas fa-times"} style={{marginRight: 4}}/>
-                                Clear
+                            <div style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "space-between",
+                                fontSize: 20,
+                                alignItems: "right",
+                                textAlign: "right",
+                            }}>
+                                {this.renderTimeLink("09:00", <span>09:00</span>)}
+                                {this.renderTimeLink("16:00", <span>16:00</span>)}
+                                {this.renderTimeLink("22:00", <span>22:00</span>)}
+                                <span onClick={() => {this.onClear()}}>Clear</span>
                             </div>
                         </div>
 
@@ -146,6 +210,7 @@ class WhenFormSection extends React.Component {
 
     }
 }
+
 
 export default WhenFormSection
 

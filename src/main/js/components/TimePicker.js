@@ -17,7 +17,7 @@ for (let i = 0; i < 60; i++) {
 const ROW_HEIGHT = 42;
 const MARGIN_ROWS = 2;
 
-const DRUM_WIDTH = 48;
+const DRUM_WIDTH = 54;
 const FONT_SIZE = 32;
 
 
