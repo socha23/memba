@@ -112,6 +112,8 @@ class WhenFormSection extends React.Component {
                                 flexDirection: "column",
                                 justifyContent: "space-between",
                                 fontSize: 16,
+                                flexGrow: 1,
+                                flexBasis: 0,
                             }}>
                                 {this.renderDayLink(moment(), <span>Today</span>)}
                                 {this.renderDayLink(moment().add(1, "day"), <span>Tomorrow</span>)}
@@ -127,8 +129,9 @@ class WhenFormSection extends React.Component {
                                 flexDirection: "column",
                                 justifyContent: "space-between",
                                 fontSize: 20,
-                                alignItems: "right",
                                 textAlign: "right",
+                                flexGrow: 1,
+                                flexBasis: 0,
                             }}>
                                 {this.renderTimeLink("09:00", <span>09:00</span>)}
                                 {this.renderTimeLink("16:00", <span>16:00</span>)}
