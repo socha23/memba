@@ -7,6 +7,7 @@ import Calendar from "./Calendar";
 import Modal from "./Modal";
 import ButtonIcon from "./ButtonIcon";
 import TimePicker from "./TimePicker";
+import momentToString from '../momentToString'
 
 class WhenFormSection extends React.Component {
     static propTypes = {
@@ -26,10 +27,11 @@ class WhenFormSection extends React.Component {
     };
 
     describeValue() {
-        if (!this.currentValue()) {
+        const val = this.currentValue();
+        if (!val) {
             return " (not set)"
         } else {
-            return this.currentValue().format("YYYY.MM.DD HH:mm")
+            return momentToString(val)
         }
     }
 
