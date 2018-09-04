@@ -32,19 +32,23 @@ const TodoListPageViewStandardMode = ({
             )}
         </AnimatedList>
         <AnimatedList>
-            {todos.map(t => <TodoListItem
+            {todos.map(t => <TodoListItemWithCheckbox
                 key={t.id}
                 todo={t}
-                onClick={() => { history.push(encodeQuery("/todo/" + t.id, {groupId: t.id})) }}
-            >
-                <div style={{cursor: "pointer"}} onClick={() => todoLogic.setCompleted(t.id, !t.completed)}>
-                    <i style={{fontSize: 40}} className={"far " + (t.completed ? "fa-check-square" : "fa-square")}/>
-                </div>
-            </TodoListItem>)}
+            />)}
         </AnimatedList>
         <div style={{height: 100}}/>
     </PageBody>
 };
+
+export const TodoListItemWithCheckbox = withRouterWithQuery(({history, todo, backTo="/"}) => <TodoListItem
+                todo={todo}
+                onClick={() => { history.push(encodeQuery("/todo/" + todo.id, {backTo: backTo, groupId: todo.id})) }}
+            >
+                <div style={{cursor: "pointer"}} onClick={() => todoLogic.setCompleted(todo.id, !todo.completed)}>
+                    <i style={{fontSize: 40}} className={"far " + (todo.completed ? "fa-check-square" : "fa-square")}/>
+                </div>
+            </TodoListItem>);
 
 export default withRouterWithQuery(TodoListPageViewStandardMode)
 

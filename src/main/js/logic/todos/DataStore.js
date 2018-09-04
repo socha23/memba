@@ -109,4 +109,12 @@ export default class DataStore {
     findGroupById(id) {
         return this.groups.find(t => t.id === id)
     }
+
+    listTodosWithDeadlines() {
+        const result = this.notCompletedTodos.filter(t => t.when != null);
+        result.sort((a, b) => (a.when || "").localeCompare(b.when || ""));
+        return result;
+    }
+
+
 }

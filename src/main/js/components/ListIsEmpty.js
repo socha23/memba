@@ -1,12 +1,12 @@
 import React from 'react'
 
-const ListIsEmpty = () => <div style={{
+const ListIsEmpty = ({text = "List is empty"}) => <div style={{
     display: "flex",
     justifyContent: "center",
     paddingTop: 100,
     fontSize: 20
 }}>
-    List is empty
+    {text}
 </div>;
 
 export default ListIsEmpty

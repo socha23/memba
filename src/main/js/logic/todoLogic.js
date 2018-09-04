@@ -95,6 +95,10 @@ class TodoLogic {
         return this.statistics.countNotCompletedInGroup(groupId);
     }
 
+    listTodosWithDeadlines() {
+        return this.dataStore.listTodosWithDeadlines();
+    }
+
     isTopLevel(item) {
         return this.isRootId(item.groupId)
     }

@@ -8,10 +8,11 @@ import AbstractItemFormPage from './AbstractItemFormPage'
 import TodoForm from '../TodoForm'
 import DeleteToolbarButton from "../DeleteToolbarButton";
 
-const EditTodoPage = ({history, match}) => {
+const EditTodoPage = ({history, match, location}) => {
     const item = todoLogic.findTodoById(match.params.todoId);
+    const backTo = location.query.backTo || "/";
     if (item == null) {
-        history.push("/");
+        history.push(backTo);
         return <span/>;
     }
     const deleteButton = <DeleteToolbarButton
@@ -22,12 +23,12 @@ const EditTodoPage = ({history, match}) => {
         item={item}
         onSave={(i) => {
             todoLogic.updateTodo(i.id, i).then(() => {
-                history.push(encodeQuery("/", {groupId: item.groupId}));
+                history.push(encodeQuery(backTo, {groupId: item.groupId}));
                 message("Changes saved");
             });
         }}
         onBack={() => {
-            history.push(encodeQuery("/", {groupId: item.groupId}));
+            history.push(encodeQuery(backTo, {groupId: item.groupId}));
         }}
         title="Edit item"
         createMode={false}

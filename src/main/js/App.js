@@ -12,6 +12,7 @@ import AddGroupPage from './components/pages/AddGroupPage'
 import EditGroupPage from './components/pages/EditGroupPage'
 import ReorderPage from "./components/pages/ReorderPage";
 import DevPage from "./components/pages/DevPage";
+import DeadlinesPage from "./components/pages/DeadlinesPage";
 
 export default () => <div className="container" style={{padding: 0}}>
     <WithBottomBar>
@@ -24,6 +25,7 @@ export default () => <div className="container" style={{padding: 0}}>
                     <Route path="/addGroup" component={AddGroupPage}/>
                     <Route path="/group/:groupId" component={EditGroupPage}/>
                     <Route path="/reorder/:groupId" component={ReorderPage}/>
+                    <Route path="/deadlines" component={DeadlinesPage}/>
                     <Route path="/dev" component={DevPage}/>
                 </Switch>
             </WaitForInitialDataToLoad>

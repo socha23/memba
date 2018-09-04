@@ -99,6 +99,7 @@ export const ListModeNavbar = withRouterWithQuery(({history, groupId, showComple
 
 const RootRightButtons = ({showCompleted, onToggleShowCompleted}) => {
     return <div id="smallToolbar" className="btn-toolbar" style={{display: "flex", flexWrap: "nowrap"}}>
+        <DeadlinesButton/>
         <ReorderGroupButton groupId={"root"}/>
         <ShowCompletedButton showCompleted={showCompleted} onToggleShowCompleted={onToggleShowCompleted}/>
     </div>
@@ -117,6 +118,11 @@ const ShowCompletedButton = ({showCompleted, onToggleShowCompleted}) => <Toolbar
     active={showCompleted}
     onClick={() => onToggleShowCompleted()}
 />;
+
+const DeadlinesButton = withRouterWithQuery(({history, groupId}) => <ToolbarButton
+    className="far fa-calendar-alt"
+    onClick={() => {history.push(encodeQuery("/deadlines"))}}
+/>);
 
 const EditGroupButton = withRouterWithQuery(({history, groupId}) => <ToolbarButton
     className="fas fa-cog"
