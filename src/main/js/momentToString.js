@@ -7,12 +7,12 @@ export default function momentToString(v, options = {}, now = moment()) {
 
     options = {...DEFAULT_OPTIONS, ...options};
 
-    const then = moment(v);
+    const then = moment(v).startOf("minute");
+    now = now.startOf("minute");
+    
     if (!then.isValid()) {
         return "";
     }
-
-
 
     if (then.isBefore(now)) {
 
@@ -26,7 +26,7 @@ export default function momentToString(v, options = {}, now = moment()) {
             }
         } else {
             if (then.isSame(now, "day")) {
-                return then.format("HH:mm")
+                return "Today, " + then.format("HH:mm")
             } else if (then.isSame(now.clone().subtract(1, "day"), "day")) {
                 return "Yesterday, " + then.format("HH:mm")
             } else {
@@ -45,13 +45,29 @@ export default function momentToString(v, options = {}, now = moment()) {
                 return then.format("D MMMM YYYY")
             }
         } else {
+            let result = "";
             if (then.isSame(now, "day")) {
-                return then.format("HH:mm")
+                result = "Today, " + then.format("HH:mm")
             } else if (then.isSame(now.clone().add(1, "day"), "day")) {
-                return "Tomorrow, " + then.format("HH:mm")
+                result = "Tomorrow, " + then.format("HH:mm")
             } else {
-                return then.format("dddd") + ", " + then.format("HH:mm")
+                result = then.format("dddd") + ", " + then.format("HH:mm")
             }
+
+            const allMinutes = moment.duration(then.diff(now)).asMinutes();
+            if (allMinutes > 180 || allMinutes < 1) {
+                return result;
+            }
+            const minutes = allMinutes % 60;
+            const hours = Math.floor(allMinutes / 60);
+            if (hours > 0 && minutes === 0) {
+                return result + " (in " + hours + "h)"
+            } else if (hours === 0 && minutes > 0) {
+                return result + " (in " + minutes + "m)"
+            } else {
+                return result + " (in " + hours + "h " + minutes + "m)"
+            }
+
         }
     }
 

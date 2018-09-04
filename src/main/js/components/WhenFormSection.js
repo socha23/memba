@@ -3,11 +3,11 @@ import PropTypes from 'prop-types'
 
 import FormSectionContainer from './FormSectionContainer'
 import moment from 'moment'
-import Calendar from "./Calendar";
-import Modal from "./Modal";
-import ButtonIcon from "./ButtonIcon";
-import TimePicker from "./TimePicker";
-import momentToString from '../momentToString'
+import Calendar from "./Calendar"
+import Modal from "./Modal"
+import ButtonIcon from "./ButtonIcon"
+import TimePicker from "./TimePicker"
+import WhenLabel from "./WhenLabel"
 
 class WhenFormSection extends React.Component {
     static propTypes = {
@@ -26,12 +26,12 @@ class WhenFormSection extends React.Component {
         modalShown: false
     };
 
-    describeValue() {
+    renderDescribeValue() {
         const val = this.currentValue();
         if (!val) {
             return " (not set)"
         } else {
-            return momentToString(val)
+            return <WhenLabel when={val}/>
         }
     }
 
@@ -86,7 +86,9 @@ class WhenFormSection extends React.Component {
 
         return <div>
         <FormSectionContainer style={this.props.style} onClick={() => {this.showModal()}}>
-                        When: {this.describeValue()}
+            <span>
+                When: {this.renderDescribeValue()}
+            </span>
         </FormSectionContainer>
         <Modal visible={this.state.modalShown} onCancel={() => {this.hideModal()}}>
             <div className="modal-body" style={{padding: 0}}>

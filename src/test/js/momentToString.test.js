@@ -29,8 +29,8 @@ it("past yesterday => yesterday, with hour ", () => {
     expect(momentToString(NOW.clone().subtract(1, "days"), {}, NOW)).toEqual("Yesterday, 19:30")
 });
 
-it("past today => hour ", () => {
-    expect(momentToString(NOW.clone().subtract(1, "hours"), {}, NOW)).toEqual("18:30")
+it("past today => today with hour ", () => {
+    expect(momentToString(NOW.clone().subtract(1, "hours"), {}, NOW)).toEqual("Today, 18:30")
 });
 
 
@@ -50,7 +50,14 @@ it("future tomorrow => tomorrow,, with hour ", () => {
     expect(momentToString(NOW.clone().add(1, "days"), {}, NOW)).toEqual("Tomorrow, 19:30")
 });
 
-it("future today => hour ", () => {
-    expect(momentToString(NOW.clone().add(1, "hour"), {}, NOW)).toEqual("20:30")
+it("future today => today with hour ", () => {
+    expect(momentToString(NOW.clone().add(4, "hour"), {}, NOW)).toEqual("Today, 23:30")
 });
 
+it("future today in closest 3h => today with minutes and hours too ", () => {
+    expect(momentToString(NOW.clone().add(75, "minutes"), {}, NOW)).toEqual("Today, 20:45 (in 1h 15m)")
+});
+
+it("future today in closest 3h => no zero hours ", () => {
+    expect(momentToString(NOW.clone().add(15, "minutes"), {}, NOW)).toEqual("Today, 19:45 (in 15m)")
+});
