@@ -6,20 +6,40 @@ import ListIsEmpty from "../ListIsEmpty";
 import todoLogic from "../../logic/todoLogic"
 import {TodoListItemWithCheckbox} from './TodoListPage'
 
-export default () => {
-    const todos = todoLogic.listTodosWithDeadlines();
+class DeadlinesPage extends React.Component {
 
-    return <div>
-        <TitleWithBackNavbar title="Deadlines"/>
+    state = {
+        generation: 0
+    }
 
-        <PageBody>
-            {
-                todos.length === 0 ? <ListIsEmpty text="No items with deadlines found"/> :
-                    <div>
-                        {todos.map(t => <TodoListItemWithCheckbox key={t.id} todo={t} backTo="/deadlines"/>)}
-                    </div>
-            }
-        </PageBody>
-    </div>
+    render() {
+        const todos = todoLogic.listTodosWithDeadlines();
+
+        return <div>
+            <TitleWithBackNavbar title="Deadlines"/>
+
+            <PageBody>
+                {
+                    todos.length === 0 ? <ListIsEmpty text="No items with deadlines found"/> :
+                        <div>
+                            {todos.map(t => <TodoListItemWithCheckbox key={t.id} todo={t} backTo="/deadlines"/>)}
+                        </div>
+                }
+            </PageBody>
+        </div>
+    }
+
+    componentDidMount() {
+        todoLogic.subscribe(this, () => {this.setState({generation: this.state.generation + 1})});
+    }
+
+    componentWillUnmount() {
+        todoLogic.unsubscribe(this)
+    }
+
+
 }
+
+
+export default DeadlinesPage
 
