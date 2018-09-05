@@ -38,7 +38,7 @@ export default function momentToString(v, options = {}, now = moment()) {
 
         // FUTURE
 
-        if (now.clone().add(6, "days").startOf("day").isBefore(then)) { // more than a week in future
+        if (now.clone().add(7, "days").startOf("day").isBefore(then)) { // more than a week in future
             if (then.isSame(now, "year")) {
                 return then.format("D MMMM")
             } else {

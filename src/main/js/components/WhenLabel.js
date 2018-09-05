@@ -1,9 +1,9 @@
 import React from 'react'
-import moment from 'moment'
 import momentToString from '../momentToString'
+import deadlineColor from '../deadlineColors'
 
 const WhenLabel = ({when}) => <span style={{
-    color: moment(when).isBefore(moment()) ? "red" : "#aaa"
+    color: deadlineColor(when)
 }}>
     {momentToString(when)}
 </span>
