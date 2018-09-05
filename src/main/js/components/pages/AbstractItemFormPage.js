@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import {IconAndTitle, PageTopNavbar} from '../structural/PageTopNavbar'
-import {SizeChangingNavbar} from './todoListComponents/GroupNavbar'
+import {SizeChangingNavbar} from '../structural/GroupNavbar'
 import PageBody from '../structural/PageBody'
 import {BottomButtonBar} from '../structural/PageBottomBar'
 

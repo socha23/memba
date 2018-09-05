@@ -1,9 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {encodeQuery, withRouterWithQuery} from "../../../routerUtils";
-import sharingLogic from '../../../logic/sharingLogic'
-import {ToolbarButton, BrandedNavbar} from '../../structural/PageTopNavbar'
-import GroupBackground from '../../GroupBackground'
+
+import {encodeQuery, withRouterWithQuery} from "../../routerUtils";
+import sharingLogic from '../../logic/sharingLogic'
+
+import {ToolbarButton, BrandedNavbar} from './PageTopNavbar'
+import GroupBackground from '../GroupBackground'
 
 const Z_TOOLBAR_BUTTONS = 6;
 const Z_BLOCK_TITLE_CONTENT = 5;

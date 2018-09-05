@@ -1,14 +1,19 @@
 import React from 'react'
 
 import todoLogic from '../../logic/todoLogic'
-import {BottomButtonBar} from "../structural/PageBottomBar";
-import ButtonIcon from '../ButtonIcon'
-import {IconAndTitle} from "../structural/PageTopNavbar";
-import ListIsEmpty from "../ListIsEmpty";
-import TodoListPageViewReorderMode from "./todoListComponents/TodoListPageViewReorderMode";
 import {encodeQuery, withRouterWithQuery} from "../../routerUtils";
 import {message} from "../../toast"
-import {SizeChangingNavbar} from "./todoListComponents/GroupNavbar";
+
+import {SizeChangingNavbar} from "../structural/GroupNavbar";
+import {IconAndTitle} from "../structural/PageTopNavbar";
+import {BottomButtonBar} from "../structural/PageBottomBar";
+import PageBody from '../structural/PageBody'
+
+import AnimatedList from '../AnimatedList'
+import GroupListItem from '../GroupListItem'
+import TodoListItem from '../TodoListItem'
+import ButtonIcon from '../ButtonIcon'
+import ListIsEmpty from '../ListIsEmpty'
 
 class ReorderPage extends React.Component {
     state = {
@@ -87,6 +92,58 @@ const ReorderModeNavbar = withRouterWithQuery(({history, group, onSave}) => {
         return <SizeChangingNavbar group={group} onBack={() => {onSave()}}/>
     }
 });
+
+const TodoListPageViewReorderMode = ({
+                                         groups = [],
+                                         todos = [],
+                                         onSwapGroups = (a, b) => {},
+                                         onSwapTodos = (a, b) => {},
+                                     }) => {
+    return <PageBody>
+        <AnimatedList>
+            {groups.map((g, idx) => {
+                const first = (idx === 0);
+                const last = (idx === groups.length - 1);
+                return <GroupListItem key={g.id} group={g}>
+                    <div style={{display: "flex", flexWrap: "nowrap"}}>
+                        {first ? <None/> :
+                            <Icon className="fas fa-chevron-up"
+                                  onClick={() => {onSwapGroups(idx, idx - 1)}}/>}
+                        {last ? <None/> :
+                            <Icon className="fas fa-chevron-down"
+                                  onClick={() => {onSwapGroups(idx, idx + 1)}}/>}
+                    </div>
+                </GroupListItem>
+            })}
+        </AnimatedList>
+        <AnimatedList>
+            {todos.map((t, idx) => {
+                const first = (idx === 0);
+                const last = (idx === todos.length - 1);
+                return <TodoListItem key={t.id} todo={t}>
+                    <div style={{display: "flex", flexWrap: "nowrap"}}>
+                        {first ? <None/> :
+                            <Icon className="fas fa-chevron-up"
+                                  onClick={() => {onSwapTodos(idx, idx - 1)}}/>}
+                        {last ? <None/> :
+                            <Icon className="fas fa-chevron-down"
+                                  onClick={() => {onSwapTodos(idx, idx + 1)}}/>}
+                    </div>
+                </TodoListItem>
+            })}
+        </AnimatedList>
+        <div style={{height: 100}}/>
+    </PageBody>
+};
+
+const None = () => <div style={{width: 36, display: "inline-block"}}/>;
+
+const Icon = ({className, onClick = () => {}}) =>
+    <i className={className}
+       style={{fontSize: 30, padding: 5, cursor: "pointer"}}
+       onClick={onClick}
+    />;
+
 
 
 

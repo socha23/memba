@@ -4,7 +4,7 @@ import {BackAndTitle} from '../structural/PageTopNavbar'
 import PageBody from '../structural/PageBody'
 import ListIsEmpty from "../ListIsEmpty";
 import todoLogic from "../../logic/todoLogic"
-import {TodoListItemWithCheckbox} from './todoListComponents/TodoListPageViewStandardMode'
+import {TodoListItemWithCheckbox} from './TodoListPage'
 
 export default () => {
     const todos = todoLogic.listTodosWithDeadlines();

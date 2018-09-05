@@ -2,12 +2,17 @@ import React from 'react'
 
 import {encodeQuery, withRouterWithQuery} from '../../routerUtils'
 import todoLogic from '../../logic/todoLogic'
-import {BottomButtonBar} from "../structural/PageBottomBar";
-import AddItemButton from '../AddItemButton'
-import TodoListPageViewStandardMode from "./todoListComponents/TodoListPageViewStandardMode";
-import {SizeChangingNavbar, RootNavbar} from "./todoListComponents/GroupNavbar";
-import ListIsEmpty from "../ListIsEmpty";
+
 import {ToolbarButton} from "../structural/PageTopNavbar";
+import {SizeChangingNavbar, RootNavbar} from "../structural/GroupNavbar";
+import {BottomButtonBar} from "../structural/PageBottomBar";
+import PageBody from '../structural/PageBody'
+
+import AddItemButton from '../AddItemButton'
+import ListIsEmpty from "../ListIsEmpty";
+import AnimatedList from '../AnimatedList'
+import TodoListItem from '../TodoListItem'
+import GroupListItem from '../GroupListItem'
 
 class TodoListPage extends React.Component {
     state = {
@@ -42,7 +47,7 @@ class TodoListPage extends React.Component {
     }
 
     componentDidMount() {
-        todoLogic.subscribe(this, () => {this.setState({generation: this.state.generation + 1})})
+        todoLogic.subscribe(this, () => {this.setState({generation: this.state.generation + 1})});
         $(window).scrollTop(0);
     }
 
@@ -59,6 +64,7 @@ class TodoListPage extends React.Component {
 
 export default withRouterWithQuery(TodoListPage);
 
+
 const TodoListView = ({
                           groupId = todoLogic.ROOT_GROUP_ID,
                           showCompleted = false,
@@ -73,6 +79,49 @@ const TodoListView = ({
     }
 
 };
+
+const TodoListPageViewStandardMode = withRouterWithQuery(({
+                                          history,
+                                          groups = [],
+                                          todos = [],
+                                      }) => {
+
+    return <PageBody>
+        <AnimatedList>
+            {groups.map(g => <GroupListItem
+                    key={g.id}
+                    group={g}
+                    onClick={() => { history.push(encodeQuery("/", {groupId: g.id}))}}>
+
+                {todoLogic.countNotCompletedInGroup(g.id) === 0 ? <span/> : <span
+                    style={{
+                        fontSize: 34,
+                        fontWeight: 600,
+                        marginRight: 6,
+                        marginLeft: 6,
+                    }}
+                >{todoLogic.countNotCompletedInGroup(g.id)}</span>}
+                </GroupListItem>
+            )}
+        </AnimatedList>
+        <AnimatedList>
+            {todos.map(t => <TodoListItemWithCheckbox
+                key={t.id}
+                todo={t}
+            />)}
+        </AnimatedList>
+        <div style={{height: 100}}/>
+    </PageBody>
+});
+
+export const TodoListItemWithCheckbox = withRouterWithQuery(({history, todo, backTo="/"}) => <TodoListItem
+                todo={todo}
+                onClick={() => { history.push(encodeQuery("/todo/" + todo.id, {backTo: backTo, groupId: todo.id})) }}
+            >
+                <div style={{cursor: "pointer"}} onClick={() => todoLogic.setCompleted(todo.id, !todo.completed)}>
+                    <i style={{fontSize: 40}} className={"far " + (todo.completed ? "fa-check-square" : "fa-square")}/>
+                </div>
+            </TodoListItem>);
 
 const TodoListPageBottomToolbar = ({addEnabled, groupId}) => <BottomButtonBar>
     <AddItemButton groupId={groupId}/>
@@ -119,7 +168,7 @@ const ShowCompletedButton = ({showCompleted, onToggleShowCompleted}) => <Toolbar
     onClick={() => onToggleShowCompleted()}
 />;
 
-const DeadlinesButton = withRouterWithQuery(({history, groupId}) => <ToolbarButton
+const DeadlinesButton = withRouterWithQuery(({history}) => <ToolbarButton
     className="far fa-calendar-alt"
     onClick={() => {history.push(encodeQuery("/deadlines"))}}
 />);
@@ -133,4 +182,5 @@ const ReorderGroupButton = withRouterWithQuery(({history, groupId}) => <ToolbarB
     className="fas fa-sort"
     onClick={() => {history.push(encodeQuery("/reorder/" + groupId))}}
 />);
+
 
