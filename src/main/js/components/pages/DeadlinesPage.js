@@ -1,6 +1,6 @@
 import React from 'react'
 
-import {BackAndTitle} from '../structural/PageTopNavbar'
+import {TitleWithBackNavbar} from '../structural/PageTopNavbar'
 import PageBody from '../structural/PageBody'
 import ListIsEmpty from "../ListIsEmpty";
 import todoLogic from "../../logic/todoLogic"
@@ -10,7 +10,7 @@ export default () => {
     const todos = todoLogic.listTodosWithDeadlines();
 
     return <div>
-        <BackAndTitle title="Deadlines"/>
+        <TitleWithBackNavbar title="Deadlines"/>
 
         <PageBody>
             {

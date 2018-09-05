@@ -9,6 +9,7 @@ import {BottomButtonBar} from "../structural/PageBottomBar";
 import PageBody from '../structural/PageBody'
 
 import AddItemButton from '../AddItemButton'
+import DeadlinesToolbarButton from '../DeadlinesToolbarButton'
 import ListIsEmpty from "../ListIsEmpty";
 import AnimatedList from '../AnimatedList'
 import TodoListItem from '../TodoListItem'
@@ -148,7 +149,7 @@ export const ListModeNavbar = withRouterWithQuery(({history, groupId, showComple
 
 const RootRightButtons = ({showCompleted, onToggleShowCompleted}) => {
     return <div id="smallToolbar" className="btn-toolbar" style={{display: "flex", flexWrap: "nowrap"}}>
-        <DeadlinesButton/>
+        <DeadlinesToolbarButton/>
         <ReorderGroupButton groupId={"root"}/>
         <ShowCompletedButton showCompleted={showCompleted} onToggleShowCompleted={onToggleShowCompleted}/>
     </div>
@@ -167,11 +168,6 @@ const ShowCompletedButton = ({showCompleted, onToggleShowCompleted}) => <Toolbar
     active={showCompleted}
     onClick={() => onToggleShowCompleted()}
 />;
-
-const DeadlinesButton = withRouterWithQuery(({history}) => <ToolbarButton
-    className="far fa-calendar-alt"
-    onClick={() => {history.push(encodeQuery("/deadlines"))}}
-/>);
 
 const EditGroupButton = withRouterWithQuery(({history, groupId}) => <ToolbarButton
     className="fas fa-cog"

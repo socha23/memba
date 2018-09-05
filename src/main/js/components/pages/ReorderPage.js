@@ -5,7 +5,7 @@ import {encodeQuery, withRouterWithQuery} from "../../routerUtils";
 import {message} from "../../toast"
 
 import {SizeChangingNavbar} from "../structural/GroupNavbar";
-import {IconAndTitle} from "../structural/PageTopNavbar";
+import {TitleWithBackNavbar} from "../structural/PageTopNavbar";
 import {BottomButtonBar} from "../structural/PageBottomBar";
 import PageBody from '../structural/PageBody'
 
@@ -87,7 +87,7 @@ export default withRouterWithQuery(ReorderPage);
 
 const ReorderModeNavbar = withRouterWithQuery(({history, group, onSave}) => {
     if (todoLogic.isRootId(group.id)) {
-        return <IconAndTitle title={"Reorder"} onClick={() => {onSave()}} iconClass={"fas fa-backward"}/>
+        return <TitleWithBackNavbar title={"Reorder"} onClick={() => {onSave()}} iconClass={"fas fa-backward"}/>
     } else {
         return <SizeChangingNavbar group={group} onBack={() => {onSave()}}/>
     }
