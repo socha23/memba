@@ -5,6 +5,7 @@ import PageBody from '../structural/PageBody'
 import ListIsEmpty from "../ListIsEmpty";
 import todoLogic from "../../logic/todoLogic"
 import {TodoListItemWithCheckbox} from './TodoListPage'
+import AnimatedList from "../AnimatedList";
 
 class DeadlinesPage extends React.Component {
 
@@ -21,9 +22,9 @@ class DeadlinesPage extends React.Component {
             <PageBody>
                 {
                     todos.length === 0 ? <ListIsEmpty text="No items with deadlines found"/> :
-                        <div>
+                        <AnimatedList>
                             {todos.map(t => <TodoListItemWithCheckbox key={t.id} todo={t} backTo="/deadlines"/>)}
-                        </div>
+                        </AnimatedList>
                 }
             </PageBody>
         </div>
