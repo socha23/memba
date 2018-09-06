@@ -1,5 +1,6 @@
 package pl.socha23.memba.web;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -7,17 +8,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStream;
 import java.security.MessageDigest;
 import java.util.Base64;
-import java.util.Random;
 
 @Controller
 public class IndexController {
-
-    private Resource bundleJs = new ClassPathResource("classpath:/static/bundle.js");
 
     private String googleClientId;
 
@@ -27,8 +23,9 @@ public class IndexController {
 
     private String calculateMd5(String path) {
         try {
-            URL resource = getClass().getClassLoader().getResource(path);
-            byte[] bytes = Files.readAllBytes(Paths.get(resource.toURI()));
+            InputStream is = getClass().getClassLoader().getResourceAsStream(path);
+            byte[] bytes = IOUtils.toByteArray(is);
+            is.close();
             MessageDigest digest = MessageDigest.getInstance("MD5");
             digest.update(bytes);
             return Base64.getEncoder().encodeToString(digest.digest());
