@@ -1,6 +1,6 @@
 var CACHE_NAME = 'memba-cache';
 var urlsToCache = [
-    '/#/',
+    '/',
     '/fontawesome/webfonts/fa-solid-900.woff2',
     '/fontawesome/webfonts/fa-regular-400.woff2',
     '/bootstrap-slate-4.1.3.min.css',
