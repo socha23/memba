@@ -19,19 +19,15 @@ public class IndexController {
 
     private Resource bundleJs = new ClassPathResource("classpath:/static/bundle.js");
 
-    private Random random = new Random();
     private String googleClientId;
-
-    private final String bundleJsMd5;
 
     public IndexController(@Value("${memba.security.google.client_id}") String googleClientId) {
         this.googleClientId = googleClientId;
-        bundleJsMd5 = calculateBundleJsMd5();
     }
 
-    private String calculateBundleJsMd5() {
+    private String calculateMd5(String path) {
         try {
-            URL resource = getClass().getClassLoader().getResource("static/bundle.js");
+            URL resource = getClass().getClassLoader().getResource(path);
             byte[] bytes = Files.readAllBytes(Paths.get(resource.toURI()));
             MessageDigest digest = MessageDigest.getInstance("MD5");
             digest.update(bytes);
@@ -52,9 +48,14 @@ public class IndexController {
         return googleClientId;
     }
 
-    @ModelAttribute("cachebuster")
-    public String getCachebuster() {
-        return bundleJsMd5;
+    @ModelAttribute("membaCssCachebuster")
+    public String getMembaCssCachebuster() {
+        return calculateMd5("static/memba.css");
+    }
+
+    @ModelAttribute("bundleJsCachebuster")
+    public String getBundleJsCachebuster() {
+        return calculateMd5("static/bundle.js");
     }
 
 }

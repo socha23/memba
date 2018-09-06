@@ -10,9 +10,15 @@
     <meta name="msapplication-navbutton-color" content="black">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
+    <link rel="preconnect" href="https://lh3.googleusercontent.com">
+    <link rel="preconnect" href="https://accounts.google.com">
+
+    <link rel="preload" crossorigin href="fontawesome/webfonts/fa-solid-900.woff2" as="font"/>
+    <link rel="preload" crossorigin href="fontawesome/webfonts/fa-regular-400.woff2" as="font"/>
+
     <link rel="stylesheet" href="bootstrap-slate-4.1.3.min.css">
     <link rel="stylesheet" href="fontawesome/css/all.css">
-    <link rel="stylesheet" href="memba.css">
+    <link rel="stylesheet" th:href="@{memba.css(cachebuster=${membaCssCachebuster})}">
 
     <script type="text/javascript" th:inline="javascript">
         /*<![CDATA[*/
@@ -52,6 +58,6 @@
 <script src="bootstrap-4.1.3.min.js"></script>
 <script src="hammer.min.js"></script>
 <script src="jquery.hammer.js"></script>
-<script type="application/javascript" th:src="@{bundle.js(cachebuster=${cachebuster})}"></script>
+<script type="application/javascript" th:src="@{bundle.js(cachebuster=${bundleJsCachebuster})}"></script>
 </body>
 </html>
