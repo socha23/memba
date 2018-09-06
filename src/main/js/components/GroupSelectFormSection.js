@@ -5,6 +5,7 @@ import Modal, {ModalHeader} from "./Modal";
 import todoLogic from '../logic/todoLogic'
 import {groupTreeAsListWithIdent} from "../logic/groupTree";
 import FormSectionContainer from './FormSectionContainer'
+import GroupPathLabel from "./GroupPathLabel";
 
 class GroupSelectFormSection extends React.Component {
     static propTypes = {
@@ -21,7 +22,6 @@ class GroupSelectFormSection extends React.Component {
     render() {
         const myGroupId = this.props.value || todoLogic.ROOT_GROUP_ID;
         const rootGroup = {id: "root", text: "(none)", color: "black", ident: 0};
-        const currentGroup = myGroupId === todoLogic.ROOT_GROUP_ID ? rootGroup : todoLogic.findGroupById(myGroupId);
 
         const allGroups = groupTreeAsListWithIdent(todoLogic.listGroups({groupId: ""}));
         allGroups.unshift(rootGroup);
@@ -30,7 +30,9 @@ class GroupSelectFormSection extends React.Component {
             <FormSectionContainer onClick={() => {
                 this.setState({modalShown: true})
             }}>
-                List: {this.groupPath(currentGroup)}
+                <span>
+                    List: {todoLogic.isRootId(myGroupId) ? <span>(none)</span> : <GroupPathLabel groupId={myGroupId}/>}
+                </span>
             </FormSectionContainer>
             <Modal
                 visible={this.state.modalShown}
@@ -77,16 +79,6 @@ class GroupSelectFormSection extends React.Component {
                 </div>
             </Modal>
         </div>;
-    }
-
-    groupPath(group) {
-        if (group.id === todoLogic.ROOT_GROUP_ID || group.groupId === todoLogic.ROOT_GROUP_ID) {
-            return group.text
-        } else {
-            return this.groupPath(todoLogic.findGroupById(group.groupId))
-                + " > "
-                + group.text
-        }
     }
 
     onCancel() {

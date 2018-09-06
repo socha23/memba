@@ -23,7 +23,7 @@ class DeadlinesPage extends React.Component {
                 {
                     todos.length === 0 ? <ListIsEmpty text="No items with deadlines found"/> :
                         <AnimatedList>
-                            {todos.map(t => <TodoListItemWithCheckbox key={t.id} todo={t} backTo="/deadlines"/>)}
+                            {todos.map(t => <TodoListItemWithCheckbox renderPath={true} key={t.id} todo={t} backTo="/deadlines"/>)}
                         </AnimatedList>
                 }
             </PageBody>

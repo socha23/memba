@@ -115,8 +115,9 @@ const TodoListPageViewStandardMode = withRouterWithQuery(({
     </PageBody>
 });
 
-export const TodoListItemWithCheckbox = withRouterWithQuery(({history, todo, backTo="/"}) => <TodoListItem
+export const TodoListItemWithCheckbox = withRouterWithQuery(({history, todo, backTo="/", renderPath=false}) => <TodoListItem
                 todo={todo}
+                renderPath={renderPath}
                 onClick={() => { history.push(encodeQuery("/todo/" + todo.id, {backTo: backTo, groupId: todo.id})) }}
             >
                 <div style={{cursor: "pointer"}} onClick={() => todoLogic.setCompleted(todo.id, !todo.completed)}>
