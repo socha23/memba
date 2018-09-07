@@ -11,6 +11,7 @@ memba:
       client_id: "502079153987-8e460ao67b3jj62u94o362sgukfrjf6q.apps.googleusercontent.com"
   push:
     gcm_sender_id: "240160191919"
+    server_key: "AAAAN-qpta8:APA91bGkaQjb9bl9vbicRAx92diwzWERa345I23kSr5kFfS2uDWxx0OolG16wRx7kq3XqiCRmN66_-bNrHJOZuzhuUnlwCdyrRN0-zOH_Llx9CpYd8CXxckWe_DP22pVgWpn9yWQy8t2"
 
 spring:
   profiles:
