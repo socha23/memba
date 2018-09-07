@@ -29,9 +29,7 @@ public class PushNotificationSenderImpl implements PushNotificationSender {
                 .exchange()
                 .flatMap(
                         r -> {
-                            System.out.println(r.statusCode().toString());
-
-
+                            System.out.println("Push to " + endpoint + " with server key " + serverKey + " results in " + r.statusCode().toString());
                             return Mono.empty();
                         }
                 );
