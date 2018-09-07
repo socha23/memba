@@ -18,8 +18,8 @@ import RequestPushNotifications from "./components/structural/RequestPushNotific
 export default () => <div className="container" style={{padding: 0}}>
     <WithBottomBar>
         <SignInRequired>
-            <RequestPushNotifications/>
             <WaitForInitialDataToLoad>
+                <RequestPushNotifications/>
                 <Switch>
                     <Route exact path="/" component={TodoListPage}/>
                     <Route path="/addTodo" component={AddTodoPage}/>
