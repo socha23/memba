@@ -17,7 +17,8 @@
   "background_color": "#272B30",
   "display": "standalone",
   "orientation": "portrait",
-  "theme_color": "#272B30"
+  "theme_color": "#272B30",
+  "gcm_sender_id": "240160191919"
   
   
   

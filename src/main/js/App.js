@@ -13,10 +13,12 @@ import EditGroupPage from './components/pages/EditGroupPage'
 import ReorderPage from "./components/pages/ReorderPage";
 import DevPage from "./components/pages/DevPage";
 import DeadlinesPage from "./components/pages/DeadlinesPage";
+import RequestPushNotifications from "./components/structural/RequestPushNotifications";
 
 export default () => <div className="container" style={{padding: 0}}>
     <WithBottomBar>
         <SignInRequired>
+            <RequestPushNotifications/>
             <WaitForInitialDataToLoad>
                 <Switch>
                     <Route exact path="/" component={TodoListPage}/>
