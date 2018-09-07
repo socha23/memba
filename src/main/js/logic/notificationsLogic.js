@@ -8,6 +8,7 @@ class NotificationsLogic {
                     reg.pushManager.subscribe({
                         userVisibleOnly: true
                     }).then(sub => {
+                        console.log("endpoint", sub.endpoint);
                         this.registerPushEndpoint(sub.endpoint);
                     }).catch(function (e) {
                         console.error('Unable to subscribe to push', e);
