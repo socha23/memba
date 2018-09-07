@@ -38,7 +38,6 @@ self.addEventListener('fetch', event => {
                     if (response) {
                         return response;
                     }
-                    console.log("dont have than in cache, gotta fetch:", event.request);
                     return fetch(event.request);
                 }
             )

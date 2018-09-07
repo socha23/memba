@@ -24,10 +24,6 @@ class NotificationsLogic {
 
     registerPushEndpoint(endpoint) {
         profileLogic.registerPushEndpoint(endpoint);
-
-        //
-
-        console.log('Endpoint URLa: ', endpoint);
     }
 
 }

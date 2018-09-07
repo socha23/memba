@@ -43,7 +43,6 @@ export default class ServerData {
     }
 
     postNewPushEndpoint(endpoint) {
-        console.log("pushing endpoint", endpoint);
         jsonPost("/profile/pushEndpoints", {endpoint: endpoint})
             .then(this._reload());
     }
