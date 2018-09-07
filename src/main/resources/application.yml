@@ -9,6 +9,8 @@ memba:
       password: admin
     google:
       client_id: "502079153987-8e460ao67b3jj62u94o362sgukfrjf6q.apps.googleusercontent.com"
+  push:
+    gcm_sender_id: "240160191919"
 
 spring:
   profiles:
@@ -23,6 +25,8 @@ spring:
     cache:
       cachecontrol:
         max-age: 86400
+  thymeleaf:
+    view-names: "*.html,*.json"
 
 management:
   endpoints:

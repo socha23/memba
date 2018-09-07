@@ -3,11 +3,12 @@ var path = require('path');
 
 module.exports = {
     entry: {
-        index: './src/main/js/index.js'
+        app: ['./src/main/js/index.js'],
+		serviceworker: './src/main/js/serviceworker.js'
     },
     output: {
         path: path.join(__dirname, 'out/production/resources/static/'),
-        filename: 'bundle.js'
+        filename: '[name]-bundle.js'
     },
     module: {
         loaders: [

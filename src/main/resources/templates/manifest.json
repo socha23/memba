@@ -1,5 +1,5 @@
 {
-  "short_name": "Memba",
+  "short_name": "Membaaa",
   "name": "Memba",
   "icons": [
     {
@@ -18,7 +18,7 @@
   "display": "standalone",
   "orientation": "portrait",
   "theme_color": "#272B30",
-  "gcm_sender_id": "240160191919"
+  "gcm_sender_id": [# th:text=${gcmSenderId}/]
   
   
   

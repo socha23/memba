@@ -39,6 +39,13 @@ class ProfileLogic {
     findFriendById(id) {
         return this.profile.friends.find(f => f.id === id)
     }
+
+    registerPushEndpoint(endpoint) {
+        const pushEndpoints = this.profile.pushEndpoints || [];
+        if (!pushEndpoints.includes(endpoint)) {
+            this.serverData.postNewPushEndpoint(endpoint);
+        }
+    }
 }
 
 const PROFILE_LOGIC = new ProfileLogic();

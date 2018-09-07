@@ -2,25 +2,34 @@ import profileLogic from './profileLogic'
 
 class NotificationsLogic {
     requestPermission() {
-        navigator.serviceWorker.ready.then(function(reg) {
-          Notification.requestPermission(function(status) {
-              reg.pushManager.subscribe({
-                      userVisibleOnly: true
-                    }).then(function(sub) {
-                      console.log('Endpoint URL: ', sub.endpoint);
-                    }).catch(function(e) {
-                      if (Notification.permission === 'denied') {
-                        console.warn('Permission for notifications was denied');
-                      } else {
+        navigator.serviceWorker.getRegistration().then(reg => {
+            Notification.requestPermission(status => {
+                if (status === 'granted') {
+                    reg.pushManager.subscribe({
+                        userVisibleOnly: true
+                    }).then(sub => {
+                        this.registerPushEndpoint(sub.endpoint);
+                    }).catch(function (e) {
                         console.error('Unable to subscribe to push', e);
-                      }
                     });
-          });
+                } else {
+                    console.warn('Permission for notifications was denied');
+                }
+            });
         })
-         .catch(function(err) {
-              console.log('Service Worker registration failed: ', err);
-        });
+            .catch(function (err) {
+                console.log('Service Worker registration failed: ', err);
+            });
     }
+
+    registerPushEndpoint(endpoint) {
+        profileLogic.registerPushEndpoint(endpoint);
+
+        //
+
+        console.log('Endpoint URLa: ', endpoint);
+    }
+
 }
 
 const NOTIFICATIONS_LOGIC = new NotificationsLogic();

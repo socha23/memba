@@ -1,4 +1,4 @@
-import {jsonGet} from '../apiHelper'
+import {jsonGet, jsonPost} from '../apiHelper'
 
 const REFRESH_ITEMS_EVERY_MS = 300 * 1000;
 
@@ -41,4 +41,12 @@ export default class ServerData {
     _receiveProfile(items) {
         this.onReceiveProfile(items);
     }
+
+    postNewPushEndpoint(endpoint) {
+        console.log("pushing endpoint", endpoint);
+        jsonPost("/profile/pushEndpoints", {endpoint: endpoint})
+            .then(this._reload());
+    }
+
+
 }

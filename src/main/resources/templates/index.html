@@ -33,10 +33,12 @@
 <div id="app">
     <div class="container" style="padding: 0">
         <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary"
-                                            style="padding: 0 2px 0 2px">
+             style="padding: 0 2px 0 2px">
             <div class="container">
                 <div>
-                    <img src="memba48x44.png" width="48" height="44" style="margin: 3px 2px 0 0" class="d-inline-block align-top"/><span class="navbar-brand" style="border-right: none; padding-left: 8px">Memba</span>
+                    <img src="memba48x44.png" width="48" height="44" style="margin: 3px 2px 0 0"
+                         class="d-inline-block align-top"/><span class="navbar-brand"
+                                                                 style="border-right: none; padding-left: 8px">Memba</span>
                 </div>
             </div>
         </nav>
@@ -46,7 +48,7 @@
             </div>
         </div>
         <nav class="navbar fixed-bottom navbar-expand-lg"
-                                        style="padding: 0 5px 0 0">
+             style="padding: 0 5px 0 0">
             <div class="container">
                 <span>Loading...</span>
             </div>
@@ -60,18 +62,18 @@
 <script src="bootstrap-4.1.3.min.js"></script>
 <script src="hammer.min.js"></script>
 <script src="jquery.hammer.js"></script>
-<script type="application/javascript" th:src="@{bundle.js(cachebuster=${bundleJsCachebuster})}"></script>
+<script type="application/javascript" th:src="@{app-bundle.js(cachebuster=${bundleJsCachebuster})}"></script>
 
-<script>
+<script th:inline="javascript">
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function() {
-        navigator.serviceWorker.register('/service_worker.js').then(function(registration) {
-          // Registration was successful
-        }, function(err) {
-          // registration failed :(
-          console.log('ServiceWorker registration failed: ', err);
+        window.addEventListener('load', function () {
+            navigator.serviceWorker.register([[@{serviceworker-bundle.js(cachebuster=${serviceWorkerCachebuster})}]]).then(function (registration) {
+                // Registration was successful
+            }, function (err) {
+                // registration failed :(
+                console.log('ServiceWorker registration failed: ', err);
+            });
         });
-      });
     }
 </script>
 </body>
