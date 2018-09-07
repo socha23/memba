@@ -14,6 +14,14 @@ public class MembaMigrations extends BasicMigrations implements InitializingBean
 
     @Override
     public void afterPropertiesSet() {
+        add("2018-09-17 22:16 ", "Push endpoints in profiles", mongo -> {
+
+            for (Document user : mongo.getCollection("users").find()) {
+                user.put("pushEndpoints", Collections.emptySet());
+                mongo.save(user, "users");
+            }
+        });
+
         add("2018-08-16 13:12 ", "Added owners to todos and groups", mongo -> {
 
             for (Document todo : mongo.getCollection("todo").find()) {

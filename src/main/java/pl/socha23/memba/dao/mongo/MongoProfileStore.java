@@ -2,8 +2,8 @@ package pl.socha23.memba.dao.mongo;
 
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import pl.socha23.memba.business.api.dao.ProfileStore;
-import pl.socha23.memba.business.api.model.UserProfile;
 import pl.socha23.memba.business.api.model.User;
+import pl.socha23.memba.business.api.model.UserProfile;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -40,6 +40,13 @@ class MongoProfileStore implements ProfileStore {
     public Mono<? extends UserProfile> updateRootOrder(String id, List<String> todoOrder, List<String> groupOrder) {
         return template.findById(id, MongoUserProfileImpl.class)
                 .map(u -> u.setRootOrder(todoOrder, groupOrder))
+                .compose(template::save);
+    }
+
+    @Override
+    public Mono<? extends UserProfile> addPushEndpoint(String id, String endpoint) {
+        return template.findById(id, MongoUserProfileImpl.class)
+                .map(u -> u.addPushEndpoint(endpoint))
                 .compose(template::save);
     }
 

@@ -26,8 +26,9 @@ public class ProfileController {
 
     @PostMapping("/api/profile/pushEndpoints")
     public Mono<PushEndpointResult> postPushEndpoint(@RequestBody PushEndpointRequest request) {
-        System.out.println("Got push endpoint: " + request.getEndpoint());
-        return Mono.just(PushEndpointResult.success());
+        return profileOperations
+                .addCurrentUserPushEndpoint(request.getEndpoint())
+                .map(t -> PushEndpointResult.success());
     }
 
     static class PushEndpointRequest {

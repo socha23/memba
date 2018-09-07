@@ -5,8 +5,8 @@ import pl.socha23.memba.business.api.dao.ProfileStore;
 import pl.socha23.memba.business.api.logic.CurrentUserProvider;
 import pl.socha23.memba.business.api.logic.ProfileOperations;
 import pl.socha23.memba.business.api.model.BasicUserProfileWithFriends;
-import pl.socha23.memba.business.api.model.UserProfile;
 import pl.socha23.memba.business.api.model.User;
+import pl.socha23.memba.business.api.model.UserProfile;
 import pl.socha23.memba.business.api.model.UserProfileWithFriends;
 import reactor.core.publisher.Mono;
 
@@ -52,5 +52,10 @@ public class ProfileOperationsImpl implements ProfileOperations {
     @Override
     public Mono<? extends UserProfile> updateRootOrders(String userId, List<String> todoOrder, List<String> groupOrder) {
         return profileStore.updateRootOrder(userId, todoOrder, groupOrder);
+    }
+
+    @Override
+    public Mono<? extends UserProfile> addCurrentUserPushEndpoint(String endpoint) {
+        return profileStore.addPushEndpoint(currentUserProvider.getCurrentUserId(), endpoint);
     }
 }

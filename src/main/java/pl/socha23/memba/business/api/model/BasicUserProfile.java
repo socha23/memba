@@ -1,12 +1,15 @@
 package pl.socha23.memba.business.api.model;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class BasicUserProfile implements UserProfile {
 
     private User me;
     private List<String> rootGroupOrder;
     private List<String> rootTodoOrder;
+    private Set<String> pushEndpoints = new HashSet<>();
 
     @Override
     public String getId() {
@@ -44,6 +47,15 @@ public class BasicUserProfile implements UserProfile {
 
     public void setRootTodoOrder(List<String> rootTodoOrder) {
         this.rootTodoOrder = rootTodoOrder;
+    }
+
+    @Override
+    public Set<String> getPushEndpoints() {
+        return pushEndpoints;
+    }
+
+    public void setPushEndpoints(Set<String> pushEndpoints) {
+        this.pushEndpoints = pushEndpoints;
     }
 
     public static BasicUserProfile from(User user) {

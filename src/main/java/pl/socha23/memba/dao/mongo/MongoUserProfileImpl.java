@@ -1,10 +1,12 @@
 package pl.socha23.memba.dao.mongo;
 
 import org.springframework.data.mongodb.core.mapping.Document;
-import pl.socha23.memba.business.api.model.UserProfile;
 import pl.socha23.memba.business.api.model.User;
+import pl.socha23.memba.business.api.model.UserProfile;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Document(collection = "users")
 public class MongoUserProfileImpl implements UserProfile {
@@ -15,6 +17,7 @@ public class MongoUserProfileImpl implements UserProfile {
 
     private List<String> rootGroupOrder;
     private List<String> rootTodoOrder;
+    private Set<String> pushEndpoints = new HashSet<>();
 
     @Override
     public String getId() {
@@ -66,6 +69,20 @@ public class MongoUserProfileImpl implements UserProfile {
 
     void setRootTodoOrder(List<String> rootTodoOrder) {
         this.rootTodoOrder = rootTodoOrder;
+    }
+
+    @Override
+    public Set<String> getPushEndpoints() {
+        return pushEndpoints;
+    }
+
+    public void setPushEndpoints(Set<String> pushEndpoints) {
+        this.pushEndpoints = pushEndpoints;
+    }
+
+    MongoUserProfileImpl addPushEndpoint(String endpoint) {
+        getPushEndpoints().add(endpoint);
+        return this;
     }
 
     public static MongoUserProfileImpl from(User user) {

@@ -1,6 +1,7 @@
 package pl.socha23.memba.business.api.model;
 
 import java.util.List;
+import java.util.Set;
 
 public class BasicUserProfileWithFriends implements UserProfileWithFriends {
 
@@ -28,6 +29,11 @@ public class BasicUserProfileWithFriends implements UserProfileWithFriends {
     @Override
     public List<String> getRootTodoOrder() {
         return profile.getRootTodoOrder();
+    }
+
+    @Override
+    public Set<String> getPushEndpoints() {
+        return profile.getPushEndpoints();
     }
 
     @Override

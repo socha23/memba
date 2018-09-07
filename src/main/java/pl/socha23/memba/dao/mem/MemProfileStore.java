@@ -4,8 +4,8 @@ import org.springframework.stereotype.Component;
 import pl.socha23.memba.business.api.dao.ProfileStore;
 import pl.socha23.memba.business.api.logic.CurrentUserProvider;
 import pl.socha23.memba.business.api.model.BasicUserProfile;
-import pl.socha23.memba.business.api.model.UserProfile;
 import pl.socha23.memba.business.api.model.User;
+import pl.socha23.memba.business.api.model.UserProfile;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -47,6 +47,13 @@ public class MemProfileStore implements ProfileStore {
         BasicUserProfile p = profiles.get(id);
         p.setRootGroupOrder(groupOrder);
         p.setRootTodoOrder(todoOrder);
+        return Mono.just(p);
+    }
+
+    @Override
+    public Mono<? extends UserProfile> addPushEndpoint(String id, String endpoint) {
+        BasicUserProfile p = profiles.get(id);
+        p.getPushEndpoints().add(endpoint);
         return Mono.just(p);
     }
 
