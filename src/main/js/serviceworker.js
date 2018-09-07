@@ -14,7 +14,8 @@ const urlsToCache = [
     '/popper-1.14.3.min.js',
     '/bootstrap-4.1.3.min.js',
     '/hammer.min.js',
-    '/jquery.hammer.js'
+    '/jquery.hammer.js',
+    '/manifest.json',
 ];
 
 backgrounds
