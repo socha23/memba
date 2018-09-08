@@ -3,6 +3,9 @@ import profileLogic from './profileLogic'
 class NotificationsLogic {
     requestPermission() {
         navigator.serviceWorker.getRegistration().then(reg => {
+
+            reg.update();
+
             Notification.requestPermission(status => {
                 if (status === 'granted') {
                     reg.pushManager.subscribe({

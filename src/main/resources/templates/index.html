@@ -71,7 +71,6 @@
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', function () {
             navigator.serviceWorker.register([[@{serviceworker-bundle.js(cachebuster=${serviceWorkerCachebuster})}]]).then(function (registration) {
-                registration.update();
                 // Registration was successful
             }, function (err) {
                 // registration failed :(
