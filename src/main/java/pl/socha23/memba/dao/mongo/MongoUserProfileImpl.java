@@ -4,6 +4,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import pl.socha23.memba.business.api.model.User;
 import pl.socha23.memba.business.api.model.UserProfile;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -33,7 +34,7 @@ public class MongoUserProfileImpl implements UserProfile {
         return firstName;
     }
 
-    void setFirstName(String firstName) {
+    private void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
@@ -42,7 +43,7 @@ public class MongoUserProfileImpl implements UserProfile {
         return fullName;
     }
 
-    void setFullName(String fullName) {
+    private void setFullName(String fullName) {
         this.fullName = fullName;
     }
 
@@ -51,7 +52,7 @@ public class MongoUserProfileImpl implements UserProfile {
         return pictureUrl;
     }
 
-    void setPictureUrl(String pictureUrl) {
+    private void setPictureUrl(String pictureUrl) {
         this.pictureUrl = pictureUrl;
     }
 
@@ -59,7 +60,7 @@ public class MongoUserProfileImpl implements UserProfile {
         return rootGroupOrder;
     }
 
-    void setRootGroupOrder(List<String> rootGroupOrder) {
+    private void setRootGroupOrder(List<String> rootGroupOrder) {
         this.rootGroupOrder = rootGroupOrder;
     }
 
@@ -67,17 +68,13 @@ public class MongoUserProfileImpl implements UserProfile {
         return rootTodoOrder;
     }
 
-    void setRootTodoOrder(List<String> rootTodoOrder) {
+    private void setRootTodoOrder(List<String> rootTodoOrder) {
         this.rootTodoOrder = rootTodoOrder;
     }
 
     @Override
     public Set<String> getPushEndpoints() {
         return pushEndpoints;
-    }
-
-    public void setPushEndpoints(Set<String> pushEndpoints) {
-        this.pushEndpoints = pushEndpoints;
     }
 
     MongoUserProfileImpl addPushEndpoint(String endpoint) {
@@ -102,6 +99,11 @@ public class MongoUserProfileImpl implements UserProfile {
     MongoUserProfileImpl setRootOrder(List<String> todoOrder, List<String> groupOrder) {
         setRootTodoOrder(todoOrder);
         setRootGroupOrder(groupOrder);
+        return this;
+    }
+
+    MongoUserProfileImpl removePushEndpoints(Collection<String> endpointsToRemove) {
+        getPushEndpoints().removeAll(endpointsToRemove);
         return this;
     }
 }

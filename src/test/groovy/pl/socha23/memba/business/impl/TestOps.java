@@ -2,6 +2,7 @@ package pl.socha23.memba.business.impl;
 
 import pl.socha23.memba.business.api.logic.GroupsOperations;
 import pl.socha23.memba.business.api.logic.ProfileOperations;
+import pl.socha23.memba.business.api.logic.PushOperations;
 import pl.socha23.memba.business.api.logic.TodosOperations;
 import pl.socha23.memba.business.api.model.CreateOrUpdateGroup;
 import pl.socha23.memba.business.api.model.CreateOrUpdateTodo;
@@ -22,11 +23,12 @@ public class TestOps {
     private TestUserProvider userProvider = new TestUserProvider();
     private MemProfileStore profileStore = new MemProfileStore(userProvider);
     private OwnershipManager ownershipManager = new OwnershipManagerImpl(groupStore, todoStore);
-
+    private TestPushSender pushSender = new TestPushSender();
 
     private TodosOperations todoOps = new TodosOperationsImpl(todoStore, userProvider, ownershipManager);
     private ProfileOperations profileOps = new ProfileOperationsImpl(new CachingProfileStore(profileStore), userProvider);
     private GroupsOperations groupOps = new GroupsOperationsImpl(todoStore, groupStore, userProvider, ownershipManager, profileOps);
+    private PushOperations pushOps = new PushOperationsImpl(profileStore, pushSender);
 
     public TodosOperations getTodoOps() {
         return todoOps;
@@ -38,6 +40,10 @@ public class TestOps {
 
     public ProfileOperations getProfileOps() {
         return profileOps;
+    }
+
+    public PushOperations getPushOps() {
+        return pushOps;
     }
 
     public TestOps createTodo(CreateOrUpdateTodo todo) {
@@ -92,5 +98,9 @@ public class TestOps {
 
     public Group findGroupById(String id) {
         return groupStore.findGroupById(id).block();
+    }
+
+    public TestPushSender getPushSender() {
+        return pushSender;
     }
 }

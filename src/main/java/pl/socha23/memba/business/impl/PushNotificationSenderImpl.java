@@ -5,6 +5,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import static pl.socha23.memba.business.impl.PushNotificationSender.PushResult.Status.ENDPOINT_NOT_REGISTRED;
+import static pl.socha23.memba.business.impl.PushNotificationSender.PushResult.Status.SUCCESS;
+
 @Component
 public class PushNotificationSenderImpl implements PushNotificationSender {
 
@@ -19,7 +22,7 @@ public class PushNotificationSenderImpl implements PushNotificationSender {
     }
 
     @Override
-    public Mono<Void> sendPushNotification(String endpoint) {
+    public Mono<PushResult> sendPushNotification(String endpoint) {
         return webClient
                 .post()
                 .uri(endpoint)
@@ -27,10 +30,19 @@ public class PushNotificationSenderImpl implements PushNotificationSender {
                 .header("TTL", "60")
                 .header("Authorization", "key=" + serverKey)
                 .exchange()
-                .flatMap(
+                .map(
                         r -> {
                             System.out.println("Push to " + endpoint + " with server key " + serverKey + " results in " + r.statusCode().toString());
-                            return Mono.empty();
+
+                            if (r.statusCode().value() == 201) {
+                                System.out.println("Push successfull");
+                                return new PushResult(endpoint, SUCCESS);
+                            } else if (r.statusCode().value() == 410) {
+                                System.out.println("Removing endpoint");
+                                return new PushResult(endpoint, ENDPOINT_NOT_REGISTRED);
+                            } else {
+                                throw new RuntimeException("Error when pushing");
+                            }
                         }
                 );
     }

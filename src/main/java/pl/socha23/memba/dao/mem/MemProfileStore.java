@@ -10,6 +10,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Instant;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +55,13 @@ public class MemProfileStore implements ProfileStore {
     public Mono<? extends UserProfile> addPushEndpoint(String id, String endpoint) {
         BasicUserProfile p = profiles.get(id);
         p.getPushEndpoints().add(endpoint);
+        return Mono.just(p);
+    }
+
+    @Override
+    public Mono<? extends UserProfile> removePushEndpoints(String id, Collection<String> endpointsToRemove) {
+        BasicUserProfile p = profiles.get(id);
+        p.getPushEndpoints().removeAll(endpointsToRemove);
         return Mono.just(p);
     }
 

@@ -5,6 +5,7 @@ import pl.socha23.memba.business.api.model.UserProfile;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface ProfileStore {
@@ -13,4 +14,5 @@ public interface ProfileStore {
     Flux<? extends User> listAllUsers();
     Mono<? extends UserProfile> updateRootOrder(String id, List<String> todoOrder, List<String> groupOrder);
     Mono<? extends UserProfile> addPushEndpoint(String id, String endpoint);
+    Mono<? extends UserProfile> removePushEndpoints(String id, Collection<String> endpointsToRemove);
 }

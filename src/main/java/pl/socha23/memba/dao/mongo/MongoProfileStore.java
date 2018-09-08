@@ -7,6 +7,7 @@ import pl.socha23.memba.business.api.model.UserProfile;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Collection;
 import java.util.List;
 
 class MongoProfileStore implements ProfileStore {
@@ -47,6 +48,13 @@ class MongoProfileStore implements ProfileStore {
     public Mono<? extends UserProfile> addPushEndpoint(String id, String endpoint) {
         return template.findById(id, MongoUserProfileImpl.class)
                 .map(u -> u.addPushEndpoint(endpoint))
+                .compose(template::save);
+    }
+
+    @Override
+    public Mono<? extends UserProfile> removePushEndpoints(String id, Collection<String> endpointsToRemove) {
+        return template.findById(id, MongoUserProfileImpl.class)
+                .map(u -> u.removePushEndpoints(endpointsToRemove))
                 .compose(template::save);
     }
 
