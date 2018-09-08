@@ -56,11 +56,11 @@ self.addEventListener('push', function (e) {
         },
         actions: [
             {
-                action: 'explore', title: 'Explore this new world',
+                action: 'explore', title: 'Action one',
                 icon: 'images/checkmark.png'
             },
             {
-                action: 'close', title: 'Close',
+                action: 'close', title: 'Action two',
                 icon: 'images/xmark.png'
             },
         ]
