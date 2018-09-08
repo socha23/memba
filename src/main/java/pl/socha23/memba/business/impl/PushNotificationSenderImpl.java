@@ -1,9 +1,14 @@
 package pl.socha23.memba.business.impl;
 
+import nl.martijndwars.webpush.PushService;
+import nl.martijndwars.webpush.Utils;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+
+import java.security.Security;
 
 import static pl.socha23.memba.business.impl.PushNotificationSender.PushResult.Status.ENDPOINT_NOT_REGISTRED;
 import static pl.socha23.memba.business.impl.PushNotificationSender.PushResult.Status.SUCCESS;
@@ -12,17 +17,34 @@ import static pl.socha23.memba.business.impl.PushNotificationSender.PushResult.S
 public class PushNotificationSenderImpl implements PushNotificationSender {
 
 
-
+    private PushService pushService;
     WebClient webClient = WebClient.create();
 
-    String serverKey;
+    String vapidPublicKey;
+    String vapidPrivateKey;
 
-    public PushNotificationSenderImpl(@Value("${memba.push.server_key}") String serverKey) {
-        this.serverKey = serverKey;
+    public PushNotificationSenderImpl(@Value("${memba.push.vapidPublicKey}") String vapidPublicKey,
+                                      @Value("${memba.push.vapidPrivateKey}") String vapidPrivateKey) {
+        this.vapidPrivateKey = vapidPrivateKey;
+        this.vapidPublicKey = vapidPublicKey;
+
+        Security.addProvider(new BouncyCastleProvider());
+
+        try {
+            pushService = new PushService();
+            pushService.setPublicKey(Utils.loadPublicKey(vapidPublicKey));
+            pushService.setPrivateKey(Utils.loadPrivateKey(vapidPrivateKey));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public Mono<PushResult> sendPushNotification(String endpoint) {
+
+        //pushService.send()
+
+
         return webClient
                 .post()
                 .uri(endpoint)

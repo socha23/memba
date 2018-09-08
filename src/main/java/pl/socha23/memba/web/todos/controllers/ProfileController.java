@@ -24,6 +24,14 @@ public class ProfileController {
         return profileOperations.getCurrentUserProfile();
     }
 
+
+    @PostMapping("/api/profile/subscriptions")
+    public Mono<PushEndpointResult> postSubscription(@RequestBody PushEndpointRequest request) {
+        return profileOperations
+                .addCurrentUserPushEndpoint(request.getEndpoint())
+                .map(t -> PushEndpointResult.success());
+    }
+
     @PostMapping("/api/profile/pushEndpoints")
     public Mono<PushEndpointResult> postPushEndpoint(@RequestBody PushEndpointRequest request) {
         return profileOperations

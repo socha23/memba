@@ -40,11 +40,8 @@ class ProfileLogic {
         return this.profile.friends.find(f => f.id === id)
     }
 
-    registerPushEndpoint(endpoint) {
-        const pushEndpoints = this.profile.pushEndpoints || [];
-        if (!pushEndpoints.includes(endpoint)) {
-            this.serverData.postNewPushEndpoint(endpoint);
-        }
+    registerPushSubscription(endpoint) {
+        this.serverData.postNewSubscription(endpoint);
     }
 }
 

@@ -12,6 +12,10 @@ memba:
   push:
     gcm_sender_id: "240160191919"
     server_key: "AAAAN-qpta8:APA91bGkaQjb9bl9vbicRAx92diwzWERa345I23kSr5kFfS2uDWxx0OolG16wRx7kq3XqiCRmN66_-bNrHJOZuzhuUnlwCdyrRN0-zOH_Llx9CpYd8CXxckWe_DP22pVgWpn9yWQy8t2"
+    vapidPublicKey: "BLJGqk_V6lwC3EW12CRRuy2_vU1UhgFmrD5f_HZi8th60eiBu4Z1ViIt8zbHjnbpeZkFQJGznLzo5z_DsRbtiZQ"
+    vapidPrivateKey: "Q5UR0PCliPxxverITugOW24XUb5W-iOR0dwnie55U_I"
+
+
 
 spring:
   profiles:

@@ -18,11 +18,17 @@ public class IndexController {
     private String googleClientId;
     private String gcmSenderId;
 
+    private String vapidPublicKey;
+
+
     public IndexController(
             @Value("${memba.security.google.client_id}") String googleClientId,
-            @Value("${memba.push.gcm_sender_id}") String gcmSenderId) {
+            @Value("${memba.push.gcm_sender_id}") String gcmSenderId,
+            @Value("${memba.push.vapidPublicKey}") String vapidPublicKey
+    ) {
         this.googleClientId = googleClientId;
         this.gcmSenderId = gcmSenderId;
+        this.vapidPublicKey = vapidPublicKey;
     }
 
     private String calculateMd5(String path) {
@@ -58,6 +64,11 @@ public class IndexController {
     @ModelAttribute("gcmSenderId")
     public String getGcmSenderId() {
         return gcmSenderId;
+    }
+
+    @ModelAttribute("vapidPublicKey")
+    public String getVapidPublicKey() {
+        return vapidPublicKey;
     }
 
     @ModelAttribute("membaCssCachebuster")

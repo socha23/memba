@@ -6,12 +6,14 @@ class NotificationsLogic {
             Notification.requestPermission(status => {
                 if (status === 'granted') {
                     reg.pushManager.subscribe({
-                        userVisibleOnly: true
+                        userVisibleOnly: true,
+                        applicationServerKey: urlBase64ToUint8Array(global.VAPID_PUBLIC_KEY)
                     }).then(sub => {
-                        console.log("endpoint", sub.endpoint);
-                        this.registerPushEndpoint(sub.endpoint);
+                        console.log("Subscribing: ", JSON.stringify(sub));
+                        this.registerSubscription(sub);
                     }).catch(function (e) {
                         console.error('Unable to subscribe to push', e);
+                        reg.pushManager.getSubscription().then(s => {s.unsubscribe()})
                     });
                 } else {
                     console.warn('Permission for notifications was denied');
@@ -23,10 +25,20 @@ class NotificationsLogic {
             });
     }
 
-    registerPushEndpoint(endpoint) {
-        profileLogic.registerPushEndpoint(endpoint);
+    registerSubscription(subscription) {
+        profileLogic.registerPushSubscription(subscription);
     }
 
+}
+
+function urlBase64ToUint8Array(base64String) {
+  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding)
+    .replace(/\-/g, '+')
+    .replace(/_/g, '/')
+  ;
+  const rawData = window.atob(base64);
+  return Uint8Array.from([...rawData].map((char) => char.charCodeAt(0)));
 }
 
 const NOTIFICATIONS_LOGIC = new NotificationsLogic();

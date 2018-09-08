@@ -6,8 +6,6 @@
 
     <title>Memba?</title>
 
-    <link rel="preload" crossorigin href="manifest.json" as="fetch"/>
-
     <meta name="theme-color" content="black">
     <meta name="msapplication-navbutton-color" content="black">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -28,6 +26,7 @@
     <script type="text/javascript" th:inline="javascript">
         /*<![CDATA[*/
         GOOGLE_CLIENT_ID = [[${googleClientId}]];
+        VAPID_PUBLIC_KEY = [[${vapidPublicKey}]];
         /*]]>*/
     </script>
 
