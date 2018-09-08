@@ -70,7 +70,7 @@
 <script th:inline="javascript">
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', function () {
-            navigator.serviceWorker.register([[@{serviceworker-bundle.js(cachebuster=${serviceWorkerCachebuster})}]]).then(function (registration) {
+            navigator.serviceWorker.register("serviceworker-bundle.js").then(function (registration) {
                 // Registration was successful
             }, function (err) {
                 // registration failed :(

@@ -1,6 +1,6 @@
 import backgrounds from './backgrounds'
 
-const CACHE_NAME = 'memba-cache-20180907';
+const CACHE_NAME = 'memba-cache-20180908';
 const urlsToCache = [
 /*    '/', */
     '/fontawesome/webfonts/fa-solid-900.woff2',
@@ -69,3 +69,5 @@ self.addEventListener('push', function (e) {
         self.registration.showNotification('Memba?', options)
     );
 });
+
+self.skipWaiting();
