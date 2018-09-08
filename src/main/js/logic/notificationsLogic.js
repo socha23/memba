@@ -12,6 +12,7 @@ class NotificationsLogic {
                         this.registerPushEndpoint(sub.endpoint);
                     }).catch(function (e) {
                         console.error('Unable to subscribe to push', e);
+                        reg.pushManager.getSubscription().then(s => s.unsubscribe());
                     });
                 } else {
                     console.warn('Permission for notifications was denied');
