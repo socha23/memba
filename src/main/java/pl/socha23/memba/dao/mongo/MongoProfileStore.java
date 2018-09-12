@@ -53,7 +53,7 @@ class MongoProfileStore implements ProfileStore, PushSubscriptionStore {
 
     @Override
     public Collection<? extends PushSubscription> listPushSubscriptions(String userId) {
-        return Optional.ofNullable(template.findById(userId, MongoUserProfileImpl.class))
+        return Optional.ofNullable(getProfile(userId))
                 .orElseThrow(() -> new RuntimeException("Profile not found"))
                 .getPushSubscriptions();
     }
