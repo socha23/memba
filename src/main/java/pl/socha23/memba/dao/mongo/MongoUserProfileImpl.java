@@ -72,8 +72,7 @@ public class MongoUserProfileImpl implements UserProfile {
         this.rootTodoOrder = rootTodoOrder;
     }
 
-    @Override
-    public Set<String> getPushEndpoints() {
+    Set<String> getPushEndpoints() {
         return pushEndpoints;
     }
 

@@ -49,7 +49,6 @@ public class BasicUserProfile implements UserProfile {
         this.rootTodoOrder = rootTodoOrder;
     }
 
-    @Override
     public Set<String> getPushEndpoints() {
         return pushEndpoints;
     }

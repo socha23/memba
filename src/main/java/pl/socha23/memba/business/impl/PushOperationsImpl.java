@@ -31,6 +31,11 @@ public class PushOperationsImpl implements PushOperations {
                 .then();
     }
 
+    @Override
+    public Mono<? extends UserProfile> addPushEndpoint(String userId, String endpoint) {
+        return profileStore.addPushEndpoint(userId, endpoint);
+    }
+
     private <R> Mono<? extends UserProfile> removeUnregisteredEndpoints(String userId, List<PushNotificationSender.PushResult> pushResults) {
         Set<String> endpointsToRemove = pushResults.stream()
                 .filter(p -> p.getStatus() == PushNotificationSender.PushResult.Status.ENDPOINT_NOT_REGISTRED)
@@ -40,7 +45,7 @@ public class PushOperationsImpl implements PushOperations {
     }
 
     private Mono<List<PushNotificationSender.PushResult>> pushToEndpoints(UserProfile p) {
-        return Flux.fromIterable(p.getPushEndpoints())
+        return Flux.fromIterable(profileStore.listPushSubscriptions(p.getId()))
                 .flatMap(this::pushToEndpoint)
                 .collectList();
     }

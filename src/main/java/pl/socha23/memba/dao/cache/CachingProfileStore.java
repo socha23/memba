@@ -63,6 +63,11 @@ public class CachingProfileStore implements ProfileStore {
     }
 
     @Override
+    public Collection<String> listPushSubscriptions(String userId) {
+        return store.listPushSubscriptions(userId);
+    }
+
+    @Override
     public Mono<? extends UserProfile> addPushEndpoint(String id, String endpoint) {
         return store.addPushEndpoint(id, endpoint)
                 .map(this::putInCache);

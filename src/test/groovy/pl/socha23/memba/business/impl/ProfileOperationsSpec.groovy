@@ -57,23 +57,4 @@ class ProfileOperationsSpec extends Specification {
         expect:
         ops.profileOps.currentUserProfile.block().friends.find{it.id == TestUserProvider.USER_ID} == null
     }
-
-    def "add push endpoint"() {
-        given:
-        def ops = new TestOps()
-        ops.profileOps.addCurrentUserPushEndpoint("endpoint").block()
-
-        expect:
-        ops.profileOps.currentUserProfile.block().pushEndpoints[0] == "endpoint"
-    }
-
-    def "can't add same endpoint twice"() {
-        given:
-        def ops = new TestOps()
-        ops.profileOps.addCurrentUserPushEndpoint("endpoint").block()
-        ops.profileOps.addCurrentUserPushEndpoint("endpoint").block()
-
-        expect:
-        ops.profileOps.currentUserProfile.block().pushEndpoints.size() == 1
-    }
 }

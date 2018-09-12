@@ -41,10 +41,7 @@ class ProfileLogic {
     }
 
     registerPushEndpoint(endpoint) {
-        const pushEndpoints = this.profile.pushEndpoints || [];
-        if (!pushEndpoints.includes(endpoint)) {
-            this.serverData.postNewPushEndpoint(endpoint);
-        }
+        this.serverData.postNewPushSubscriptionEndpoint(endpoint);
     }
 }
 

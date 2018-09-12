@@ -42,9 +42,8 @@ export default class ServerData {
         this.onReceiveProfile(items);
     }
 
-    postNewPushEndpoint(endpoint) {
-        jsonPost("/profile/pushEndpoints", {endpoint: endpoint})
-            .then(this._reload());
+    postNewPushSubscriptionEndpoint(endpoint) {
+        jsonPost("/pushSubscriptions", {endpoint: endpoint})
     }
 
 

@@ -7,6 +7,4 @@ public interface UserProfile extends User {
 
     List<String> getRootGroupOrder();
     List<String> getRootTodoOrder();
-
-    Set<String> getPushEndpoints();
 }

@@ -1,5 +1,6 @@
 package pl.socha23.memba.dao.mongo;
 
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import pl.socha23.memba.business.api.dao.ProfileStore;
 import pl.socha23.memba.business.api.model.User;
@@ -9,53 +10,63 @@ import reactor.core.publisher.Mono;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 class MongoProfileStore implements ProfileStore {
 
-    private ReactiveMongoTemplate template;
+    private ReactiveMongoTemplate reactiveTemplate;
+    private MongoTemplate template;
 
-    MongoProfileStore(ReactiveMongoTemplate mongoTemplate) {
-        this.template = mongoTemplate;
+    MongoProfileStore(ReactiveMongoTemplate reactiveMongoTemplate, MongoTemplate template) {
+        this.reactiveTemplate = reactiveMongoTemplate;
+        this.template = template;
     }
 
     @Override
     public Mono<UserProfile> updateUserData(User user) {
-        return template.findById(user.getId(), MongoUserProfileImpl.class)
+        return reactiveTemplate.findById(user.getId(), MongoUserProfileImpl.class)
                 .defaultIfEmpty(MongoUserProfileImpl.from(user))
                 .map(u -> u.updateUserData(user))
-                .compose(template::save);
+                .compose(reactiveTemplate::save);
 
     }
 
     @Override
     public Mono<? extends UserProfile> findProfileById(String id) {
-        return template.findById(id, MongoUserProfileImpl.class);
+        return reactiveTemplate.findById(id, MongoUserProfileImpl.class);
     }
 
     @Override
     public Flux<? extends User> listAllUsers() {
-        return template.findAll(MongoUserProfileImpl.class);
+        return reactiveTemplate.findAll(MongoUserProfileImpl.class);
     }
 
     @Override
     public Mono<? extends UserProfile> updateRootOrder(String id, List<String> todoOrder, List<String> groupOrder) {
-        return template.findById(id, MongoUserProfileImpl.class)
+        return reactiveTemplate.findById(id, MongoUserProfileImpl.class)
                 .map(u -> u.setRootOrder(todoOrder, groupOrder))
-                .compose(template::save);
+                .compose(reactiveTemplate::save);
+    }
+
+    @Override
+    public Collection<String> listPushSubscriptions(String userId) {
+        return Optional.ofNullable(template.findById(userId, MongoUserProfileImpl.class))
+                .orElseThrow(() -> new RuntimeException("Profile not found"))
+                .getPushEndpoints();
     }
 
     @Override
     public Mono<? extends UserProfile> addPushEndpoint(String id, String endpoint) {
-        return template.findById(id, MongoUserProfileImpl.class)
+        return reactiveTemplate.findById(id, MongoUserProfileImpl.class)
                 .map(u -> u.addPushEndpoint(endpoint))
-                .compose(template::save);
+                .compose(reactiveTemplate::save);
     }
 
     @Override
     public Mono<? extends UserProfile> removePushEndpoints(String id, Collection<String> endpointsToRemove) {
-        return template.findById(id, MongoUserProfileImpl.class)
+        return reactiveTemplate.findById(id, MongoUserProfileImpl.class)
                 .map(u -> u.removePushEndpoints(endpointsToRemove))
-                .compose(template::save);
+                .compose(reactiveTemplate::save);
     }
 
 

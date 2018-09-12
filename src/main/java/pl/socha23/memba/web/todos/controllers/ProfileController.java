@@ -24,39 +24,4 @@ public class ProfileController {
         return profileOperations.getCurrentUserProfile();
     }
 
-    @PostMapping("/api/profile/pushEndpoints")
-    public Mono<PushEndpointResult> postPushEndpoint(@RequestBody PushEndpointRequest request) {
-        return profileOperations
-                .addCurrentUserPushEndpoint(request.getEndpoint())
-                .map(t -> PushEndpointResult.success());
-    }
-
-    static class PushEndpointRequest {
-        private String endpoint;
-
-        public String getEndpoint() {
-            return endpoint;
-        }
-
-        public void setEndpoint(String endpoint) {
-            this.endpoint = endpoint;
-        }
-    }
-
-    static class PushEndpointResult {
-        private boolean success;
-
-        private PushEndpointResult(boolean success) {
-            this.success = success;
-        }
-
-        public boolean isSuccess() {
-            return success;
-        }
-
-        static PushEndpointResult success() {
-            return new PushEndpointResult(true);
-        }
-    }
-
 }

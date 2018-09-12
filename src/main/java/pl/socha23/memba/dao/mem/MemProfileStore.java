@@ -52,6 +52,11 @@ public class MemProfileStore implements ProfileStore {
     }
 
     @Override
+    public Collection<String> listPushSubscriptions(String userId) {
+        return profiles.get(userId).getPushEndpoints();
+    }
+
+    @Override
     public Mono<? extends UserProfile> addPushEndpoint(String id, String endpoint) {
         BasicUserProfile p = profiles.get(id);
         p.getPushEndpoints().add(endpoint);

@@ -32,11 +32,6 @@ public class BasicUserProfileWithFriends implements UserProfileWithFriends {
     }
 
     @Override
-    public Set<String> getPushEndpoints() {
-        return profile.getPushEndpoints();
-    }
-
-    @Override
     public String getId() {
         return profile.getId();
     }

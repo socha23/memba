@@ -13,5 +13,4 @@ public interface ProfileOperations {
     Mono<? extends UserProfile> updateProfile(User user);
     Mono<? extends UserProfile> findUserById(String id);
     Mono<? extends UserProfile> updateRootOrders(String userId, List<String> todoOrder, List<String> groupOrder);
-    Mono<? extends UserProfile> addCurrentUserPushEndpoint(String endpoint);
 }

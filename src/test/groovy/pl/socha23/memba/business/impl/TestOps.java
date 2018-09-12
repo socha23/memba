@@ -1,9 +1,6 @@
 package pl.socha23.memba.business.impl;
 
-import pl.socha23.memba.business.api.logic.GroupsOperations;
-import pl.socha23.memba.business.api.logic.ProfileOperations;
-import pl.socha23.memba.business.api.logic.PushOperations;
-import pl.socha23.memba.business.api.logic.TodosOperations;
+import pl.socha23.memba.business.api.logic.*;
 import pl.socha23.memba.business.api.model.CreateOrUpdateGroup;
 import pl.socha23.memba.business.api.model.CreateOrUpdateTodo;
 import pl.socha23.memba.business.api.model.Group;
