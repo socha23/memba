@@ -2,6 +2,7 @@ package pl.socha23.memba.dao.mem;
 
 import org.springframework.stereotype.Component;
 import pl.socha23.memba.business.api.dao.ProfileStore;
+import pl.socha23.memba.business.api.dao.PushSubscriptionStore;
 import pl.socha23.memba.business.api.logic.CurrentUserProvider;
 import pl.socha23.memba.business.api.model.BasicUserProfile;
 import pl.socha23.memba.business.api.model.User;
@@ -10,14 +11,11 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Instant;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 @org.springframework.context.annotation.Profile("mem")
-public class MemProfileStore implements ProfileStore {
+public class MemProfileStore implements ProfileStore, PushSubscriptionStore {
 
     private Map<String, Instant> updateTimes = new HashMap<>();
     private Map<String, BasicUserProfile> profiles = new HashMap<>();
@@ -53,14 +51,17 @@ public class MemProfileStore implements ProfileStore {
 
     @Override
     public Collection<String> listPushSubscriptions(String userId) {
-        return profiles.get(userId).getPushEndpoints();
+        if (profiles.get(userId) != null) {
+            return profiles.get(userId).getPushEndpoints();
+        } else {
+            return null;
+        }
     }
 
     @Override
-    public Mono<? extends UserProfile> addPushEndpoint(String id, String endpoint) {
+    public void addPushEndpoint(String id, String endpoint) {
         BasicUserProfile p = profiles.get(id);
         p.getPushEndpoints().add(endpoint);
-        return Mono.just(p);
     }
 
     @Override

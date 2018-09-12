@@ -19,10 +19,10 @@ class PushOperationsSpec extends Specification {
     def "push sends messages to valid endpoints"() {
         given:
         def ops = new TestOps()
-        ops.pushOps.addPushEndpoint(TestUserProvider.USER_ID, "valid1").block()
-        ops.pushOps.addPushEndpoint(TestUserProvider.USER_ID, "invalid1").block()
-        ops.pushOps.addPushEndpoint(TestUserProvider.USER_ID, "valid2").block()
-        ops.pushOps.addPushEndpoint(TestUserProvider.USER_ID, "invalid2").block()
+        ops.pushOps.addPushEndpoint(TestUserProvider.USER_ID, "valid1")
+        ops.pushOps.addPushEndpoint(TestUserProvider.USER_ID, "invalid1")
+        ops.pushOps.addPushEndpoint(TestUserProvider.USER_ID, "valid2")
+        ops.pushOps.addPushEndpoint(TestUserProvider.USER_ID, "invalid2")
         ops.pushSender
                 .addValidEndpoint("valid1")
                 .addValidEndpoint("valid2")
@@ -40,8 +40,8 @@ class PushOperationsSpec extends Specification {
     def "invalid endpoints removed on push"() {
         given:
         def ops = new TestOps()
-        ops.pushOps.addPushEndpoint(TestUserProvider.USER_ID,"valid").block()
-        ops.pushOps.addPushEndpoint(TestUserProvider.USER_ID, "invalid").block()
+        ops.pushOps.addPushEndpoint(TestUserProvider.USER_ID,"valid")
+        ops.pushOps.addPushEndpoint(TestUserProvider.USER_ID, "invalid")
         ops.pushSender.addValidEndpoint("valid")
 
         when:
@@ -58,7 +58,7 @@ class PushOperationsSpec extends Specification {
     def "add push endpoint"() {
         given:
         def ops = new TestOps()
-        ops.pushOps.addPushEndpoint(TestUserProvider.USER_ID, "endpoint").block()
+        ops.pushOps.addPushEndpoint(TestUserProvider.USER_ID, "endpoint")
 
         expect:
         ops.profileStore.listPushSubscriptions(TestUserProvider.USER_ID)[0] == "endpoint"
@@ -67,8 +67,8 @@ class PushOperationsSpec extends Specification {
     def "can't add same endpoint twice"() {
         given:
         def ops = new TestOps()
-        ops.pushOps.addPushEndpoint(TestUserProvider.USER_ID, "endpoint").block()
-        ops.pushOps.addPushEndpoint(TestUserProvider.USER_ID, "endpoint").block()
+        ops.pushOps.addPushEndpoint(TestUserProvider.USER_ID, "endpoint")
+        ops.pushOps.addPushEndpoint(TestUserProvider.USER_ID, "endpoint")
 
         expect:
         ops.profileStore.listPushSubscriptions(TestUserProvider.USER_ID).size() == 1

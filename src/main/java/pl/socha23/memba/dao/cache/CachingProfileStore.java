@@ -6,7 +6,10 @@ import pl.socha23.memba.business.api.model.UserProfile;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class CachingProfileStore implements ProfileStore {
     
@@ -59,23 +62,6 @@ public class CachingProfileStore implements ProfileStore {
     @Override
     public Mono<? extends UserProfile> updateRootOrder(String id, List<String> todoOrder, List<String> groupOrder) {
         return store.updateRootOrder(id, todoOrder, groupOrder)
-                .map(this::putInCache);
-    }
-
-    @Override
-    public Collection<String> listPushSubscriptions(String userId) {
-        return store.listPushSubscriptions(userId);
-    }
-
-    @Override
-    public Mono<? extends UserProfile> addPushEndpoint(String id, String endpoint) {
-        return store.addPushEndpoint(id, endpoint)
-                .map(this::putInCache);
-    }
-
-    @Override
-    public Mono<? extends UserProfile> removePushEndpoints(String id, Collection<String> endpointsToRemove) {
-        return store.removePushEndpoints(id, endpointsToRemove)
                 .map(this::putInCache);
     }
 }

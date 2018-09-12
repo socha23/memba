@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import pl.socha23.memba.business.api.logic.CurrentUserProvider;
 import pl.socha23.memba.business.api.logic.PushOperations;
-import reactor.core.publisher.Mono;
 
 @Component
 @RestController
@@ -21,10 +20,10 @@ public class SubscriptionController {
     }
 
     @PostMapping("/api/pushSubscriptions")
-    public Mono<SubsciptionResult> postSubscription(@RequestBody SubscriptionRequest request) {
-        return pushOperations
-                .addPushEndpoint(currentUserProvider.getCurrentUserId(), request.getEndpoint())
-                .map(t -> SubsciptionResult.success());
+    public SubsciptionResult postSubscription(@RequestBody SubscriptionRequest request) {
+        pushOperations.addPushEndpoint(currentUserProvider.getCurrentUserId(), request.getEndpoint());
+        return SubsciptionResult.success();
+
     }
 
     static class SubscriptionRequest {

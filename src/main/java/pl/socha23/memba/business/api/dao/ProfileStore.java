@@ -13,8 +13,4 @@ public interface ProfileStore {
     Mono<? extends UserProfile> findProfileById(String id);
     Flux<? extends User> listAllUsers();
     Mono<? extends UserProfile> updateRootOrder(String id, List<String> todoOrder, List<String> groupOrder);
-
-    Collection<String> listPushSubscriptions(String userId);
-    Mono<? extends UserProfile> addPushEndpoint(String id, String endpoint);
-    Mono<? extends UserProfile> removePushEndpoints(String id, Collection<String> endpointsToRemove);
 }

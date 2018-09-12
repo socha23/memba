@@ -3,6 +3,7 @@ package pl.socha23.memba.dao.mongo;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import pl.socha23.memba.business.api.dao.ProfileStore;
+import pl.socha23.memba.business.api.dao.PushSubscriptionStore;
 import pl.socha23.memba.business.api.model.User;
 import pl.socha23.memba.business.api.model.UserProfile;
 import reactor.core.publisher.Flux;
@@ -12,7 +13,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-class MongoProfileStore implements ProfileStore {
+class MongoProfileStore implements ProfileStore, PushSubscriptionStore {
 
     private ReactiveMongoTemplate reactiveTemplate;
     private MongoTemplate template;
@@ -56,10 +57,14 @@ class MongoProfileStore implements ProfileStore {
     }
 
     @Override
-    public Mono<? extends UserProfile> addPushEndpoint(String id, String endpoint) {
-        return reactiveTemplate.findById(id, MongoUserProfileImpl.class)
-                .map(u -> u.addPushEndpoint(endpoint))
-                .compose(reactiveTemplate::save);
+    public void addPushEndpoint(String id, String endpoint) {
+        var profile = getProfile(id);
+        profile.getPushEndpoints().add(endpoint);
+        template.save(profile);
+    }
+
+    private MongoUserProfileImpl getProfile(String id) {
+        return template.findById(id, MongoUserProfileImpl.class);
     }
 
     @Override
