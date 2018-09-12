@@ -19,10 +19,10 @@ class PushOperationsSpec extends Specification {
     def "push sends messages to valid endpoints"() {
         given:
         def ops = new TestOps()
-        ops.pushOps.addPushEndpoint(TestUserProvider.USER_ID, "valid1")
-        ops.pushOps.addPushEndpoint(TestUserProvider.USER_ID, "invalid1")
-        ops.pushOps.addPushEndpoint(TestUserProvider.USER_ID, "valid2")
-        ops.pushOps.addPushEndpoint(TestUserProvider.USER_ID, "invalid2")
+        ops.addPushSubscription("valid1")
+        ops.addPushSubscription("invalid1")
+        ops.addPushSubscription("valid2")
+        ops.addPushSubscription("invalid2")
         ops.pushSender
                 .addValidEndpoint("valid1")
                 .addValidEndpoint("valid2")
@@ -40,8 +40,8 @@ class PushOperationsSpec extends Specification {
     def "invalid endpoints removed on push"() {
         given:
         def ops = new TestOps()
-        ops.pushOps.addPushEndpoint(TestUserProvider.USER_ID,"valid")
-        ops.pushOps.addPushEndpoint(TestUserProvider.USER_ID, "invalid")
+        ops.addPushSubscription("valid")
+        ops.addPushSubscription("invalid")
         ops.pushSender.addValidEndpoint("valid")
 
         when:
@@ -51,24 +51,24 @@ class PushOperationsSpec extends Specification {
         ops.pushSender.pushFailures.contains("invalid")
 
         def subscriptions = ops.profileStore.listPushSubscriptions(TestUserProvider.USER_ID)
-        subscriptions.contains("valid");
-        !subscriptions.contains("invalid");
+        subscriptions*.endpoint.contains("valid");
+        !subscriptions*.endpoint.contains("invalid");
     }
 
     def "add push endpoint"() {
         given:
         def ops = new TestOps()
-        ops.pushOps.addPushEndpoint(TestUserProvider.USER_ID, "endpoint")
+        ops.addPushSubscription("endpoint")
 
         expect:
-        ops.profileStore.listPushSubscriptions(TestUserProvider.USER_ID)[0] == "endpoint"
+        ops.profileStore.listPushSubscriptions(TestUserProvider.USER_ID)[0].endpoint == "endpoint"
     }
 
     def "can't add same endpoint twice"() {
         given:
         def ops = new TestOps()
-        ops.pushOps.addPushEndpoint(TestUserProvider.USER_ID, "endpoint")
-        ops.pushOps.addPushEndpoint(TestUserProvider.USER_ID, "endpoint")
+        ops.addPushSubscription("endpoint")
+        ops.addPushSubscription("endpoint")
 
         expect:
         ops.profileStore.listPushSubscriptions(TestUserProvider.USER_ID).size() == 1

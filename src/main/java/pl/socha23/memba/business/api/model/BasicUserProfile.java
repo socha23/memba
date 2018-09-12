@@ -9,7 +9,7 @@ public class BasicUserProfile implements UserProfile {
     private User me;
     private List<String> rootGroupOrder;
     private List<String> rootTodoOrder;
-    private Set<String> pushEndpoints = new HashSet<>();
+    private Set<BasicPushSubscription> pushSubscriptions = new HashSet<>();
 
     @Override
     public String getId() {
@@ -49,12 +49,12 @@ public class BasicUserProfile implements UserProfile {
         this.rootTodoOrder = rootTodoOrder;
     }
 
-    public Set<String> getPushEndpoints() {
-        return pushEndpoints;
+    public Set<BasicPushSubscription> getPushSubscriptions() {
+        return pushSubscriptions;
     }
 
-    public void setPushEndpoints(Set<String> pushEndpoints) {
-        this.pushEndpoints = pushEndpoints;
+    public void setPushSubscriptions(Set<BasicPushSubscription> pushSubscriptions) {
+        this.pushSubscriptions = pushSubscriptions;
     }
 
     public static BasicUserProfile from(User user) {

@@ -1,6 +1,8 @@
 package pl.socha23.memba.dao.mongo;
 
 import org.springframework.data.mongodb.core.mapping.Document;
+import pl.socha23.memba.business.api.model.BasicPushSubscription;
+import pl.socha23.memba.business.api.model.PushSubscription;
 import pl.socha23.memba.business.api.model.User;
 import pl.socha23.memba.business.api.model.UserProfile;
 
@@ -18,7 +20,7 @@ public class MongoUserProfileImpl implements UserProfile {
 
     private List<String> rootGroupOrder;
     private List<String> rootTodoOrder;
-    private Set<String> pushEndpoints = new HashSet<>();
+    private Set<BasicPushSubscription> pushSubscriptions = new HashSet<>();
 
     @Override
     public String getId() {
@@ -72,13 +74,8 @@ public class MongoUserProfileImpl implements UserProfile {
         this.rootTodoOrder = rootTodoOrder;
     }
 
-    Set<String> getPushEndpoints() {
-        return pushEndpoints;
-    }
-
-    MongoUserProfileImpl addPushEndpoint(String endpoint) {
-        getPushEndpoints().add(endpoint);
-        return this;
+    Set<BasicPushSubscription> getPushSubscriptions() {
+        return pushSubscriptions;
     }
 
     public static MongoUserProfileImpl from(User user) {
@@ -98,11 +95,6 @@ public class MongoUserProfileImpl implements UserProfile {
     MongoUserProfileImpl setRootOrder(List<String> todoOrder, List<String> groupOrder) {
         setRootTodoOrder(todoOrder);
         setRootGroupOrder(groupOrder);
-        return this;
-    }
-
-    MongoUserProfileImpl removePushEndpoints(Collection<String> endpointsToRemove) {
-        getPushEndpoints().removeAll(endpointsToRemove);
         return this;
     }
 }

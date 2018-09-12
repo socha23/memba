@@ -1,5 +1,7 @@
 package pl.socha23.memba.business.impl;
 
+import pl.socha23.memba.business.api.model.PushSubscription;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,13 +15,13 @@ public class TestPushSender implements PushNotificationSender {
     private Set<String> pushFailures = new HashSet<>();
 
     @Override
-    public PushResult sendPushNotification(String endpoint) {
-        if (validEndpoints.contains(endpoint)) {
-            pushSuccesses.add(endpoint);
-            return new PushResult(endpoint, SUCCESS);
+    public PushResult sendPushNotification(PushSubscription subscription) {
+        if (validEndpoints.contains(subscription.getEndpoint())) {
+            pushSuccesses.add(subscription.getEndpoint());
+            return new PushResult(subscription, SUCCESS);
         } else {
-            pushFailures.add(endpoint);
-            return new PushResult(endpoint, ENDPOINT_NOT_REGISTRED);
+            pushFailures.add(subscription.getEndpoint());
+            return new PushResult(subscription, ENDPOINT_NOT_REGISTRED);
         }
     }
 

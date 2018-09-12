@@ -4,9 +4,7 @@ import org.springframework.stereotype.Component;
 import pl.socha23.memba.business.api.dao.ProfileStore;
 import pl.socha23.memba.business.api.dao.PushSubscriptionStore;
 import pl.socha23.memba.business.api.logic.CurrentUserProvider;
-import pl.socha23.memba.business.api.model.BasicUserProfile;
-import pl.socha23.memba.business.api.model.User;
-import pl.socha23.memba.business.api.model.UserProfile;
+import pl.socha23.memba.business.api.model.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -50,28 +48,28 @@ public class MemProfileStore implements ProfileStore, PushSubscriptionStore {
     }
 
     @Override
-    public Collection<String> listPushSubscriptions(String userId) {
+    public Collection<? extends PushSubscription> listPushSubscriptions(String userId) {
         if (profiles.get(userId) != null) {
-            return profiles.get(userId).getPushEndpoints();
+            return profiles.get(userId).getPushSubscriptions();
         } else {
             return new ArrayList<>();
         }
     }
 
     @Override
-    public void addPushEndpoint(String id, String endpoint) {
+    public void addPushSubscription(String id, PushSubscription subscription) {
         BasicUserProfile p = profiles.get(id);
         if (p != null) {
-            p.getPushEndpoints().add(endpoint);
+            p.getPushSubscriptions().add(BasicPushSubscription.copy(subscription));
         }
 
     }
 
     @Override
-    public void removePushEndpoints(String id, Collection<String> endpointsToRemove) {
+    public void removePushSubscriptions(String id, Collection<PushSubscription> endpointsToRemove) {
         BasicUserProfile p = profiles.get(id);
         if (p != null) {
-            p.getPushEndpoints().removeAll(endpointsToRemove);
+            p.getPushSubscriptions().removeAll(endpointsToRemove);
         }
 
     }

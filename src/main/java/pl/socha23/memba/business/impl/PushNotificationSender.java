@@ -1,20 +1,22 @@
 package pl.socha23.memba.business.impl;
 
+import pl.socha23.memba.business.api.model.PushSubscription;
+
 interface PushNotificationSender {
 
     class PushResult {
         enum Status {SUCCESS, ENDPOINT_NOT_REGISTRED, ERROR};
 
-        private final String endpoint;
+        private final PushSubscription subscription;
         private final Status status;
 
-        public PushResult(String endpoint, Status status) {
-            this.endpoint = endpoint;
+        public PushResult(PushSubscription subscription, Status status) {
+            this.subscription = subscription;
             this.status = status;
         }
 
-        public String getEndpoint() {
-            return endpoint;
+        public PushSubscription getSubscription() {
+            return subscription;
         }
 
         public Status getStatus() {
@@ -22,5 +24,5 @@ interface PushNotificationSender {
         }
     }
 
-    PushResult sendPushNotification(String endpoint);
+    PushResult sendPushNotification(PushSubscription subscription);
 }

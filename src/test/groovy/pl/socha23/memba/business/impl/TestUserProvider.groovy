@@ -5,7 +5,7 @@ import pl.socha23.memba.business.api.model.User
 
 class TestUserProvider implements CurrentUserProvider {
 
-    public final static USER_ID = "testUserId";
+    public final static String USER_ID = "testUserId";
 
     @Override
     User currentUser() {

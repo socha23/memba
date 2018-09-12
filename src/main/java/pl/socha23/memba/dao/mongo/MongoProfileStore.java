@@ -4,6 +4,8 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import pl.socha23.memba.business.api.dao.ProfileStore;
 import pl.socha23.memba.business.api.dao.PushSubscriptionStore;
+import pl.socha23.memba.business.api.model.BasicPushSubscription;
+import pl.socha23.memba.business.api.model.PushSubscription;
 import pl.socha23.memba.business.api.model.User;
 import pl.socha23.memba.business.api.model.UserProfile;
 import reactor.core.publisher.Flux;
@@ -50,16 +52,16 @@ class MongoProfileStore implements ProfileStore, PushSubscriptionStore {
     }
 
     @Override
-    public Collection<String> listPushSubscriptions(String userId) {
+    public Collection<? extends PushSubscription> listPushSubscriptions(String userId) {
         return Optional.ofNullable(template.findById(userId, MongoUserProfileImpl.class))
                 .orElseThrow(() -> new RuntimeException("Profile not found"))
-                .getPushEndpoints();
+                .getPushSubscriptions();
     }
 
     @Override
-    public void addPushEndpoint(String id, String endpoint) {
+    public void addPushSubscription(String id, PushSubscription endpoint) {
         var profile = getProfile(id);
-        profile.getPushEndpoints().add(endpoint);
+        profile.getPushSubscriptions().add(BasicPushSubscription.copy(endpoint));
         template.save(profile);
     }
 
@@ -68,9 +70,9 @@ class MongoProfileStore implements ProfileStore, PushSubscriptionStore {
     }
 
     @Override
-    public void removePushEndpoints(String id, Collection<String> endpointsToRemove) {
+    public void removePushSubscriptions(String id, Collection<PushSubscription> endpointsToRemove) {
         var profile = getProfile(id);
-        profile.getPushEndpoints().removeAll(endpointsToRemove);
+        profile.getPushSubscriptions().removeAll(endpointsToRemove);
         template.save(profile);
     }
 }

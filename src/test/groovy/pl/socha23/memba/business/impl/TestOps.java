@@ -1,10 +1,7 @@
 package pl.socha23.memba.business.impl;
 
 import pl.socha23.memba.business.api.logic.*;
-import pl.socha23.memba.business.api.model.CreateOrUpdateGroup;
-import pl.socha23.memba.business.api.model.CreateOrUpdateTodo;
-import pl.socha23.memba.business.api.model.Group;
-import pl.socha23.memba.business.api.model.Todo;
+import pl.socha23.memba.business.api.model.*;
 import pl.socha23.memba.dao.cache.CachingProfileStore;
 import pl.socha23.memba.dao.mem.MemGroupStore;
 import pl.socha23.memba.dao.mem.MemProfileStore;
@@ -99,5 +96,11 @@ public class TestOps {
 
     public TestPushSender getPushSender() {
         return pushSender;
+    }
+
+    public void addPushSubscription(String endpoint) {
+        var subscription = new BasicPushSubscription();
+        subscription.setEndpoint(endpoint);
+        pushOps.addPushSubscription(TestUserProvider.USER_ID, subscription);
     }
 }
