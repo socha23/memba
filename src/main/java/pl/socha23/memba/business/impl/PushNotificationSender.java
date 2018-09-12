@@ -1,7 +1,5 @@
 package pl.socha23.memba.business.impl;
 
-import reactor.core.publisher.Mono;
-
 interface PushNotificationSender {
 
     class PushResult {
@@ -24,5 +22,5 @@ interface PushNotificationSender {
         }
     }
 
-    Mono<PushResult> sendPushNotification(String endpoint);
+    PushResult sendPushNotification(String endpoint);
 }

@@ -10,7 +10,7 @@ class PushOperationsSpec extends Specification {
         def ops = new TestOps()
 
         when:
-        ops.pushOps.pushTo("no_such_user").block()
+        ops.pushOps.pushTo("no_such_user")
 
         then:
         notThrown(Exception)
@@ -28,7 +28,7 @@ class PushOperationsSpec extends Specification {
                 .addValidEndpoint("valid2")
 
         when:
-        ops.pushOps.pushTo(TestUserProvider.USER_ID).block()
+        ops.pushOps.pushTo(TestUserProvider.USER_ID)
 
         then:
         ops.pushSender.pushSuccesses.contains("valid1")
@@ -45,7 +45,7 @@ class PushOperationsSpec extends Specification {
         ops.pushSender.addValidEndpoint("valid")
 
         when:
-        ops.pushOps.pushTo(TestUserProvider.USER_ID).block()
+        ops.pushOps.pushTo(TestUserProvider.USER_ID)
 
         then:
         ops.pushSender.pushFailures.contains("invalid")

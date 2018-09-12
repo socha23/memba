@@ -54,21 +54,26 @@ public class MemProfileStore implements ProfileStore, PushSubscriptionStore {
         if (profiles.get(userId) != null) {
             return profiles.get(userId).getPushEndpoints();
         } else {
-            return null;
+            return new ArrayList<>();
         }
     }
 
     @Override
     public void addPushEndpoint(String id, String endpoint) {
         BasicUserProfile p = profiles.get(id);
-        p.getPushEndpoints().add(endpoint);
+        if (p != null) {
+            p.getPushEndpoints().add(endpoint);
+        }
+
     }
 
     @Override
-    public Mono<? extends UserProfile> removePushEndpoints(String id, Collection<String> endpointsToRemove) {
+    public void removePushEndpoints(String id, Collection<String> endpointsToRemove) {
         BasicUserProfile p = profiles.get(id);
-        p.getPushEndpoints().removeAll(endpointsToRemove);
-        return Mono.just(p);
+        if (p != null) {
+            p.getPushEndpoints().removeAll(endpointsToRemove);
+        }
+
     }
 
     public Instant getUpdateTime(String id) {

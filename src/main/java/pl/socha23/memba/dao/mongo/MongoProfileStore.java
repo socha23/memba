@@ -68,11 +68,9 @@ class MongoProfileStore implements ProfileStore, PushSubscriptionStore {
     }
 
     @Override
-    public Mono<? extends UserProfile> removePushEndpoints(String id, Collection<String> endpointsToRemove) {
-        return reactiveTemplate.findById(id, MongoUserProfileImpl.class)
-                .map(u -> u.removePushEndpoints(endpointsToRemove))
-                .compose(reactiveTemplate::save);
+    public void removePushEndpoints(String id, Collection<String> endpointsToRemove) {
+        var profile = getProfile(id);
+        profile.getPushEndpoints().removeAll(endpointsToRemove);
+        template.save(profile);
     }
-
-
 }

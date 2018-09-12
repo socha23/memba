@@ -3,7 +3,6 @@ package pl.socha23.memba.business.impl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 import static pl.socha23.memba.business.impl.PushNotificationSender.PushResult.Status.ENDPOINT_NOT_REGISTRED;
 import static pl.socha23.memba.business.impl.PushNotificationSender.PushResult.Status.SUCCESS;
@@ -22,7 +21,7 @@ public class PushNotificationSenderImpl implements PushNotificationSender {
     }
 
     @Override
-    public Mono<PushResult> sendPushNotification(String endpoint) {
+    public PushResult sendPushNotification(String endpoint) {
         return webClient
                 .post()
                 .uri(endpoint)
@@ -44,6 +43,6 @@ public class PushNotificationSenderImpl implements PushNotificationSender {
                                 throw new RuntimeException("Error when pushing");
                             }
                         }
-                );
+                ).block();
     }
 }

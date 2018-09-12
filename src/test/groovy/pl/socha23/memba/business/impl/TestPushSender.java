@@ -1,7 +1,5 @@
 package pl.socha23.memba.business.impl;
 
-import reactor.core.publisher.Mono;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,13 +13,13 @@ public class TestPushSender implements PushNotificationSender {
     private Set<String> pushFailures = new HashSet<>();
 
     @Override
-    public Mono<PushResult> sendPushNotification(String endpoint) {
+    public PushResult sendPushNotification(String endpoint) {
         if (validEndpoints.contains(endpoint)) {
             pushSuccesses.add(endpoint);
-            return Mono.just(new PushResult(endpoint, SUCCESS));
+            return new PushResult(endpoint, SUCCESS);
         } else {
             pushFailures.add(endpoint);
-            return Mono.just(new PushResult(endpoint, ENDPOINT_NOT_REGISTRED));
+            return new PushResult(endpoint, ENDPOINT_NOT_REGISTRED);
         }
     }
 
