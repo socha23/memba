@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pl.socha23.memba.business.api.logic.NotificationOperations;
 import pl.socha23.memba.business.api.logic.PushOperations;
-import pl.socha23.memba.business.impl.PushNotificationSender;
 
 import java.util.Collections;
+import java.util.Map;
 
 @RestController
 public class DevController {
@@ -22,15 +22,9 @@ public class DevController {
     }
 
     @GetMapping("/dev/pushTodo/{todoId}")
-    public PushResult push(@PathVariable("todoId") String todoId) {
+    public Map<String, Object> push(@PathVariable("todoId") String todoId) {
         notificationOperations.pushTodo(todoId);
-        return new PushResult();
-    }
-
-    static class PushResult {
-        boolean isSuccess() {
-            return true;
-        }
+        return Collections.singletonMap("success", true);
     }
 
     @GetMapping("/dev/push/{userId}")

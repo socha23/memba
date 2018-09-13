@@ -62,7 +62,8 @@ public class VapidPushNotificationSenderImpl implements PushNotificationSender {
                 subscription.getEndpoint(),
                 key,
                 authBytes,
-                getNotificationPayload(payload)
+                getNotificationPayload(payload),
+                3600
         );
     }
 

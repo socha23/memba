@@ -2,7 +2,10 @@ function createPushMessage(pushData) {
     return {
         title: "Memba?",
         options: {
-            body: pushData.message,
+            body: pushData.text,
+            requireInteraction: true,
+            renotify: true,
+            tag: pushData.id,
             icon: 'memba192x192.png',
             vibrate: [100, 50, 100],
             data: {

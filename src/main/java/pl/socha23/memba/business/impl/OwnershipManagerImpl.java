@@ -51,8 +51,8 @@ class OwnershipManagerImpl implements OwnershipManager {
     }
 
     @Override
-    public Collection<String> getOwnerIds(BasicItemInGroup item) {
-        return item.getOwnerIds();         
+    public Collection<String> getOwnerIds(ItemInGroup item) {
+        return item.getOwnerIds();
     }
 
     private Mono<? extends Void> setOwnershipInChildren(Set<String> ownerIds, Group group) {
