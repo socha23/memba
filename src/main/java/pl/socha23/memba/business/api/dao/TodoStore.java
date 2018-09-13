@@ -8,7 +8,8 @@ import java.util.Set;
 
 public interface TodoStore<T extends Todo> {
     
-    Mono<T> findTodoById(String id);
+    Mono<T> findTodoByIdReactive(String id);
+    Todo findTodoById(String id);
 
     Flux<T> listTodosByOwnerId(String userId);
 

@@ -1,6 +1,7 @@
 package pl.socha23.memba.dao.mongo;
 
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -19,16 +20,23 @@ import java.util.Set;
 class MongoTodoStore implements TodoStore<MongoTodoImpl> {
 
     private MongoTodoRepository repository;
-    private ReactiveMongoTemplate template;
+    private ReactiveMongoTemplate reactiveTemplate;
+    private MongoTemplate template;
 
-    public MongoTodoStore(MongoTodoRepository repository, ReactiveMongoTemplate template) {
+    public MongoTodoStore(MongoTodoRepository repository, ReactiveMongoTemplate reactiveTemplate, MongoTemplate template) {
         this.repository = repository;
+        this.reactiveTemplate = reactiveTemplate;
         this.template = template;
     }
 
     @Override
-    public Mono<MongoTodoImpl> findTodoById(String id) {
+    public Mono<MongoTodoImpl> findTodoByIdReactive(String id) {
         return repository.findById(id);
+    }
+
+    @Override
+    public Todo findTodoById(String id) {
+        return template.findById(id, MongoTodoImpl.class);
     }
 
     @Override
@@ -69,7 +77,7 @@ class MongoTodoStore implements TodoStore<MongoTodoImpl> {
     }
 
     private Mono<Void> update(Criteria criteria, Update update) {
-        return template.updateMulti(new Query(criteria), update, MongoTodoImpl.class).then();
+        return reactiveTemplate.updateMulti(new Query(criteria), update, MongoTodoImpl.class).then();
     }
 
 }

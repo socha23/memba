@@ -54,7 +54,7 @@ public class TodosOperationsImpl extends AbstractItemInGroupOperationsImpl<Basic
     @Override
     public Mono<? extends Todo> updateTodo(String todoId, Mono<? extends CreateOrUpdateTodo> command) {
         return todoStore
-                .findTodoById(todoId)
+                .findTodoByIdReactive(todoId)
                 .zipWith(command)
                 .flatMap(t -> {
                     var result = updateFields(t.getT1(), t.getT2());

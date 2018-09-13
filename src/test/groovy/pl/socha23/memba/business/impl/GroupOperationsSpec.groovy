@@ -113,12 +113,12 @@ class GroupOperationsSpec extends Specification {
         ops.groupStore.findGroupById(g1.id).block() == null
 
         ops. groupStore.findGroupById(g1a.id).block().groupId == 'root'
-        ops. todoStore.findTodoById(t1.id).block().groupId == 'root'
+        ops. todoStore.findTodoByIdReactive(t1.id).block().groupId == 'root'
 
-        ops. todoStore.findTodoById(t.id).block().groupId == 'root'
+        ops. todoStore.findTodoByIdReactive(t.id).block().groupId == 'root'
         ops. groupStore.findGroupById(g2.id).block().groupId == 'root'
         ops. groupStore.findGroupById(g2a.id).block().groupId == g2.id
-        ops. todoStore.findTodoById(t2.id).block().groupId == g2.id
+        ops. todoStore.findTodoByIdReactive(t2.id).block().groupId == g2.id
     }
 
 }

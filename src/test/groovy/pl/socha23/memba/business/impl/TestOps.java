@@ -87,7 +87,7 @@ public class TestOps {
     }
 
     public Todo findTodoById(String id) {
-        return todoStore.findTodoById(id).block();
+        return todoStore.findTodoByIdReactive(id).block();
     }
 
     public Group findGroupById(String id) {

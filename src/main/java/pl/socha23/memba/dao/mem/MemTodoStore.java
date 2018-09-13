@@ -20,8 +20,13 @@ public class MemTodoStore implements TodoStore<BasicTodo> {
     private Map<String, BasicTodo> todosById = new HashMap<>();
 
     @Override
-    public Mono<BasicTodo> findTodoById(String id) {
+    public Mono<BasicTodo> findTodoByIdReactive(String id) {
         return Mono.justOrEmpty(todosById.get(id));
+    }
+
+    @Override
+    public Todo findTodoById(String id) {
+        return todosById.get(id);
     }
 
     @Override

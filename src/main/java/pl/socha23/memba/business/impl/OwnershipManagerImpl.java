@@ -9,6 +9,7 @@ import pl.socha23.memba.business.api.model.ItemInGroup;
 import pl.socha23.memba.business.api.model.Todo;
 import reactor.core.publisher.Mono;
 
+import java.util.Collection;
 import java.util.Set;
 
 @Component
@@ -47,6 +48,11 @@ class OwnershipManagerImpl implements OwnershipManager {
     @Override
     public Mono<Void> copyOwnershipToChildren(Mono<? extends Group> group) {
         return group.flatMap(g -> setOwnershipInChildren(g.getOwnerIds(), g));
+    }
+
+    @Override
+    public Collection<String> getOwnerIds(BasicItemInGroup item) {
+        return item.getOwnerIds();         
     }
 
     private Mono<? extends Void> setOwnershipInChildren(Set<String> ownerIds, Group group) {
