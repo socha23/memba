@@ -15,7 +15,7 @@ public class TestPushSender implements PushNotificationSender {
     private Set<String> pushFailures = new HashSet<>();
 
     @Override
-    public PushResult sendPushNotification(PushSubscription subscription) {
+    public PushResult sendPushNotification(PushSubscription subscription, Object payload) {
         if (validEndpoints.contains(subscription.getEndpoint())) {
             pushSuccesses.add(subscription.getEndpoint());
             return new PushResult(subscription, SUCCESS);

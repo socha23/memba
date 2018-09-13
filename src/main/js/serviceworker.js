@@ -1,5 +1,7 @@
 import backgrounds from './backgrounds'
 
+import createPushMessage from './createPushMessage'
+
 const CACHE_NAME = 'memba-cache-20180908';
 const urlsToCache = [
 /*    '/', */
@@ -46,27 +48,9 @@ self.addEventListener('fetch', event => {
 });
 
 self.addEventListener('push', function (e) {
-    const options = {
-        body: 'Memba Chewbacca?',
-        icon: 'memba192x192.png',
-        vibrate: [100, 50, 100],
-        data: {
-            dateOfArrival: Date.now(),
-            primaryKey: '2'
-        },
-        actions: [
-            {
-                action: 'explore', title: 'Action one',
-                icon: 'images/checkmark.png'
-            },
-            {
-                action: 'close', title: 'Action two',
-                icon: 'images/xmark.png'
-            },
-        ]
-    };
+    const message = createPushMessage(e.data.json());
     e.waitUntil(
-        self.registration.showNotification('Memba?', options)
+        self.registration.showNotification(message.title, message.options)
     );
 });
 

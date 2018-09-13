@@ -1,5 +1,7 @@
 import profileLogic from './profileLogic'
 
+// notification logic from https://github.com/web-push-libs/webpush-java/blob/master/doc/UsageExample.md
+
 class NotificationsLogic {
     requestPermission() {
         navigator.serviceWorker.getRegistration().then(reg => {
@@ -25,20 +27,27 @@ class NotificationsLogic {
             });
     }
 
-    registerSubscription(subscription) {
+    registerSubscription(sub) {
+        const key = sub.getKey ? sub.getKey('p256dh') : '';
+        const auth = sub.getKey ? sub.getKey('auth') : '';
+        const subscription = {
+            endpoint: sub.endpoint,
+            key: key ? btoa(String.fromCharCode.apply(null, new Uint8Array(key))) : '',
+            auth: auth ? btoa(String.fromCharCode.apply(null, new Uint8Array(auth))) : ''
+        };
         profileLogic.registerPushSubscription(subscription);
     }
 
 }
 
 function urlBase64ToUint8Array(base64String) {
-  const padding = '='.repeat((4 - base64String.length % 4) % 4);
-  const base64 = (base64String + padding)
-    .replace(/\-/g, '+')
-    .replace(/_/g, '/')
-  ;
-  const rawData = window.atob(base64);
-  return Uint8Array.from([...rawData].map((char) => char.charCodeAt(0)));
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding)
+        .replace(/\-/g, '+')
+        .replace(/_/g, '/')
+    ;
+    const rawData = window.atob(base64);
+    return Uint8Array.from([...rawData].map((char) => char.charCodeAt(0)));
 }
 
 const NOTIFICATIONS_LOGIC = new NotificationsLogic();

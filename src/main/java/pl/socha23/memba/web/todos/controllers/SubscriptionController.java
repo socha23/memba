@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import pl.socha23.memba.business.api.logic.CurrentUserProvider;
 import pl.socha23.memba.business.api.logic.PushOperations;
-import pl.socha23.memba.business.api.model.PushSubscription;
+import pl.socha23.memba.business.api.model.BasicPushSubscription;
 
 @Component
 @RestController
@@ -27,16 +27,7 @@ public class SubscriptionController {
 
     }
 
-    static class SubscriptionRequest implements PushSubscription {
-        private String endpoint;
-
-        public String getEndpoint() {
-            return endpoint;
-        }
-
-        public void setEndpoint(String endpoint) {
-            this.endpoint = endpoint;
-        }
+    private static class SubscriptionRequest extends BasicPushSubscription {
     }
 
     static class SubsciptionResult {

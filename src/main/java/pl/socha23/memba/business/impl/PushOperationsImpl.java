@@ -20,11 +20,11 @@ public class PushOperationsImpl implements PushOperations {
     }
 
     @Override
-    public void pushTo(String userId) {
+    public void pushTo(String userId, Object payload) {
          var subscriptions = pushSubscriptionsStore.listPushSubscriptions(userId);
          var subscriptionsToRemove = new HashSet<PushSubscription>();
          for (var subscription : subscriptions) {
-             var result = pushToEndpoint(subscription);
+             var result = pushToEndpoint(subscription, payload);
              if (result.getStatus() == PushNotificationSender.PushResult.Status.ENDPOINT_NOT_REGISTRED) {
                  subscriptionsToRemove.add(subscription);
              }
@@ -41,8 +41,8 @@ public class PushOperationsImpl implements PushOperations {
         pushSubscriptionsStore.removePushSubscriptions(userId, subscriptionsToRemove);
     }
 
-    private PushNotificationSender.PushResult pushToEndpoint(PushSubscription endpoint) {
-        return pushNotificationSender.sendPushNotification(endpoint);
+    private PushNotificationSender.PushResult pushToEndpoint(PushSubscription endpoint, Object payload) {
+        return pushNotificationSender.sendPushNotification(endpoint, payload);
     }
 
 }

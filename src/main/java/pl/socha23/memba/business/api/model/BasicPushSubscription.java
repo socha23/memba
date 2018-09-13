@@ -5,6 +5,8 @@ import java.util.Objects;
 public class BasicPushSubscription implements PushSubscription {
 
     private String endpoint;
+    private String key;
+    private String auth;
 
     @Override
     public String getEndpoint() {
@@ -15,9 +17,29 @@ public class BasicPushSubscription implements PushSubscription {
         this.endpoint = endpoint;
     }
 
+    @Override
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    @Override
+    public String getAuth() {
+        return auth;
+    }
+
+    public void setAuth(String auth) {
+        this.auth = auth;
+    }
+
     public static BasicPushSubscription copy(PushSubscription subscription) {
         var result = new BasicPushSubscription();
         result.setEndpoint(subscription.getEndpoint());
+        result.setKey(subscription.getKey());
+        result.setAuth(subscription.getAuth());
         return result;
     }
 
@@ -26,7 +48,10 @@ public class BasicPushSubscription implements PushSubscription {
         if (this == o) return true;
         if (o instanceof PushSubscription) {
             var that = (PushSubscription)o;
-            return Objects.equals(endpoint, that.getEndpoint());
+            return Objects.equals(endpoint, that.getEndpoint())
+                    && Objects.equals(key, that.getKey())
+                    && Objects.equals(auth, that.getAuth())
+                    ;
         } else {
             return false;
         }
@@ -34,6 +59,6 @@ public class BasicPushSubscription implements PushSubscription {
 
     @Override
     public int hashCode() {
-        return Objects.hash(endpoint);
+        return Objects.hash(endpoint, key, auth);
     }
 }

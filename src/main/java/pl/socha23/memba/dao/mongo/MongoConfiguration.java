@@ -7,8 +7,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import pl.socha23.memba.business.api.dao.ProfileStore;
 import pl.socha23.memba.business.api.dao.PushSubscriptionStore;
-import pl.socha23.memba.business.api.model.PushSubscription;
-import pl.socha23.memba.business.impl.PushNotificationSenderImpl;
 import pl.socha23.memba.dao.cache.CachingProfileStore;
 
 @Profile("mongo")

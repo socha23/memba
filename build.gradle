@@ -50,10 +50,14 @@ dependencies {
 	compile("com.google.api-client:google-api-client:1.23.0")
 	compile group: 'commons-io', name: 'commons-io', version: '2.6'
 
+	compile group: 'nl.martijndwars', name: 'web-push', version: '3.1.1'
+    compile('org.springframework.boot:spring-boot-configuration-processor:2.0.1.RELEASE')
+
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile("org.spockframework:spock-spring:1.0-groovy-2.4")
 }
 
+compileJava.dependsOn(processResources)
 
 task npmInstall(type: Exec) {
 	commandLine 'npm', 'install'
