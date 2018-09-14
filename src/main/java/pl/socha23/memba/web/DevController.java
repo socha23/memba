@@ -21,13 +21,13 @@ public class DevController {
         this.pushOperations = pushOperations1;
     }
 
-    @GetMapping("/dev/pushTodo/{todoId}")
+    @GetMapping("/api/dev/pushTodo/{todoId}")
     public Map<String, Object> push(@PathVariable("todoId") String todoId) {
         notificationOperations.pushTodo(todoId);
         return Collections.singletonMap("success", true);
     }
 
-    @GetMapping("/dev/push/{userId}")
+    @GetMapping("/api/dev/push/{userId}")
     public boolean push(@PathVariable("userId") String userId, @RequestParam("message") String message) {
         pushOperations.pushTo(userId, Collections.singletonMap("message", message == null ? "empty" : message ));
         return true;

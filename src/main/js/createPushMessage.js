@@ -1,11 +1,13 @@
-function createPushMessage(pushData) {
+import momentToString from './momentToString'
+
+function createPushMessage(todo) {
     return {
-        title: "Memba?",
+        title: todo.text,
         options: {
-            body: pushData.text,
+            body: todo.when ? momentToString(todo.when) : "Memba?",
             requireInteraction: true,
             renotify: true,
-            tag: pushData.id,
+            tag: todo.id,
             icon: 'memba192x192.png',
             vibrate: [100, 50, 100],
             data: {

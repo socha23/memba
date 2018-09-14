@@ -2,6 +2,8 @@ package pl.socha23.memba.business.impl.pushNotifications;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import nl.martijndwars.webpush.Notification;
 import nl.martijndwars.webpush.PushService;
 import nl.martijndwars.webpush.Utils;
@@ -33,6 +35,9 @@ public class VapidPushNotificationSenderImpl implements PushNotificationSender {
         pushService = new PushService();
         pushService.setPublicKey(Utils.loadPublicKey(vapidProperties.getVapidPublicKey()));
         pushService.setPrivateKey(Utils.loadPrivateKey(vapidProperties.getVapidPrivateKey()));
+
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
     }
 
     @Override

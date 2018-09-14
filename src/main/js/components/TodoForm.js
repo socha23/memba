@@ -3,6 +3,7 @@ import ColorPicker from './ColorPicker'
 import GroupSelectFormSection from './GroupSelectFormSection'
 import TodoCompletedFormSection from "./TodoCompletedFormSection";
 import WhenFormSection from "./WhenFormSection";
+import SendNotificationButton from "./dev/SendNotificationButton";
 
 const TodoForm = ({item, onChangeFields, createMode, onSubmit}) => <div>
     <TodoTextInput
@@ -20,6 +21,9 @@ const TodoForm = ({item, onChangeFields, createMode, onSubmit}) => <div>
                 onChangeValue={v => onChangeFields({groupId: v})}
                 disabledId={item.id}
             />
+    <div>
+        <SendNotificationButton todo={item}/>
+    </div>
 
 </div>;
 

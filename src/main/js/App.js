@@ -11,7 +11,7 @@ import EditTodoPage from './components/pages/EditTodoPage'
 import AddGroupPage from './components/pages/AddGroupPage'
 import EditGroupPage from './components/pages/EditGroupPage'
 import ReorderPage from "./components/pages/ReorderPage";
-import DevPage from "./components/pages/DevPage";
+import DevPage from "./components/dev/DevPage";
 import DeadlinesPage from "./components/pages/DeadlinesPage";
 import RequestPushNotifications from "./components/structural/RequestPushNotifications";
 
