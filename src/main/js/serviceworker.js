@@ -4,7 +4,7 @@ import createPushMessage from './createPushMessage'
 
 const CACHE_NAME = 'memba-cache-20180908';
 const urlsToCache = [
-/*    '/', */
+    /*    '/', */
     '/fontawesome/webfonts/fa-solid-900.woff2',
     '/fontawesome/webfonts/fa-regular-400.woff2',
     '/fontawesome/webfonts/fa-brands-400.woff2',
@@ -51,6 +51,28 @@ self.addEventListener('push', function (e) {
     const message = createPushMessage(e.data.json());
     e.waitUntil(
         self.registration.showNotification(message.title, message.options)
+    );
+});
+
+
+self.addEventListener('notificationclick', function (event) {
+    const todo = event.notification.data;
+    const url = "/#/todo/" + todo.id;
+    event.notification.close();
+    event.waitUntil(
+        clients.matchAll({
+            type: "window"
+        })
+            .then(function (clientList) {
+                    if (clientList.length > 0) {
+                        const client = clientList[0];
+                        client.navigate(url);
+                        client.focus();
+                    } else {
+                        clients.openWindow(url)
+                    }
+                }
+            )
     );
 });
 

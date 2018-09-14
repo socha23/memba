@@ -10,10 +10,9 @@ function createPushMessage(todo) {
             tag: todo.id,
             icon: 'memba192x192.png',
             vibrate: [100, 50, 100],
-            data: {
-                dateOfArrival: Date.now(),
-                primaryKey: '2'
-            },
+            data: todo
+            /*
+            ,
             actions: [
                 {
                     action: 'explore', title: 'Action one',
@@ -24,6 +23,7 @@ function createPushMessage(todo) {
                     icon: 'images/xmark.png'
                 },
             ]
+            */
         }
     };
 }
