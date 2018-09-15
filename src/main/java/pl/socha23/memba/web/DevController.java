@@ -23,7 +23,7 @@ public class DevController {
 
     @GetMapping("/api/dev/pushTodo/{todoId}")
     public Map<String, Object> push(@PathVariable("todoId") String todoId) {
-        notificationOperations.pushTodo(todoId);
+        notificationOperations.sendNotificationForTodo(todoId);
         return Collections.singletonMap("success", true);
     }
 

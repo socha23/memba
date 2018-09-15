@@ -19,7 +19,7 @@ public class NotificationOperationsImpl implements NotificationOperations {
     }
 
     @Override
-    public void pushTodo(String todoId) {
+    public void sendNotificationForTodo(String todoId) {
         var todo = todoStore.findTodoById(todoId);
         var ownerIds = ownershipManager.getOwnerIds(todo);
         for (var owner : ownerIds) {
