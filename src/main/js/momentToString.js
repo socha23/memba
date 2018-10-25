@@ -1,7 +1,7 @@
 import moment from 'moment'
 
-const DEFAULT_OPTIONS = {
-};
+const DEFAULT_OPTIONS = {};
+
 
 export default function momentToString(v, options = {}, now = moment()) {
 
@@ -9,7 +9,7 @@ export default function momentToString(v, options = {}, now = moment()) {
 
     const then = moment(v).startOf("minute");
     now = now.startOf("minute");
-    
+
     if (!then.isValid()) {
         return "";
     }
@@ -70,10 +70,10 @@ export default function momentToString(v, options = {}, now = moment()) {
 
         }
     }
-
-
-    
-
-    return moment().toISOString()
 }
+
+export function momentToAbsoluteString(v) {
+    return moment(v).format("ddd D MMMM, HH:mm")
+}
+
 

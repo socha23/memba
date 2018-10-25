@@ -1,10 +1,10 @@
-import momentToString from './momentToString'
+import {momentToAbsoluteString} from './momentToString'
 
 function createPushMessage(todo) {
     return {
         title: todo.text,
         options: {
-            body: todo.when ? momentToString(todo.when) : "Memba?",
+            body: todo.when ? momentToAbsoluteString(todo.when) : "Memba?",
             requireInteraction: true,
             renotify: true,
             tag: todo.id,
