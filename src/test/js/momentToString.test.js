@@ -13,12 +13,12 @@ it("formats invalid string as empty string", () => {
     expect(momentToString('this_not_a_date')).toEqual("")
 });
 
-it("past different year => full date, no hour ", () => {
-    expect(momentToString(NOW.clone().subtract(2, "years"), {}, NOW)).toEqual("3 September 2016")
+it("past different year => full date, with hour ", () => {
+    expect(momentToString(NOW.clone().subtract(2, "years"), {}, NOW)).toEqual("3 September 2016, 19:30")
 });
 
-it("past same year, more than week => date without year, no hour ", () => {
-    expect(momentToString(NOW.clone().subtract(1, "month"), {}, NOW)).toEqual("3 August")
+it("past same year, more than week => date without year, with hour ", () => {
+    expect(momentToString(NOW.clone().subtract(1, "month"), {}, NOW)).toEqual("3 August, 19:30")
 });
 
 it("past same week but more than day => last day, with hour ", () => {
@@ -34,12 +34,12 @@ it("past today => today with hour ", () => {
 });
 
 
-it("future different year => full date, no hour ", () => {
-    expect(momentToString(NOW.clone().add(2, "years"), {}, NOW)).toEqual("3 September 2020")
+it("future different year => full date, with hour ", () => {
+    expect(momentToString(NOW.clone().add(2, "years"), {}, NOW)).toEqual("3 September 2020, 19:30")
 });
 
-it("future same year, more than week => date without year, no hour ", () => {
-    expect(momentToString(NOW.clone().add(1, "month"), {}, NOW)).toEqual("3 October")
+it("future same year, more than week => date without year, with hour ", () => {
+    expect(momentToString(NOW.clone().add(1, "month"), {}, NOW)).toEqual("3 October, 19:30")
 });
 
 it("future same week but more than day => next day, with hour ", () => {

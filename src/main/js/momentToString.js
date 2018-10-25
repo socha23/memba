@@ -20,9 +20,9 @@ export default function momentToString(v, options = {}, now = moment()) {
 
         if (now.clone().subtract(1, "week").startOf("day").isAfter(then)) { // more than a week in past
             if (then.isSame(now, "year")) {
-                return then.format("D MMMM")
+                return then.format("D MMMM, HH:mm")
             } else {
-                return then.format("D MMMM YYYY")
+                return then.format("D MMMM YYYY, HH:mm")
             }
         } else {
             if (then.isSame(now, "day")) {
@@ -40,9 +40,9 @@ export default function momentToString(v, options = {}, now = moment()) {
 
         if (now.clone().add(7, "days").startOf("day").isBefore(then)) { // more than a week in future
             if (then.isSame(now, "year")) {
-                return then.format("D MMMM")
+                return then.format("D MMMM, HH:mm")
             } else {
-                return then.format("D MMMM YYYY")
+                return then.format("D MMMM YYYY, HH:mm")
             }
         } else {
             let result = "";
