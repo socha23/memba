@@ -10,9 +10,9 @@ const GroupPathLabel = ({groupId, style={}}) => {
         if (group == null) {
             break;
         }
-        elements.push(renderLabel(group));
+        elements.unshift(renderLabel(group));
         if (!todoLogic.isRootId(group.groupId)) {
-            elements.push(renderCaret(group));
+            elements.unshift(renderCaret(group));
         }
         groupId = group.groupId
     }
