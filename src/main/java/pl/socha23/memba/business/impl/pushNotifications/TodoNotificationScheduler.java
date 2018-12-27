@@ -28,7 +28,7 @@ public class TodoNotificationScheduler {
     public void run(Instant currentTime) {
         var todos = provider.listTodosRequiringNotificationInPeriod(lastTime, currentTime);
         for (var todo : todos) {
-            notificationOperations.sendNotificationForTodo(todo);
+            notificationOperations.sendNotificationForTodo(todo, currentTime, lastTime, currentTime);
         }
         lastTime = currentTime;
     }

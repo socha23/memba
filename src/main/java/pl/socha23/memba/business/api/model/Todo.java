@@ -1,6 +1,7 @@
 package pl.socha23.memba.business.api.model;
 
 import java.time.Instant;
+import java.util.SortedSet;
 
 public interface Todo extends ItemInGroup {
     String getText();
@@ -12,4 +13,6 @@ public interface Todo extends ItemInGroup {
     String getColor();
 
     Instant getWhen();
+
+    SortedSet<Reminder> getReminders();
 }

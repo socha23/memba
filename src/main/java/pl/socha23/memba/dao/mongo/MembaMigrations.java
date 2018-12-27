@@ -5,15 +5,36 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.stereotype.Component;
+import pl.socha23.memba.business.api.model.Reminder;
 import pl.socha23.memba.dao.mongo.migga.BasicMigrations;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 
 @Component
 public class MembaMigrations extends BasicMigrations implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() {
+
+        add("2018-12-27 18:37", "Add reminders", mongo -> {
+
+            for (Document todo : mongo.getCollection("todo").find()) {
+                var reminders = new ArrayList<>();
+                var when = todo.getDate("when");
+                if (when != null) {
+                    boolean inPast = when.before(new Date());
+                    var reminder = new Document();
+                    reminder.put("when", when);
+                    reminder.put("notificationSentOn", inPast ? when : null);
+                    reminders.add(reminder);
+                }
+                todo.put("reminders", reminders);
+                mongo.save(todo, "todo");
+            }
+        });
+
         add("2018-09-14 00:40", "Reset push endpoints again", mongo -> {
 
             for (Document user : mongo.getCollection("users").find()) {

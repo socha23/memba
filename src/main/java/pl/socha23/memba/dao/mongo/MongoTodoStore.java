@@ -67,6 +67,11 @@ class MongoTodoStore implements TodoStore<MongoTodoImpl> {
     }
 
     @Override
+    public MongoTodoImpl updateTodo(Todo todo) {
+        return repository.save(MongoTodoImpl.copy(todo));
+    }
+
+    @Override
     public Mono<Void> changeEveryGroupId(String fromGroupId, String toGroupId) {
         return updateAllInGroup(fromGroupId, new Update().set("groupId", toGroupId));
     }

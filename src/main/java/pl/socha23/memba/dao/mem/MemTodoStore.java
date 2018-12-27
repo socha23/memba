@@ -42,7 +42,7 @@ public class MemTodoStore implements TodoStore<BasicTodo> {
 
     @Override
     public Mono<BasicTodo> updateTodo(Mono<? extends Todo> todo) {
-        return todo.map(this::doUpdateTodo);
+        return todo.map(this::updateTodo);
     }
 
     @Override
@@ -51,7 +51,8 @@ public class MemTodoStore implements TodoStore<BasicTodo> {
         return Mono.empty();
     }
 
-    private BasicTodo doUpdateTodo(Todo todo) {
+    @Override
+    public BasicTodo updateTodo(Todo todo) {
         var result = BasicTodo.copy(todo);
         todosById.put(todo.getId(), result);
         return result;

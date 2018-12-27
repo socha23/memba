@@ -4,6 +4,8 @@ import org.springframework.stereotype.Component;
 import pl.socha23.memba.business.api.dao.TodoStore;
 import pl.socha23.memba.business.api.logic.NotificationOperations;
 import pl.socha23.memba.business.api.logic.PushOperations;
+import pl.socha23.memba.business.api.model.BasicTodo;
+import pl.socha23.memba.business.api.model.Reminder;
 import pl.socha23.memba.business.api.model.Todo;
 
 import java.time.Instant;
@@ -23,14 +25,15 @@ public class NotificationOperationsImpl implements NotificationOperations {
 
     @Override
     public void sendNotificationForTodo(String todoId) {
-        sendNotificationForTodo(todoStore.findTodoById(todoId));
+        sendNotificationForTodo(todoStore.findTodoById(todoId), Instant.now(), Instant.MIN, Instant.MAX);
     }
 
     @Override
-    public void sendNotificationForTodo(Todo todo) {
+    public void sendNotificationForTodo(Todo todo, Instant sentOn, Instant periodFromInc, Instant periodToEx) {
         var ownerIds = ownershipManager.getOwnerIds(todo);
         for (var owner : ownerIds) {
             pushOperations.pushTo(owner, todo);
         }
+        todoStore.markNotificationsAsSent(todo, sentOn, periodFromInc, periodToEx);
     }
 }
