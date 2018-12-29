@@ -1,8 +1,8 @@
 package pl.socha23.memba.business.impl
 
 import pl.socha23.memba.business.api.model.BasicGroup
-import pl.socha23.memba.business.api.model.BasicTodo
 import pl.socha23.memba.business.api.model.Group
+import pl.socha23.memba.business.api.model.Todo
 import reactor.core.publisher.Mono
 import spock.lang.Specification
 
@@ -101,9 +101,9 @@ class GroupOperationsSpec extends Specification {
         def g1a = ops.groupOps.createGroup(new TestCreateUpdateGroup(groupId: g1.id, text: "g1a").toMono()).block()
         def g2 = ops.groupOps.createGroup(new TestCreateUpdateGroup(groupId: "root", text: "g2").toMono()).block()
         def g2a = ops.groupOps.createGroup(new TestCreateUpdateGroup(groupId: g2.id, text: "g1a").toMono()).block()
-        def t = ops.todoStore.createTodo(Mono.just(new BasicTodo(groupId: "root", text: "t"))).block()
-        def t1 = ops.todoStore.createTodo(Mono.just(new BasicTodo(groupId: g1.id, text: "t1"))).block()
-        def t2 = ops.todoStore.createTodo(Mono.just(new BasicTodo(groupId: g2.id, text: "t2"))).block()
+        def t = ops.todoStore.createTodo(Mono.just(new Todo(groupId: "root", text: "t"))).block()
+        def t1 = ops.todoStore.createTodo(Mono.just(new Todo(groupId: g1.id, text: "t1"))).block()
+        def t2 = ops.todoStore.createTodo(Mono.just(new Todo(groupId: g2.id, text: "t2"))).block()
 
         when:
         ops.groupOps.deleteGroup(g1.id).block()

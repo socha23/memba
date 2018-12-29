@@ -1,7 +1,7 @@
 package pl.socha23.memba.business.impl
 
 import pl.socha23.memba.business.api.model.BasicGroup
-import pl.socha23.memba.business.api.model.BasicTodo
+import pl.socha23.memba.business.api.model.Todo
 import spock.lang.Specification
 
 class GroupOwnershipSpec extends Specification {
@@ -56,8 +56,8 @@ class GroupOwnershipSpec extends Specification {
                 .withGroup(new BasicGroup(id: "dest", groupId: "root", ownerIds: ["A", "B"]))
                 .withGroup(new BasicGroup(id: "src", groupId: "root"))
                 .withGroup(new BasicGroup(id: "sub", groupId: "src"))
-                .withTodo(new BasicTodo(id: "t1", groupId: "src"))
-                .withTodo(new BasicTodo(id: "t2", groupId: "sub"))
+                .withTodo(new Todo(id: "t1", groupId: "src"))
+                .withTodo(new Todo(id: "t2", groupId: "sub"))
         when:
         def result = ops.groupOps
                 .updateGroup("src", new TestCreateUpdateGroup(groupId: "dest").toMono()).block()
@@ -77,8 +77,8 @@ class GroupOwnershipSpec extends Specification {
                 .withGroup(new BasicGroup(id: "dest", groupId: "root", ownerIds: ["A", "B"]))
                 .withGroup(new BasicGroup(id: "src", groupId: "root"))
                 .withGroup(new BasicGroup(id: "sub", groupId: "src"))
-                .withTodo(new BasicTodo(id: "t1", groupId: "src"))
-                .withTodo(new BasicTodo(id: "t2", groupId: "sub"))
+                .withTodo(new Todo(id: "t1", groupId: "src"))
+                .withTodo(new Todo(id: "t2", groupId: "sub"))
         when:
         def result = ops.groupOps
                 .updateGroup("src", new TestCreateUpdateGroup(ownerIds: ["changed"]).toMono()).block()

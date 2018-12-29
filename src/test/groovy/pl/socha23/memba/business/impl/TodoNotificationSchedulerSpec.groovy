@@ -1,9 +1,11 @@
 package pl.socha23.memba.business.impl
 
 import pl.socha23.memba.business.api.logic.NotificationOperations
-import pl.socha23.memba.business.api.logic.TodosNeedingNotificationProvider
-import pl.socha23.memba.business.api.model.BasicTodo
+import pl.socha23.memba.business.api.logic.PushOperations
+import pl.socha23.memba.business.api.model.Reminder
+import pl.socha23.memba.business.api.model.Todo
 import pl.socha23.memba.business.impl.pushNotifications.TodoNotificationScheduler
+import pl.socha23.memba.dao.mem.MemTodoStore
 import spock.lang.Specification
 
 import java.time.Instant
@@ -13,65 +15,66 @@ class TodoNotificationSchedulerSpec extends Specification {
 
     final NOW = Instant.now()
 
-    def TODOS = [
-            new BasicTodo(id:"in_1_minute", when: NOW.plus(1, ChronoUnit.MINUTES)),
-            new BasicTodo(id:"in_2_minutes", when: NOW.plus(2, ChronoUnit.MINUTES)),
-    ]
+    PushOperations mock
+    TodoNotificationScheduler scheduler
 
-    final todoProvider = {fromInc, toEx ->
-        TODOS.findAll {t -> t.when != null && !t.when.isBefore(fromInc) && toEx.isAfter(t.when)}
-    } as TodosNeedingNotificationProvider;
+    Todo todoInOneMinute
+    Todo todoInTwoMinutes
+
+    private Todo todoInFuture(id, long minutesToAdd) {
+        def when = NOW.plus(minutesToAdd, ChronoUnit.MINUTES)
+        new Todo(id: id, when: when, reminders: [new Reminder(when: when)] as TreeSet)
+    }
+
+    def setup() {
+        MemTodoStore ts = new MemTodoStore()
+        mock = Mock(PushOperations)
+
+        NotificationOperations notificationOperations = new NotificationOperationsImpl(ts, {it -> ["ID"]} as OwnershipManager, mock)
+        scheduler = new TodoNotificationScheduler(notificationOperations)
+        todoInOneMinute = ts.createTodo(todoInFuture("in_1_minute", 1))
+        todoInTwoMinutes = ts.createTodo(todoInFuture("in_2_minutes", 2))
+    }
 
     def "no matches"() {
-        given:
-        def mock = Mock(NotificationOperations)
-        def scheduler = new TodoNotificationScheduler(mock, todoProvider)
-
         when:
         scheduler.run(NOW.plusSeconds(10))
 
         then:
-        0 * mock.sendNotificationForTodo(_)
+        0 * mock.pushTo(_, _)
     }
 
     def "one match"() {
-        given:
-        def mock = Mock(NotificationOperations)
-        def scheduler = new TodoNotificationScheduler(mock, todoProvider)
-
         when:
         scheduler.run(NOW.plusSeconds(90))
 
         then:
-        1 * mock.sendNotificationForTodo({it.id == "in_1_minute"})
-        0 * mock.sendNotificationForTodo({it.id == "in_2_minutes"})
+        1 * mock.pushTo(_, {it.id == todoInOneMinute.id})
+        todoInOneMinute.reminders[0].notificationSentOn != null
+
+        0 * mock.pushTo(_, {it.id == todoInTwoMinutes.id})
+        todoInTwoMinutes.reminders[0].notificationSentOn == null
     }
 
     def "two matches"() {
-        given:
-        def mock = Mock(NotificationOperations)
-        def scheduler = new TodoNotificationScheduler(mock, todoProvider)
-
         when:
         scheduler.run(NOW.plusSeconds(150))
 
         then:
-        1 * mock.sendNotificationForTodo({it.id == "in_1_minute"})
-        1 * mock.sendNotificationForTodo({it.id == "in_2_minutes"})
+        1 * mock.pushTo(_, {it.id == "in_1_minute"})
+        1 * mock.pushTo(_, {it.id == "in_2_minutes"})
     }
 
     def "from is inclusive but to is exclusive"() {
         given:
-        def mock = Mock(NotificationOperations)
-        def scheduler = new TodoNotificationScheduler(mock, todoProvider)
         scheduler.lastTime = NOW.plusSeconds(60)
 
         when:
         scheduler.run(NOW.plusSeconds(120))
 
         then:
-        1 * mock.sendNotificationForTodo({it.id == "in_1_minute"})
-        0 * mock.sendNotificationForTodo({it.id == "in_2_minutes"})
+        1 * mock.pushTo(_,{it.id == "in_1_minute"})
+        0 * mock.pushTo(_, {it.id == "in_2_minutes"})
     }
 }
 

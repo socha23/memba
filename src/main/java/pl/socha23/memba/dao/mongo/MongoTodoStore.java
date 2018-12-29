@@ -12,6 +12,8 @@ import pl.socha23.memba.business.api.model.Todo;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.Instant;
+import java.util.Collection;
 import java.util.Set;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
@@ -67,6 +69,11 @@ class MongoTodoStore implements TodoStore<MongoTodoImpl> {
     }
 
     @Override
+    public MongoTodoImpl createTodo(Todo todo) {
+        return updateTodo(todo);
+    }
+
+    @Override
     public MongoTodoImpl updateTodo(Todo todo) {
         return repository.save(MongoTodoImpl.copy(todo));
     }
@@ -88,4 +95,10 @@ class MongoTodoStore implements TodoStore<MongoTodoImpl> {
     private Mono<Void> update(Criteria criteria, Update update) {
         return reactiveTemplate.updateMulti(new Query(criteria), update, MongoTodoImpl.class).then();
     }
+
+    @Override
+    public Collection<MongoTodoImpl> listTodosWithUnsentRemindersInPeriod(Instant fromInclusive, Instant toExclusive) {
+        return repository.listTodosWithUnsentRemindersInPeriod(fromInclusive, toExclusive);
+    }
+
 }

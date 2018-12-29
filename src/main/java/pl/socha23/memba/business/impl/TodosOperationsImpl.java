@@ -4,7 +4,6 @@ import org.springframework.stereotype.Component;
 import pl.socha23.memba.business.api.dao.TodoStore;
 import pl.socha23.memba.business.api.logic.CurrentUserProvider;
 import pl.socha23.memba.business.api.logic.TodosOperations;
-import pl.socha23.memba.business.api.model.BasicTodo;
 import pl.socha23.memba.business.api.model.CreateOrUpdateTodo;
 import pl.socha23.memba.business.api.model.Todo;
 import reactor.core.publisher.Flux;
@@ -14,7 +13,7 @@ import java.time.Instant;
 import java.util.Collections;
 
 @Component
-public class TodosOperationsImpl extends AbstractItemInGroupOperationsImpl<BasicTodo> implements TodosOperations {
+public class TodosOperationsImpl extends AbstractItemInGroupOperationsImpl<Todo> implements TodosOperations {
 
     private TodoStore<? extends Todo> todoStore;
     private CurrentUserProvider currentUserProvider;
@@ -44,8 +43,8 @@ public class TodosOperationsImpl extends AbstractItemInGroupOperationsImpl<Basic
                 .transform(todoStore::createTodo);
     }
 
-    private BasicTodo createTodoObject(CreateOrUpdateTodo create) {
-        var todo = new BasicTodo();
+    private Todo createTodoObject(CreateOrUpdateTodo create) {
+        var todo = new Todo();
         setFields(todo, create);
         todo.setCreatedOn(Instant.now());
         return todo;
@@ -63,13 +62,13 @@ public class TodosOperationsImpl extends AbstractItemInGroupOperationsImpl<Basic
                 .transform(todoStore::updateTodo);
     }
 
-    private BasicTodo updateFields(Todo todo, CreateOrUpdateTodo updateTodo) {
-        var newTodo = BasicTodo.copy(todo);
+    private Todo updateFields(Todo todo, CreateOrUpdateTodo updateTodo) {
+        var newTodo = Todo.copy(todo);
         setFields(newTodo, updateTodo);
         return newTodo;
     }
 
-    private void setFields(BasicTodo todo, CreateOrUpdateTodo command) {
+    private void setFields(Todo todo, CreateOrUpdateTodo command) {
         todo.setOwnerIds(command.getOwnerIds() != null ? command.getOwnerIds() : Collections.singleton(currentUserProvider.getCurrentUserId()));
         todo.setGroupId(command.getGroupId());
         todo.setText(command.getText());

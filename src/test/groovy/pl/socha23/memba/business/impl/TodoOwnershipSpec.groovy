@@ -1,7 +1,7 @@
 package pl.socha23.memba.business.impl
 
 import pl.socha23.memba.business.api.model.BasicGroup
-import pl.socha23.memba.business.api.model.BasicTodo
+import pl.socha23.memba.business.api.model.Todo
 import spock.lang.Specification
 
 class TodoOwnershipSpec extends Specification {
@@ -23,7 +23,7 @@ class TodoOwnershipSpec extends Specification {
         given:
         def ops = new TestOps()
             .withGroup(new BasicGroup(id: "g1", groupId: "root", ownerIds: ["A", "B"]))
-            .withTodo(new BasicTodo(id: "t1", groupId: "root", ownerIds: ["A"]))
+            .withTodo(new Todo(id: "t1", groupId: "root", ownerIds: ["A"]))
 
         when:
         ops.todoOps
@@ -39,7 +39,7 @@ class TodoOwnershipSpec extends Specification {
         given:
         def ops = new TestOps()
             .withGroup(new BasicGroup(id: "g1", groupId: "root", ownerIds: ["A", "B"]))
-            .withTodo(new BasicTodo(id: "t1", groupId: "g1", ownerIds: ["A", "B"]))
+            .withTodo(new Todo(id: "t1", groupId: "g1", ownerIds: ["A", "B"]))
 
         when:
         ops.todoOps

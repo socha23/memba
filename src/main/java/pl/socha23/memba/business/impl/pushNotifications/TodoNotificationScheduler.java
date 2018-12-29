@@ -3,7 +3,6 @@ package pl.socha23.memba.business.impl.pushNotifications;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import pl.socha23.memba.business.api.logic.NotificationOperations;
-import pl.socha23.memba.business.api.logic.TodosNeedingNotificationProvider;
 
 import java.time.Instant;
 
@@ -11,13 +10,11 @@ import java.time.Instant;
 public class TodoNotificationScheduler {
 
     private NotificationOperations notificationOperations;
-    private TodosNeedingNotificationProvider provider;
 
     private Instant lastTime = Instant.now();
 
-    public TodoNotificationScheduler(NotificationOperations notificationOperations, TodosNeedingNotificationProvider provider) {
+    public TodoNotificationScheduler(NotificationOperations notificationOperations) {
         this.notificationOperations = notificationOperations;
-        this.provider = provider;
     }
 
     @Scheduled(fixedRate = 60 * 1000)
@@ -26,10 +23,7 @@ public class TodoNotificationScheduler {
     }
 
     public void run(Instant currentTime) {
-        var todos = provider.listTodosRequiringNotificationInPeriod(lastTime, currentTime);
-        for (var todo : todos) {
-            notificationOperations.sendNotificationForTodo(todo, currentTime, lastTime, currentTime);
-        }
+        notificationOperations.sendNotifications(currentTime, lastTime, currentTime);
         lastTime = currentTime;
     }
 

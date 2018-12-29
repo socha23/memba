@@ -9,8 +9,8 @@ import java.util.Objects;
 
 @Data
 public class Reminder implements Comparable<Reminder> {
-    private final Instant when;
-    private final Instant notificationSentOn;
+    private Instant when;
+    private Instant notificationSentOn;
 
     @Override
     public int compareTo(Reminder r) {
@@ -18,11 +18,9 @@ public class Reminder implements Comparable<Reminder> {
     }
 
     public static Reminder forInstant(Instant i) {
-        return new Reminder(i, null);
-    }
-
-    public Reminder withNotificationSentOn(Instant notificationSentOn) {
-        return new Reminder(when, notificationSentOn);
+        var result = new Reminder();
+        result.setWhen(i);
+        return result;
     }
 
     public boolean inRange(Instant periodFromInc, Instant periodToEx) {

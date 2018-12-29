@@ -1,12 +1,11 @@
 package pl.socha23.memba.business.api.dao;
 
-import pl.socha23.memba.business.api.model.BasicTodo;
-import pl.socha23.memba.business.api.model.Reminder;
 import pl.socha23.memba.business.api.model.Todo;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Instant;
+import java.util.Collection;
 import java.util.Set;
 
 public interface TodoStore<T extends Todo> {
@@ -20,6 +19,7 @@ public interface TodoStore<T extends Todo> {
     Mono<T> updateTodo(Mono<? extends Todo> todo);
     Mono<Void> deleteTodo(String id);
 
+    T createTodo(Todo todo);
     T updateTodo(Todo todo);
 
     /**
@@ -29,18 +29,6 @@ public interface TodoStore<T extends Todo> {
 
     Mono<Void> setOwnersInDirectGroupMembers(String groupId, Set<String> ownerIds);
 
-    default void markNotificationsAsSent(Todo todo, Instant sentOn, Instant periodFromInc, Instant periodToEx) {
-        var modified = BasicTodo.copy(todo);
-        modified.getReminders().clear();
-        for (Reminder r : todo.getReminders()) {
-            if (r.inRange(periodFromInc, periodToEx)) {
-                modified.getReminders().add(r.withNotificationSentOn(sentOn));
-            } else {
-                modified.getReminders().add(r);
-            }
-        }
-        updateTodo(modified);
-
-    }
+    Collection<T> listTodosWithUnsentRemindersInPeriod(Instant fromInclusive, Instant toExclusive);
 
 }
