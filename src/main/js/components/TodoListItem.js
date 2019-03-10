@@ -2,6 +2,7 @@ import React from 'react'
 import {DEFAULT_COLOR} from "./ColorPicker"
 import WhenLabel from './WhenLabel'
 import GroupPathLabel from "./GroupPathLabel";
+import CreatedOnLabel from "./CreatedOnLabel";
 
 const TodoView = ({todo, renderPath = false, onClick = () => {}, children}) => {
     const opacity = todo.completed ? 0.3 : 1;
@@ -19,6 +20,9 @@ const TodoView = ({todo, renderPath = false, onClick = () => {}, children}) => {
             cursor: "pointer",
         }}>
             <div style={{flexGrow: 1}} onClick={() => {onClick(todo)}}>
+                <div>
+                    <CreatedOnLabel todo={todo}/>
+                </div>
                 <div style={{
                     opacity: opacity,
                     color: (todo.color == null ? DEFAULT_COLOR : todo.color),
