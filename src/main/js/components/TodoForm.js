@@ -21,10 +21,6 @@ const TodoForm = ({item, onChangeFields, createMode, onSubmit}) => <div>
                 onChangeValue={v => onChangeFields({groupId: v})}
                 disabledId={item.id}
             />
-    <div>
-        <SendNotificationButton todo={item}/>
-    </div>
-
 </div>;
 
 export default TodoForm;
