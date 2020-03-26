@@ -7,7 +7,7 @@ module.exports = {
 		serviceworker: './src/main/js/serviceworker.js'
     },
     output: {
-        path: path.join(__dirname, 'out/production/resources/static/'),
+        path: path.join(__dirname, 'build/resources/main/static/'),
         filename: '[name]-bundle.js'
     },
     module: {
